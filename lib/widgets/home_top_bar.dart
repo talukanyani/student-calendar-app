@@ -13,7 +13,8 @@ class HomeTopBar extends StatelessWidget implements PreferredSizeWidget {
       actions: const <Widget>[
         IconButton(
           onPressed: nothing,
-          icon: Icon(Icons.settings),
+          icon: Icon(Icons.circle_notifications_outlined),
+          tooltip: 'Notifications',
         ),
       ],
     );

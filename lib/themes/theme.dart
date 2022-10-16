@@ -9,6 +9,13 @@ const black1 = Color(0xFF0A0A0A);
 const black2 = Color(0xFF141414);
 const black3 = Color(0xFF1E1E1E);
 
+const grey1 = Color(0xFF3C3C3C);
+const grey2 = Color(0xFF505050);
+const grey3 = Color(0xFF646464);
+const grey4 = Color(0xFF787878);
+const grey5 = Color(0xFF8C8C8C);
+const grey6 = Color(0xFFA0A0A0);
+
 const red1 = Color(0xFFD70000);
 const red2 = Color(0xFFFF2828);
 const red3 = Color(0xFF870000);
@@ -74,6 +81,8 @@ ThemeData appTheme() {
     indicatorColor: primaryLighten2,
 
     appBarTheme: topBarTheme(),
+
+    bottomNavigationBarTheme: bottomBarTheme(),
   );
 }
 
@@ -86,6 +95,24 @@ AppBarTheme topBarTheme() {
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,
       statusBarColor: white2,
+    ),
+  );
+}
+
+BottomNavigationBarThemeData bottomBarTheme() {
+  return const BottomNavigationBarThemeData(
+    backgroundColor: white2,
+    elevation: 0,
+    unselectedItemColor: grey3,
+    selectedLabelStyle: TextStyle(fontSize: 12),
+    selectedIconTheme: IconThemeData(
+      shadows: <Shadow>[
+        Shadow(
+          blurRadius: 44,
+          color: primary,
+          offset: Offset(5, 3),
+        ),
+      ],
     ),
   );
 }
