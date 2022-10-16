@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:sc_app/themes/theme.dart';
 import 'package:sc_app/screens/home/home.dart';
 
 void main() => runApp(const App());
@@ -8,9 +10,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Student Calender',
-      home: HomeScreen(),
+      home: const HomeScreen(),
+      theme: appTheme(),
     );
   }
 }
