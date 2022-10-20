@@ -18,13 +18,13 @@ const grey6 = Color(0xFFA0A0A0);
 const red1 = Color(0xFFD70014);
 const red2 = Color(0xFFAF2828);
 
-const primary = Color(0xFFFFB500);
-const primaryLight = Color(0xFFFFE74C);
-const primaryDark = Color(0xFFC68600);
+const primary = Color(0xFF48877F);
+const primaryLight = Color(0xFF70AFA7);
+const primaryDark = Color(0xFF205F57);
 
-const secondary = Color(0xFFC8FF00);
-const secondaryLight = Color(0xFFFFFF58);
-const secondaryDark = Color(0xFF92CC00);
+const secondary = Color(0xFF874850);
+const secondaryLight = Color(0xFFAF7078);
+const secondaryDark = Color.fromRGBO(95, 32, 40, 1);
 
 ColorScheme lightColorScheme() {
   return const ColorScheme(
@@ -40,10 +40,10 @@ ColorScheme lightColorScheme() {
     inversePrimary: primaryDark,
     error: red1,
     errorContainer: red2,
-    onPrimary: black1,
-    onPrimaryContainer: black1,
-    onSecondary: black1,
-    onSecondaryContainer: black1,
+    onPrimary: white1,
+    onPrimaryContainer: white1,
+    onSecondary: white1,
+    onSecondaryContainer: white1,
     onBackground: black1,
     onSurface: black1,
     onInverseSurface: black1,
