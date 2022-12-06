@@ -4,17 +4,17 @@ import 'package:sc_app/themes/color_scheme.dart';
 
 BottomNavigationBarThemeData bottomBarTheme() {
   return const BottomNavigationBarThemeData(
-    backgroundColor: white2,
+    backgroundColor: brownWhite3,
     elevation: 0,
-    selectedItemColor: grey1,
-    unselectedItemColor: grey1,
+    selectedItemColor: black40,
+    unselectedItemColor: black60,
     selectedLabelStyle: TextStyle(
       fontSize: 12,
       shadows: <Shadow>[
         Shadow(
           blurRadius: 30,
-          color: primary,
-          offset: Offset(5, 0),
+          color: brown,
+          offset: Offset(5, 3),
         ),
       ],
     ),
@@ -22,7 +22,7 @@ BottomNavigationBarThemeData bottomBarTheme() {
       shadows: <Shadow>[
         Shadow(
           blurRadius: 30,
-          color: primary,
+          color: brown,
           offset: Offset(5, 3),
         ),
       ],

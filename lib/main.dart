@@ -14,7 +14,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: systemOverlayLightTheme(),
+      value: androidSystemOverlay(),
       child: MaterialApp(
         title: 'Student Calender',
         home: const HomeScreen(),

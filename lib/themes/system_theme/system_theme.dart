@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 
-SystemUiOverlayStyle systemOverlayLightTheme() {
+SystemUiOverlayStyle androidSystemOverlay() {
   return SystemUiOverlayStyle.light.copyWith(
-    systemNavigationBarColor: white2,
-    systemNavigationBarDividerColor: white2,
+    systemNavigationBarColor: brownWhite3,
+    systemNavigationBarDividerColor: brownWhite3,
     systemNavigationBarIconBrightness: Brightness.dark,
   );
 }

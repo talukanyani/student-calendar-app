@@ -5,12 +5,12 @@ import 'package:sc_app/themes/color_scheme.dart';
 
 AppBarTheme topBarTheme() {
   return const AppBarTheme(
-    backgroundColor: white2,
-    foregroundColor: black1,
+    backgroundColor: brownWhite2,
+    foregroundColor: black40,
     iconTheme: IconThemeData(size: 28),
     elevation: 0,
     systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: white2,
+      statusBarColor: brownWhite2,
       statusBarIconBrightness: Brightness.dark,
     ),
   );
