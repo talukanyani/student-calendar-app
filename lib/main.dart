@@ -5,6 +5,7 @@ import 'package:sc_app/themes/theme.dart';
 import 'package:sc_app/themes/system_theme/system_theme.dart';
 
 import 'package:sc_app/screens/home/home.dart';
+import 'package:sc_app/screens/add/add.dart';
 
 void main() => runApp(const App());
 
@@ -17,7 +18,8 @@ class App extends StatelessWidget {
       value: androidSystemOverlay(),
       child: MaterialApp(
         title: 'Student Calender',
-        home: const HomeScreen(),
+        // home: const HomeScreen(),
+        home: const AddScreen(),
         theme: lightTheme(),
         debugShowCheckedModeBanner: false,
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:sc_app/widgets/home_top_bar.dart';
+import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: HomeTopBar(),
+      appBar: PrimaryTopBar(title: 'SC'),
       body: Center(
         child: Text('This is SC App'),
       ),
