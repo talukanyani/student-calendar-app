@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 class PrimaryTopBar extends StatelessWidget implements PreferredSizeWidget {
   const PrimaryTopBar({required this.title, super.key});
@@ -12,15 +13,13 @@ class PrimaryTopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
-      actions: const <Widget>[
+      actions: <Widget>[
         IconButton(
-          onPressed: nothing,
-          icon: Icon(Icons.account_circle_outlined),
+          onPressed: () {},
+          icon: const Icon(FluentIcons.person_circle_24_regular),
           tooltip: 'Profile',
         ),
       ],
     );
   }
 }
-
-void nothing() {}

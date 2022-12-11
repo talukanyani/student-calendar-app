@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
 
-import '../../../../../themes/color_scheme.dart';
+import '../../../../../../../themes/colors.dart';
 
 class AddScreen extends StatelessWidget {
   const AddScreen({super.key});
@@ -13,7 +13,7 @@ class AddScreen extends StatelessWidget {
     return const Scaffold(
       appBar: PrimaryTopBar(title: 'Add'),
       body: Body(),
-      bottomNavigationBar: BottomBar(screenIndex: 2),
+      bottomNavigationBar: BottomBar(screenIndex: 1),
     );
   }
 }
@@ -30,7 +30,7 @@ class Body extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
             border: Border.all(
-              color: grey120,
+              color: CustomColors.borderColor2,
               width: 1,
             ),
             borderRadius: const BorderRadius.all(
@@ -40,60 +40,60 @@ class Body extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Row(
-                children: const <Widget>[
-                  Text('Module 1'),
+                children: <Widget>[
+                  const Text('Module 1'),
                   IconButton(
-                    onPressed: nothing,
-                    icon: Icon(Icons.more_vert),
+                    onPressed: () {},
+                    icon: const Icon(Icons.more_vert),
                   ),
                 ],
               ),
               Table(
-                border: const TableBorder(
+                border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                   verticalInside: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                   top: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                 ),
                 columnWidths: const <int, TableColumnWidth>{},
-                children: const <TableRow>[
+                children: <TableRow>[
                   TableRow(children: [
-                    Text('Test'),
-                    Text('15-02-2023'),
-                    Text('09:00'),
+                    const Text('Test'),
+                    const Text('15-02-2023'),
+                    const Text('09:00'),
                     IconButton(
-                      onPressed: nothing,
+                      onPressed: () {},
                       icon: Icon(Icons.more_vert),
                     ),
                   ]),
                   TableRow(children: [
-                    Text('Quiz'),
-                    Text('01-03-2023'),
-                    Text('09:00'),
+                    const Text('Quiz'),
+                    const Text('01-03-2023'),
+                    const Text('09:00'),
                     IconButton(
-                      onPressed: nothing,
-                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                      icon: const Icon(Icons.more_vert),
                     ),
                   ]),
                   TableRow(children: [
-                    Text('Test'),
-                    Text('15-02-2023'),
-                    Text('09:00'),
+                    const Text('Test'),
+                    const Text('15-02-2023'),
+                    const Text('09:00'),
                     IconButton(
-                      onPressed: nothing,
-                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                      icon: const Icon(Icons.more_vert),
                     ),
                   ]),
                   TableRow(children: [
@@ -101,18 +101,18 @@ class Body extends StatelessWidget {
                     Text('22-03-2023'),
                     Text('10:00'),
                     IconButton(
-                      onPressed: nothing,
+                      onPressed: () {},
                       icon: Icon(Icons.more_vert),
                     ),
                   ]),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 30,
                 child: IconButton(
-                  onPressed: nothing,
-                  icon: Icon(Icons.add_circle_outline),
-                  padding: EdgeInsets.all(0),
+                  onPressed: () {},
+                  icon: const Icon(Icons.add_circle_outline),
+                  padding: const EdgeInsets.all(0),
                   color: grey80,
                 ),
               ),
@@ -123,7 +123,7 @@ class Body extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
             border: Border.all(
-              color: grey120,
+              color: CustomColors.borderColor2,
               width: 1,
             ),
             borderRadius: const BorderRadius.all(
@@ -134,61 +134,61 @@ class Body extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
-                children: const <Widget>[
-                  Text('Module 2'),
+                children: <Widget>[
+                  const Text('Module 2'),
                   IconButton(
-                    onPressed: nothing,
-                    icon: Icon(Icons.more_vert),
+                    onPressed: () {},
+                    icon: const Icon(Icons.more_vert),
                   ),
                 ],
               ),
               Table(
-                border: const TableBorder(
+                border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                   verticalInside: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                   top: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: grey120,
+                    color: CustomColors.borderColor2,
                     width: 1,
                   ),
                 ),
-                children: const <TableRow>[
+                children: <TableRow>[
                   TableRow(children: [
-                    Text('Test'),
-                    Text('15-02-2023'),
-                    Text('09:00'),
+                    const Text('Test'),
+                    const Text('15-02-2023'),
+                    const Text('09:00'),
                     IconButton(
-                      onPressed: nothing,
+                      onPressed: () {},
                       icon: Icon(Icons.more_vert),
                     ),
                   ]),
                   TableRow(children: [
-                    Text('Quiz'),
-                    Text('01-03-2023'),
-                    Text('09:00'),
+                    const Text('Quiz'),
+                    const Text('01-03-2023'),
+                    const Text('09:00'),
                     IconButton(
-                      onPressed: nothing,
-                      icon: Icon(Icons.more_vert),
+                      onPressed: () {},
+                      icon: const Icon(Icons.more_vert),
                     ),
                   ]),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 30,
                 child: Center(
                   child: IconButton(
-                    onPressed: nothing,
-                    icon: Icon(Icons.add_circle_outline),
-                    padding: EdgeInsets.all(0),
+                    onPressed: () {},
+                    icon: const Icon(Icons.add_circle_outline),
+                    padding: const EdgeInsets.all(0),
                     color: grey80,
                   ),
                 ),
@@ -200,21 +200,19 @@ class Body extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
             border: Border.all(
-              color: grey120,
+              color: CustomColors.borderColor2,
               width: 1,
             ),
             borderRadius: const BorderRadius.all(
               Radius.circular(5),
             ),
           ),
-          child: const IconButton(
-            onPressed: nothing,
-            icon: Icon(Icons.add_circle_outline),
+          child: IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.add_circle_outline),
           ),
         ),
       ],
     );
   }
 }
-
-void nothing() {}

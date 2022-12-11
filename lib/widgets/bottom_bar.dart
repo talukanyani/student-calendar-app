@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({required this.screenIndex, super.key});
@@ -8,31 +9,26 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.add_box_outlined),
-          label: 'Add',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list_alt_outlined),
-          label: 'List',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month_outlined),
-          label: 'Calender',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings_applications_outlined),
-          label: 'Settings',
-        ),
-      ],
       type: BottomNavigationBarType.fixed,
       showUnselectedLabels: true,
       currentIndex: screenIndex,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(FluentIcons.home_24_regular),
+          activeIcon: Icon(FluentIcons.home_24_filled),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(FluentIcons.add_circle_24_regular),
+          activeIcon: Icon(FluentIcons.add_circle_24_filled),
+          label: 'Add',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(FluentIcons.calendar_ltr_24_regular),
+          activeIcon: Icon(FluentIcons.calendar_ltr_24_filled),
+          label: 'Calender',
+        ),
+      ],
     );
   }
 }

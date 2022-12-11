@@ -24,9 +24,18 @@ const warningYellowLight = Color(0xFFF6F6C1);
 const brown = Color(0xFFA5785E);
 const brownDark = Color(0xFF866255);
 const brownLight = Color(0xFFDBCBBB);
+
 const brownWhite1 = Color(0xFFEAE5D9);
 const brownWhite2 = Color(0xFFE5E0D4);
 const brownWhite3 = Color(0xFFE0DBCF);
+
+const brownGrey1 = Color(0xFF555044);
+const brownGrey2 = Color(0xFF7D786C);
+const brownGrey3 = Color(0xFFA5A094);
+
+const brownBlack1 = Color(0xFF191408);
+const brownBlack2 = Color(0xFF2D281C);
+const brownBlack3 = Color(0xFF413C30);
 
 const orange = Color(0xFFDEAF5F);
 const orangeDark = Color(0xFFCA7923);
@@ -38,36 +47,16 @@ const greenDark = Color(0xFF264F0A);
 const greenLight = Color(0xFFBCCF9A);
 const greenWhite = Color(0xFFEFF4E6);
 
-ColorScheme lightColorScheme() {
-  return const ColorScheme(
-    brightness: Brightness.light,
-    primary: brown,
-    onPrimary: brownWhite1,
-    primaryContainer: brownLight,
-    onPrimaryContainer: brownDark,
-    secondary: orange,
-    onSecondary: orangeWhite,
-    secondaryContainer: orangeLight,
-    onSecondaryContainer: orangeDark,
-    tertiary: green,
-    onTertiary: greenWhite,
-    tertiaryContainer: greenLight,
-    onTertiaryContainer: greenDark,
-    background: brownWhite1,
-    onBackground: black20,
-    surface: brownWhite2,
-    onSurface: black20,
-    surfaceVariant: brownLight,
-    onSurfaceVariant: brownDark,
-    error: errorRed,
-    onError: white245,
-    errorContainer: errorRedLight,
-    onErrorContainer: black20,
-    outline: brown,
-    inverseSurface: orangeLight,
-    onInverseSurface: orangeDark,
-    inversePrimary: orange,
-    shadow: brownLight,
-    surfaceTint: brownLight,
-  );
+class CustomColors {
+  static Color bgColor1 = brownWhite1;
+  static Color bgColor2 = brownWhite2;
+  static Color bgColor3 = brownWhite3;
+
+  static Color fgColor1 = brownBlack1;
+  static Color fgColor2 = brownBlack2;
+  static Color fgColor3 = brownBlack3;
+
+  static Color borderColor1 = brownGrey1;
+  static Color borderColor2 = brownGrey2;
+  static Color borderColor3 = brownGrey3;
 }
