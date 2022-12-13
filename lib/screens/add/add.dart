@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
 
-import '../../../../../../../themes/colors.dart';
+import '../../themes/colors.dart';
 
 class AddScreen extends StatelessWidget {
   const AddScreen({super.key});
@@ -24,192 +25,290 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: CustomColors.borderColor2,
-              width: 1,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(5),
-            ),
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                blurRadius: 2,
+                offset: const Offset(0.2, 0.4),
+                color: Theme.of(context).colorScheme.shadow,
+              ),
+            ],
           ),
           child: Column(
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const Text('Module 1'),
+                  Text(
+                    'Module 1',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.more_vert),
+                    icon: const Icon(Iconsax.more_circle),
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
               Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FlexColumnWidth(3.5),
+                  1: FlexColumnWidth(3),
+                  2: FlexColumnWidth(2),
+                  3: FlexColumnWidth(1.5),
+                },
                 border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: CustomColors.borderColor2,
-                    width: 1,
-                  ),
-                  verticalInside: BorderSide(
-                    color: CustomColors.borderColor2,
-                    width: 1,
-                  ),
-                  top: BorderSide(
-                    color: CustomColors.borderColor2,
+                    color: CustomColors.borderColor1,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: CustomColors.borderColor2,
+                    color: CustomColors.borderColor1,
                     width: 1,
                   ),
                 ),
-                columnWidths: const <int, TableColumnWidth>{},
                 children: <TableRow>[
-                  TableRow(children: [
-                    const Text('Test'),
-                    const Text('15-02-2023'),
-                    const Text('09:00'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.more_vert),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    const Text('Quiz'),
-                    const Text('01-03-2023'),
-                    const Text('09:00'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    const Text('Test'),
-                    const Text('15-02-2023'),
-                    const Text('09:00'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    Text('Test'),
-                    Text('22-03-2023'),
-                    Text('10:00'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.more_vert),
-                    ),
-                  ]),
+                  TableRow(
+                    children: [
+                      Text(
+                        'Activity',
+                        style: TextStyle(color: CustomColors.fgColor4),
+                      ),
+                      Text(
+                        'Date',
+                        style: TextStyle(color: CustomColors.fgColor4),
+                      ),
+                      Text(
+                        'Time',
+                        style: TextStyle(color: CustomColors.fgColor4),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                        child: Text(''),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Test'),
+                      const Text('15-02-2023'),
+                      const Text('09:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Quiz'),
+                      const Text('01-03-2023'),
+                      const Text('09:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Test'),
+                      const Text('15-02-2023'),
+                      const Text('09:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Test'),
+                      const Text('22-03-2023'),
+                      const Text('10:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               SizedBox(
-                height: 30,
+                height: 40,
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.add_circle_outline),
-                  padding: const EdgeInsets.all(0),
-                  color: grey80,
+                  icon: const Icon(Iconsax.add_circle),
+                  tooltip: 'Add Activity',
                 ),
               ),
             ],
           ),
         ),
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: CustomColors.borderColor2,
-              width: 1,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(5),
-            ),
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                blurRadius: 2,
+                offset: const Offset(0.2, 0.4),
+                color: Theme.of(context).colorScheme.shadow,
+              ),
+            ],
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const Text('Module 2'),
+                  Text(
+                    'Module 2',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.more_vert),
+                    icon: const Icon(Iconsax.more_circle),
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
               Table(
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FlexColumnWidth(3.5),
+                  1: FlexColumnWidth(3),
+                  2: FlexColumnWidth(2),
+                  3: FlexColumnWidth(1.5),
+                },
                 border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: CustomColors.borderColor2,
-                    width: 1,
-                  ),
-                  verticalInside: BorderSide(
-                    color: CustomColors.borderColor2,
-                    width: 1,
-                  ),
-                  top: BorderSide(
-                    color: CustomColors.borderColor2,
+                    color: CustomColors.borderColor1,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: CustomColors.borderColor2,
+                    color: CustomColors.borderColor1,
                     width: 1,
                   ),
                 ),
                 children: <TableRow>[
-                  TableRow(children: [
-                    const Text('Test'),
-                    const Text('15-02-2023'),
-                    const Text('09:00'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.more_vert),
-                    ),
-                  ]),
-                  TableRow(children: [
-                    const Text('Quiz'),
-                    const Text('01-03-2023'),
-                    const Text('09:00'),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                  ]),
+                  TableRow(
+                    children: [
+                      Text(
+                        'Activity',
+                        style: TextStyle(color: CustomColors.fgColor4),
+                      ),
+                      Text(
+                        'Date',
+                        style: TextStyle(color: CustomColors.fgColor4),
+                      ),
+                      Text(
+                        'Time',
+                        style: TextStyle(color: CustomColors.fgColor4),
+                      ),
+                      const SizedBox(
+                        height: 24,
+                        child: Text(''),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Test'),
+                      const Text('15-02-2023'),
+                      const Text('09:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Quiz'),
+                      const Text('01-03-2023'),
+                      const Text('09:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text('Test'),
+                      const Text('15-02-2023'),
+                      const Text('09:00'),
+                      SizedBox(
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Iconsax.more),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               SizedBox(
-                height: 30,
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add_circle_outline),
-                    padding: const EdgeInsets.all(0),
-                    color: grey80,
-                  ),
+                height: 40,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Iconsax.add_circle),
+                  tooltip: 'Add Activity',
                 ),
               ),
             ],
           ),
         ),
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: CustomColors.borderColor2,
-              width: 1,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(5),
-            ),
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                blurRadius: 2,
+                offset: const Offset(0.2, 0.4),
+                color: Theme.of(context).colorScheme.shadow,
+              ),
+            ],
           ),
           child: IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.add_circle_outline),
+            icon: const Icon(Iconsax.add_circle),
+            tooltip: 'Add Module',
           ),
         ),
       ],

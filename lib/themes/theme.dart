@@ -4,6 +4,7 @@ import 'package:sc_app/themes/colors.dart';
 
 import 'package:sc_app/themes/widgets_theme/top_bar_theme.dart';
 import 'package:sc_app/themes/widgets_theme/bottom_bar_theme.dart';
+import 'package:sc_app/themes/widgets_theme/text_theme.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
@@ -11,7 +12,7 @@ ThemeData lightTheme() {
     colorScheme: const ColorScheme(
       brightness: Brightness.light,
       primary: brown,
-      onPrimary: brownWhite1,
+      onPrimary: brownWhite,
       primaryContainer: brownLight,
       onPrimaryContainer: brownDark,
       secondary: orange,
@@ -22,36 +23,36 @@ ThemeData lightTheme() {
       onTertiary: greenWhite,
       tertiaryContainer: greenLight,
       onTertiaryContainer: greenDark,
-      background: brownWhite1,
+      background: white240,
       onBackground: black20,
-      surface: brownWhite2,
+      surface: white245,
       onSurface: black20,
       surfaceVariant: brownLight,
       onSurfaceVariant: brownDark,
       error: errorRed,
-      onError: white245,
+      onError: white250,
       errorContainer: errorRedLight,
       onErrorContainer: black20,
       outline: brown,
       inverseSurface: orangeLight,
       onInverseSurface: orangeDark,
       inversePrimary: orange,
-      shadow: brownLight,
+      shadow: grey200,
       surfaceTint: brownLight,
     ),
     primaryColor: brown,
     primaryColorLight: brownLight,
     primaryColorDark: brownDark,
-    backgroundColor: brownWhite1,
-    scaffoldBackgroundColor: brownWhite1,
+    backgroundColor: white240,
+    scaffoldBackgroundColor: white240,
     indicatorColor: brownDark,
-    shadowColor: brownLight,
+    shadowColor: grey200,
     toggleableActiveColor: green,
     disabledColor: grey120,
-    hintColor: black60,
+    hintColor: black50,
     errorColor: errorRed,
     focusColor: orangeWhite,
-    //
+    textTheme: textTheme(),
     appBarTheme: topBarTheme(),
     bottomNavigationBarTheme: bottomBarTheme(),
   );

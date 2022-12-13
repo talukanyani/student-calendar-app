@@ -4,7 +4,7 @@ import 'package:sc_app/themes/colors.dart';
 
 BottomNavigationBarThemeData bottomBarTheme() {
   return BottomNavigationBarThemeData(
-    backgroundColor: CustomColors.bgColor3,
+    backgroundColor: CustomColors.bgColor1,
     elevation: 0,
     selectedItemColor: CustomColors.fgColor3,
     unselectedItemColor: CustomColors.fgColor3,
