@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:sc_app/themes/colors.dart';
-
-BottomNavigationBarThemeData bottomBarTheme() {
+BottomNavigationBarThemeData bottomBarTheme(Color bgColor, Color fgColor) {
   return BottomNavigationBarThemeData(
-    backgroundColor: CustomColors.bgColor1,
+    backgroundColor: bgColor,
     elevation: 0,
-    selectedItemColor: CustomColors.fgColor3,
-    unselectedItemColor: CustomColors.fgColor3,
+    selectedItemColor: fgColor,
+    unselectedItemColor: fgColor,
     selectedLabelStyle: const TextStyle(fontSize: 12),
   );
 }

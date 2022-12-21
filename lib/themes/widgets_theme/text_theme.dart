@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import '../colors.dart';
 
-TextTheme textTheme() {
+TextTheme textTheme(Color textColor1, Color hColor1) {
   return TextTheme(
     headline5: TextStyle(
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: FontWeight.w400,
-      color: CustomColors.fgColor3,
+      color: hColor1,
     ),
     bodyText2: TextStyle(
       fontSize: 14,
-      color: CustomColors.fgColor4,
+      color: textColor1,
     ),
   );
 }

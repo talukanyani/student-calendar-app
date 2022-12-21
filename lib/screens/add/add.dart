@@ -3,8 +3,7 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
-
-import '../../themes/colors.dart';
+import 'package:sc_app/screens/add/modals/row_add_modal_sheet.dart';
 
 class AddScreen extends StatelessWidget {
   const AddScreen({super.key});
@@ -68,30 +67,21 @@ class Body extends StatelessWidget {
                 },
                 border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: CustomColors.borderColor1,
+                    color: Theme.of(context).dividerColor,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: CustomColors.borderColor1,
+                    color: Theme.of(context).dividerColor,
                     width: 1,
                   ),
                 ),
                 children: <TableRow>[
-                  TableRow(
+                  const TableRow(
                     children: [
-                      Text(
-                        'Activity',
-                        style: TextStyle(color: CustomColors.fgColor4),
-                      ),
-                      Text(
-                        'Date',
-                        style: TextStyle(color: CustomColors.fgColor4),
-                      ),
-                      Text(
-                        'Time',
-                        style: TextStyle(color: CustomColors.fgColor4),
-                      ),
-                      const SizedBox(
+                      Text('Activity'),
+                      Text('Date'),
+                      Text('Time'),
+                      SizedBox(
                         height: 24,
                         child: Text(''),
                       ),
@@ -158,9 +148,20 @@ class Body extends StatelessWidget {
               SizedBox(
                 height: 40,
                 child: IconButton(
-                  onPressed: () {},
                   icon: const Icon(Iconsax.add_circle),
                   tooltip: 'Add Activity',
+                  onPressed: () {
+                    showModalBottomSheet(
+                      barrierColor: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.2),
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const RowAddModalSheet();
+                      },
+                    );
+                  },
                 ),
               ),
             ],
@@ -207,30 +208,21 @@ class Body extends StatelessWidget {
                 },
                 border: TableBorder(
                   horizontalInside: BorderSide(
-                    color: CustomColors.borderColor1,
+                    color: Theme.of(context).dividerColor,
                     width: 1,
                   ),
                   bottom: BorderSide(
-                    color: CustomColors.borderColor1,
+                    color: Theme.of(context).dividerColor,
                     width: 1,
                   ),
                 ),
                 children: <TableRow>[
-                  TableRow(
+                  const TableRow(
                     children: [
-                      Text(
-                        'Activity',
-                        style: TextStyle(color: CustomColors.fgColor4),
-                      ),
-                      Text(
-                        'Date',
-                        style: TextStyle(color: CustomColors.fgColor4),
-                      ),
-                      Text(
-                        'Time',
-                        style: TextStyle(color: CustomColors.fgColor4),
-                      ),
-                      const SizedBox(
+                      Text('Activity'),
+                      Text('Date'),
+                      Text('Time'),
+                      SizedBox(
                         height: 24,
                         child: Text(''),
                       ),
@@ -283,9 +275,20 @@ class Body extends StatelessWidget {
               SizedBox(
                 height: 40,
                 child: IconButton(
-                  onPressed: () {},
                   icon: const Icon(Iconsax.add_circle),
                   tooltip: 'Add Activity',
+                  onPressed: () {
+                    showModalBottomSheet(
+                      barrierColor: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.2),
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const RowAddModalSheet();
+                      },
+                    );
+                  },
                 ),
               ),
             ],
