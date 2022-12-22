@@ -18,8 +18,8 @@ class App extends StatelessWidget {
       value: androidSystemOverlay(),
       child: MaterialApp(
         title: 'Student Calender',
-        // home: const HomeScreen(),
-        home: const AddScreen(),
+        home: const HomeScreen(),
+        // home: const AddScreen(),
         theme: lightTheme(),
         debugShowCheckedModeBanner: false,
       ),
