@@ -7,7 +7,7 @@ class DaysList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 64,
+      height: 56,
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(
@@ -43,8 +43,9 @@ class DayBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(4),
-      width: 48,
+      width: 40,
       decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor.withOpacity(0.8),
         border: Border.all(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -54,14 +55,14 @@ class DayBox extends StatelessWidget {
           Text(
             day,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 10,
               color: Theme.of(context).textTheme.headline5?.color,
             ),
           ),
           Text(
             date,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.w500,
               color: Theme.of(context).textTheme.headline5?.color,
             ),
@@ -81,6 +82,7 @@ class ButtonBox extends StatelessWidget {
       margin: const EdgeInsets.all(4),
       width: 120,
       decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor.withOpacity(0.8),
         border: Border.all(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
