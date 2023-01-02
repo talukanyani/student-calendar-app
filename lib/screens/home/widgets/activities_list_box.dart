@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/widgets/activities_list.dart';
 
 class ActivitiesListBox extends StatelessWidget {
   const ActivitiesListBox({super.key});
@@ -40,101 +41,9 @@ class ActivitiesListBox extends StatelessWidget {
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
-          SizedBox(
-            height: 150,
-            child: ListView(
-              itemExtent: 48,
-              children: <Widget>[
-                ListTile(
-                  leading: Column(
-                    children: <Widget>[
-                      const SizedBox(height: 12),
-                      Container(
-                        height: 24,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text('09:30'),
-                      ),
-                      const VertLine(),
-                    ],
-                  ),
-                  title: Text(
-                    'Module 1 Test 1',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).textTheme.headline5?.color,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Column(
-                    children: <Widget>[
-                      const VertLine(),
-                      Container(
-                        height: 24,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text('23:59'),
-                      ),
-                      const VertLine(),
-                    ],
-                  ),
-                  title: Text(
-                    'Module 2 Quiz 3',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).textTheme.headline5?.color,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Column(
-                    children: <Widget>[
-                      const VertLine(),
-                      Container(
-                        height: 24,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text('23:59'),
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                  ),
-                  title: Text(
-                    'Module 1 Assignment 2',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).textTheme.headline5?.color,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          const Expanded(child: ActivitiesList()),
         ],
       ),
-    );
-  }
-}
-
-class VertLine extends StatelessWidget {
-  const VertLine({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 12,
-      width: 2,
-      color: Theme.of(context).primaryColorLight,
     );
   }
 }

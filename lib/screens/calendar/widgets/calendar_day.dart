@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/screens/calendar/modals/day_activities.dart';
 
 class Day extends StatelessWidget {
   const Day({
@@ -14,21 +15,29 @@ class Day extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: activities.isNotEmpty
-            ? Theme.of(context).colorScheme.tertiary
-            : null,
-        borderRadius: BorderRadius.circular(4),
-        border: isCurrentDate
-            ? Border.all(
-                width: 2,
-                color: Theme.of(context).colorScheme.secondary,
-              )
-            : null,
+    return GestureDetector(
+      onTap: () => showDialog(
+        barrierColor:
+            Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+        context: context,
+        builder: (context) => const DayActivitiesModal(),
       ),
-      child: Text(date.toString()),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: activities.isNotEmpty
+              ? Theme.of(context).colorScheme.tertiary
+              : null,
+          borderRadius: BorderRadius.circular(4),
+          border: isCurrentDate
+              ? Border.all(
+                  width: 2,
+                  color: Theme.of(context).colorScheme.secondary,
+                )
+              : null,
+        ),
+        child: Text(date.toString()),
+      ),
     );
   }
 }
