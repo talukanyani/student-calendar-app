@@ -3,7 +3,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'package:sc_app/screens/home/home.dart';
 import 'package:sc_app/screens/add/add.dart';
-import 'package:sc_app/screens/calender/calender.dart';
+import 'package:sc_app/screens/calendar/calendar.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({required this.screenIndex, super.key});
@@ -13,7 +13,7 @@ class BottomBar extends StatelessWidget {
   static const List<Widget> _primaryScreens = <Widget>[
     HomeScreen(),
     AddScreen(),
-    CalenderScreen(),
+    CalendarScreen(),
   ];
 
   @override
