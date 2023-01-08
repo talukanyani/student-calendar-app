@@ -7,11 +7,13 @@ class Day extends StatelessWidget {
     required this.date,
     this.activities = const [],
     this.isCurrentDate = false,
+    this.isInDisplayedMonth = true,
   });
 
   final int date;
   final List activities;
   final bool isCurrentDate;
+  final bool isInDisplayedMonth;
 
   @override
   Widget build(BuildContext context) {
@@ -22,21 +24,24 @@ class Day extends StatelessWidget {
         context: context,
         builder: (context) => const DayActivitiesModal(),
       ),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: activities.isNotEmpty
-              ? Theme.of(context).colorScheme.tertiary
-              : null,
-          borderRadius: BorderRadius.circular(4),
-          border: isCurrentDate
-              ? Border.all(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.secondary,
-                )
-              : null,
+      child: Opacity(
+        opacity: isInDisplayedMonth ? 1 : 0.5,
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: activities.isNotEmpty
+                ? Theme.of(context).colorScheme.tertiary
+                : null,
+            borderRadius: BorderRadius.circular(4),
+            border: isCurrentDate
+                ? Border.all(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.secondary,
+                  )
+                : null,
+          ),
+          child: Text(date.toString()),
         ),
-        child: Text(date.toString()),
       ),
     );
   }
