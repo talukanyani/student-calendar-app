@@ -9,27 +9,45 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  int _currPageIndex = 6;
-  final double _gridSpacing = 4;
-  final double _gridRatio = 0.75;
-  final DateTime currDate = DateTime.now();
+  int _displayedMonthIndex = _currMonthIndex;
+
+  static DateTime currDate = DateTime.now();
+  static int beforeCurrMonthCount = (currDate.month - 1) + 12;
+  static final int _currMonthIndex = beforeCurrMonthCount;
+
+  final double _gridSpacing = 8;
+  final double _gridRatio = 0.8;
+  final List<String> _monthNames = <String>[
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   // if it is currently displayed month, get its dates using dates algorithim
   // else get its dates using first or last date of currently diplayed month.
   DateTime getDate(dayIndex, monthIndex) {
-    if (monthIndex > _currPageIndex) {
-      return getNextMonthDate(dayIndex, monthIndex);
-    } else if (monthIndex < _currPageIndex) {
-      return getPrevMonthDate(dayIndex, monthIndex);
+    if (monthIndex > _displayedMonthIndex) {
+      return getNextMonthDates(dayIndex, monthIndex);
+    } else if (monthIndex < _displayedMonthIndex) {
+      return getPrevMonthDates(dayIndex, monthIndex);
     } else {
-      return getDisplayedMonthDate(dayIndex, monthIndex);
+      return getDisplayedMonthDates(dayIndex, monthIndex);
     }
   }
 
-  DateTime getDisplayedMonthDate(int dayIndex, int monthIndex) {
+  DateTime getDisplayedMonthDates(int dayIndex, int monthIndex) {
     var startDate = DateTime(
       currDate.year,
-      currDate.month + (monthIndex - 6),
+      currDate.month + (monthIndex - beforeCurrMonthCount),
       1,
     );
 
@@ -41,27 +59,29 @@ class _CalendarState extends State<Calendar> {
     return startDate.add(Duration(days: dayIndex));
   }
 
-  DateTime getNextMonthDate(int dayIndex, int monthIndex) {
-    var displayedMonthLastDate = getDisplayedMonthDate(41, _currPageIndex);
+  DateTime getNextMonthDates(int dayIndex, int monthIndex) {
+    var displayedMonthLastDate =
+        getDisplayedMonthDates(41, _displayedMonthIndex);
 
     var startDate = displayedMonthLastDate.add(
-      Duration(days: 1 + (42 * (monthIndex - (_currPageIndex + 1)))),
+      Duration(days: 1 + (42 * (monthIndex - (_displayedMonthIndex + 1)))),
     );
 
     return startDate.add(Duration(days: dayIndex));
   }
 
-  DateTime getPrevMonthDate(int dayIndex, int monthIndex) {
-    var displyedMounthFirstDate = getDisplayedMonthDate(0, _currPageIndex);
+  DateTime getPrevMonthDates(int dayIndex, int monthIndex) {
+    var displayedMounthFirstDate =
+        getDisplayedMonthDates(0, _displayedMonthIndex);
 
-    var startDate = displyedMounthFirstDate.subtract(
-      Duration(days: 42 + (42 * ((_currPageIndex - 1) - monthIndex))),
+    var startDate = displayedMounthFirstDate.subtract(
+      Duration(days: 42 + (42 * ((_displayedMonthIndex - 1) - monthIndex))),
     );
 
     return startDate.add(Duration(days: dayIndex));
   }
 
-  bool isCurrentDate(dayIndex, monthIndex) {
+  bool isCurrDate(dayIndex, monthIndex) {
     var dayBox = getDate(dayIndex, monthIndex);
 
     if (dayBox.day == currDate.day &&
@@ -73,18 +93,29 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
+  DateTime displayedMonthDate() {
+    return getDate(7, _displayedMonthIndex);
+  }
+
+  String displayedMonthName() {
+    return _monthNames[displayedMonthDate().month - 1];
+  }
+
+  String displayedMonthYear() {
+    if (displayedMonthDate().year == currDate.year) {
+      return '';
+    }
+
+    return displayedMonthDate().year.toString();
+  }
+
   // get month view ratio to available space using avilable space height
   // and month view height
   double getViewFraction(constraints) {
-    double gridSpaces(no) => _gridSpacing * no;
-
     double pageViewHeight = constraints.maxHeight;
     double pageViewWidth = constraints.maxWidth;
 
-    double dayBoxWidth = (pageViewWidth - gridSpaces(6)) / 7;
-    double dayBoxHeight = dayBoxWidth * (1 / _gridRatio);
-
-    double monthHeight = (dayBoxHeight * 6) + gridSpaces(5);
+    double monthHeight = (((pageViewWidth / 7) * (1 / _gridRatio)) * 6);
 
     double fraction = monthHeight / pageViewHeight;
 
@@ -107,8 +138,8 @@ class _CalendarState extends State<Calendar> {
         borderRadius: const BorderRadius.all(Radius.elliptical(16, 32)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            blurRadius: 32,
-            spreadRadius: -28,
+            blurRadius: 16,
+            spreadRadius: -8,
             color: Theme.of(context).shadowColor,
           ),
         ],
@@ -116,49 +147,58 @@ class _CalendarState extends State<Calendar> {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
             decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: const Text(
-              'February 2023',
-              style: TextStyle(fontWeight: FontWeight.w500),
+            child: Text(
+              '${displayedMonthName()} ${displayedMonthYear()}',
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 7,
-            children: const [
-              WeekDay(day: 'Mon'),
-              WeekDay(day: 'Tue'),
-              WeekDay(day: 'Wed'),
-              WeekDay(day: 'Thu'),
-              WeekDay(day: 'Fri'),
-              WeekDay(day: 'Sat'),
-              WeekDay(day: 'Sun'),
-            ],
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).dividerColor),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: GridView.count(
+              shrinkWrap: true,
+              childAspectRatio: 1.25,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 7,
+              children: const [
+                WeekDay(day: 'Mon'),
+                WeekDay(day: 'Tue'),
+                WeekDay(day: 'Wed'),
+                WeekDay(day: 'Thu'),
+                WeekDay(day: 'Fri'),
+                WeekDay(day: 'Sat'),
+                WeekDay(day: 'Sun'),
+              ],
+            ),
           ),
+          const SizedBox(height: 16),
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return PageView.builder(
                   scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   controller: PageController(
-                    initialPage: 6,
+                    initialPage: _currMonthIndex,
                     viewportFraction: getViewFraction(constraints),
                   ),
                   padEnds: false,
                   onPageChanged: (index) {
-                    setState(() => _currPageIndex = index);
+                    setState(() => _displayedMonthIndex = index);
                   },
-                  itemCount: 20,
+                  itemCount: 48,
                   itemBuilder: (context, monthIndex) {
-                    if (monthIndex == 19) {
-                      return SizedBox(height: constraints.maxHeight);
-                    }
                     return GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -172,10 +212,10 @@ class _CalendarState extends State<Calendar> {
                       itemBuilder: (context, dayIndex) {
                         return Day(
                           date: getDate(dayIndex, monthIndex).day,
-                          isCurrentDate: isCurrentDate(dayIndex, monthIndex),
+                          isCurrentDate: isCurrDate(dayIndex, monthIndex),
                           isInDisplayedMonth:
                               getDate(dayIndex, monthIndex).month ==
-                                  getDate(7, _currPageIndex).month,
+                                  displayedMonthDate().month,
                         );
                       },
                     );

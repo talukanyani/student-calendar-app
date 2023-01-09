@@ -25,20 +25,23 @@ class Day extends StatelessWidget {
         builder: (context) => const DayActivitiesModal(),
       ),
       child: Opacity(
-        opacity: isInDisplayedMonth ? 1 : 0.5,
+        opacity: isInDisplayedMonth ? 1 : 0.25,
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: activities.isNotEmpty
                 ? Theme.of(context).colorScheme.tertiary
-                : null,
-            borderRadius: BorderRadius.circular(4),
-            border: isCurrentDate
-                ? Border.all(
-                    width: 2,
-                    color: Theme.of(context).colorScheme.secondary,
-                  )
-                : null,
+                : Theme.of(context)
+                    .colorScheme
+                    .primaryContainer
+                    .withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              width: isCurrentDate ? 4 : 1,
+              color: isCurrentDate
+                  ? Theme.of(context).colorScheme.secondary
+                  : Theme.of(context).dividerColor,
+            ),
           ),
           child: Text(date.toString()),
         ),

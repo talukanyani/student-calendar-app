@@ -51,7 +51,7 @@ class BottomBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(FluentIcons.calendar_ltr_24_regular),
           activeIcon: Icon(FluentIcons.calendar_ltr_24_filled),
-          label: 'Calender',
+          label: 'Calendar',
         ),
       ],
     );
