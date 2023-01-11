@@ -41,4 +41,15 @@ const greenDark = Color(0xFF264F0A);
 const greenLight = Color(0xFFBCCF9A);
 const greenWhite = Color(0xFFEFF4E6);
 
-class CustomColors {}
+class CustomColors {
+  static const babyBlueEyes = Color(0xFFABBAFF);
+  static const freshAirBlue = Color(0xFFABE4FF);
+  static const calamnsi = Color(0xFFE4FFAB);
+  static const peach = Color(0xFFFFF0AB);
+  static const deepPeach = Color(0xFFFFC6AB);
+  static const melon = Color(0xFFF3B3B0);
+  static const salmonPink = Color(0xFFFF9E9E);
+  static const paleMagentaPink = Color(0xFFFF9ECF);
+  static const paleViolet = Color(0xFFC6ABFF);
+  static const mauveViolet = Color(0xFFE6B8F3);
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-import 'subject_table.dart';
+import 'table_container.dart';
 
 class TableAddButton extends StatelessWidget {
   const TableAddButton({super.key});
@@ -9,10 +9,9 @@ class TableAddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TableContainer(
-      child: IconButton(
+      child: RawMaterialButton(
         onPressed: () {},
-        icon: const Icon(Iconsax.add_circle),
-        tooltip: 'Add Module',
+        child: const Icon(Iconsax.add_circle),
       ),
     );
   }

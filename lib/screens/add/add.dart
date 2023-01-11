@@ -29,6 +29,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 8),
+      physics: const BouncingScrollPhysics(),
       itemCount: tablesCount + 1,
       itemBuilder: (context, index) {
         if (index == tablesCount) {
@@ -36,6 +37,7 @@ class Body extends StatelessWidget {
         }
         return SubjectTable(
           subjectName: subjectsData[index].subjectName,
+          color: subjectsData[index].color,
           activities: subjectsData[index].activities,
         );
       },

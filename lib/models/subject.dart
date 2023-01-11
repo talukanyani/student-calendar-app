@@ -1,6 +1,7 @@
 class SubjectModel {
   String subjectName;
-  Set<Map<String, String>> activities;
+  String color;
+  Set<Map<String, dynamic>> activities;
 
-  SubjectModel(this.subjectName, this.activities);
+  SubjectModel(this.subjectName, this.color, this.activities);
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:sc_app/screens/calendar/widgets/calendar_day.dart';
+
+import 'package:sc_app/helpers/mounth_names.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -17,20 +20,6 @@ class _CalendarState extends State<Calendar> {
 
   final double _gridSpacing = 8;
   final double _gridRatio = 0.8;
-  final List<String> _monthNames = <String>[
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
 
   // if it is currently displayed month, get its dates using dates algorithim
   // else get its dates using first or last date of currently diplayed month.
@@ -98,15 +87,17 @@ class _CalendarState extends State<Calendar> {
   }
 
   String displayedMonthName() {
-    return _monthNames[displayedMonthDate().month - 1];
+    return getFullMonthName(displayedMonthDate().month - 1);
   }
 
   String displayedMonthYear() {
-    if (displayedMonthDate().year == currDate.year) {
+    int year = displayedMonthDate().year;
+
+    if (year == currDate.year) {
       return '';
     }
 
-    return displayedMonthDate().year.toString();
+    return year.toString();
   }
 
   // get month view ratio to available space using avilable space height
