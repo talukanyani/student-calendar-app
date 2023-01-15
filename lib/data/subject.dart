@@ -1,9 +1,9 @@
-import 'package:sc_app/models/subject.dart';
+import 'package:sc_app/models/subject_model.dart';
 
 List<SubjectModel> subjectsData = [
   SubjectModel(
     'Subject 1',
-    'peach',
+    'yellow',
     {
       {
         "activity": "Test 1",
@@ -33,7 +33,7 @@ List<SubjectModel> subjectsData = [
   ),
   SubjectModel(
     'Subject 2',
-    'baby_blue',
+    'blue',
     {
       {
         "activity": "Test 1",
@@ -51,7 +51,7 @@ List<SubjectModel> subjectsData = [
   ),
   SubjectModel(
     'Subject 3',
-    'salmon_pink',
+    'pink',
     {
       {
         "activity": "Test 1",

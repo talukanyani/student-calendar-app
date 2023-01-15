@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/screens/add/widgets/label_and_border.dart';
 
 class ActivityInput extends StatelessWidget {
   const ActivityInput({super.key});
@@ -13,62 +12,73 @@ class ActivityInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LabelAndBorderContainer(
-      label: 'Activity',
-      child: Autocomplete<String>(
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          return _activityOptions.where((String option) {
-            return option
-                .toLowerCase()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder:
-            (context, textEditingController, focusNode, onFieldSubmitted) {
-          return TextField(
-            controller: textEditingController,
-            focusNode: focusNode,
-            keyboardType: TextInputType.text,
-            autocorrect: true,
-            maxLength: 20,
-            textCapitalization: TextCapitalization.words,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).textTheme.headline5?.color,
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        return _activityOptions.where((String option) {
+          return option
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      optionsViewBuilder: (context, onSelected, options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4,
+            color: Theme.of(context).backgroundColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(8),
             ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 64,
+              constraints: const BoxConstraints(
+                maxWidth: 240,
+                maxHeight: 120,
               ),
-              isDense: true,
-              contentPadding: const EdgeInsets.all(8),
-              filled: true,
-              fillColor: Theme.of(context).backgroundColor,
-              counterText: '',
-              hintText: 'Activity Name',
-              hintStyle: const TextStyle(fontWeight: FontWeight.w400),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(0),
+                shrinkWrap: true,
+                primary: false,
+                physics: const BouncingScrollPhysics(),
+                itemExtent: 40,
+                itemCount: options.length,
+                itemBuilder: (context, index) {
+                  final option = options.elementAt(index);
+                  return InkWell(
+                    onTap: () => onSelected(option),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        option,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-          );
-        },
-        optionsViewBuilder: (context, onSelected, options) {
-          return Material(
-            elevation: 2,
-            borderRadius: BorderRadius.circular(8),
-            child: ListView.separated(
-              itemCount: options.length,
-              separatorBuilder: (context, index) => const Divider(),
-              itemBuilder: (context, index) {
-                final option = options.elementAt(index);
-                return ListTile(
-                  title: Text(option),
-                  onTap: () => onSelected(option),
-                );
-              },
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
+      fieldViewBuilder:
+          (context, textEditingController, focusNode, onFieldSubmitted) {
+        return TextField(
+          controller: textEditingController,
+          focusNode: focusNode,
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.words,
+          maxLength: 30,
+          style: const TextStyle(fontSize: 20),
+          decoration: const InputDecoration(
+            hintText: 'Activity Name',
+            counterText: '',
+          ),
+        );
+      },
     );
   }
 }

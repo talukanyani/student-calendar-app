@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:sc_app/screens/calendar/widgets/calendar_day.dart';
+import 'package:sc_app/helpers/month_names.dart';
 
-import 'package:sc_app/helpers/mounth_names.dart';
+import 'calendar_day.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});

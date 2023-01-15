@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:sc_app/themes/theme.dart';
-import 'package:sc_app/themes/system_theme/system_theme.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 
-import 'package:sc_app/screens/home/home.dart';
+import '/widgets/android_system_navbar.dart';
+import '/screens/home/home.dart';
 
 void main() => runApp(const App());
 
@@ -13,8 +13,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: androidSystemOverlay(),
+    return AndroidSystemNavbarStyle(
+      color: CustomColorScheme.background5,
       child: MaterialApp(
         title: 'Student Calendar',
         home: const HomeScreen(),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sc_app/helpers/mounth_names.dart';
 
-import 'package:sc_app/themes/colors.dart';
+import 'package:sc_app/helpers/pad.dart';
+import 'package:sc_app/helpers/month_names.dart';
+import 'package:sc_app/utils/table_colors.dart';
 
-import '../../../helpers/pad.dart';
-import '../modals/row_add_modal_sheet.dart';
+import '../modals/row_add_modal.dart';
 
 import 'table_container.dart';
 import 'oval_text_container.dart';
@@ -21,19 +21,6 @@ class SubjectTable extends StatelessWidget {
   final String subjectName;
   final String color;
   final Set<Map<String, dynamic>> activities;
-
-  static Map<String, Color> headingBgColors = {
-    'baby_blue': CustomColors.babyBlueEyes,
-    'fresh_air_blue': CustomColors.freshAirBlue,
-    'calamansi': CustomColors.calamnsi,
-    'peach': CustomColors.peach,
-    'deep_peach': CustomColors.deepPeach,
-    'melon': CustomColors.melon,
-    'salmon_pink': CustomColors.salmonPink,
-    'pale_magenta_pink': CustomColors.paleMagentaPink,
-    'pale_violet': CustomColors.paleViolet,
-    'mauve_violet': CustomColors.mauveViolet,
-  };
 
   DateTime getDate(index) {
     return activities.elementAt(index)["date"]!;
@@ -66,7 +53,7 @@ class SubjectTable extends StatelessWidget {
                     subjectName,
                     style: Theme.of(context).textTheme.headline5,
                   ),
-                  color: headingBgColors[color],
+                  color: tableColors[color],
                 ),
               ),
               Material(
@@ -161,14 +148,14 @@ class SubjectTable extends StatelessWidget {
                 icon: const Icon(Iconsax.add_circle),
                 tooltip: 'Add Activity',
                 onPressed: () {
-                  showModalBottomSheet(
+                  showDialog(
                     barrierColor: Theme.of(context)
                         .colorScheme
                         .onBackground
-                        .withOpacity(0.2),
+                        .withOpacity(0.25),
                     context: context,
                     builder: (BuildContext context) {
-                      return const RowAddModalSheet();
+                      return RowAddModal(subjectName: subjectName);
                     },
                   );
                 },
