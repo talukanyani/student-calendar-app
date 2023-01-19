@@ -1,5 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/subject.dart';
 
 import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/themes/color_scheme.dart';
@@ -8,22 +11,30 @@ import 'package:sc_app/widgets/android_system_navbar.dart';
 import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
-class TableAddModal extends StatefulWidget {
-  const TableAddModal({super.key});
+class TableAddForm extends StatefulWidget {
+  const TableAddForm({super.key});
 
   @override
-  State<TableAddModal> createState() => _TableAddModalState();
+  State<TableAddForm> createState() => _TableAddFormState();
 }
 
-class _TableAddModalState extends State<TableAddModal> {
+class _TableAddFormState extends State<TableAddForm> {
   String _selectedColor = _colors[Random().nextInt(7)];
 
   static final List<String> _colors = [...tableColors.keys];
 
+  static final _titleInputController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleInputController.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AndroidSystemNavbarStyle(
-      color: CustomColorScheme.grey2,
+      color: CustomColorScheme.grey1,
       child: Dialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,
@@ -41,12 +52,21 @@ class _TableAddModalState extends State<TableAddModal> {
             ),
             const SizedBox(height: 20),
             const LabelText(text: 'Title'),
-            const TextField(
+            TextField(
+              controller: _titleInputController,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.words,
               maxLength: 30,
-              style: TextStyle(fontSize: 20),
-              decoration: InputDecoration(
+              inputFormatters: [
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  return newValue.text.startsWith(' ') ? oldValue : newValue;
+                }),
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  return newValue.text.contains('  ') ? oldValue : newValue;
+                }),
+              ],
+              style: const TextStyle(fontSize: 20),
+              decoration: const InputDecoration(
                 hintText: 'Subject Name',
                 counterText: '',
               ),
@@ -86,7 +106,27 @@ class _TableAddModalState extends State<TableAddModal> {
                 ),
                 const SizedBox(width: 8),
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_titleInputController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter a title.'),
+                        ),
+                      );
+                    } else {
+                      Provider.of<SubjectController>(context, listen: false)
+                          .addSubject(
+                        _titleInputController.text,
+                        _selectedColor,
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Subject Table Added'),
+                        ),
+                      );
+                    }
+                  },
                   style: OutlinedButton.styleFrom(
                     fixedSize: const Size.fromWidth(96),
                     side: BorderSide(

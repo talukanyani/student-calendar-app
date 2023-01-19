@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'table_container.dart';
-import '../modals/table_add_modal.dart';
+import '../modals/table_add_form.dart';
 
 class TableAddButton extends StatelessWidget {
   const TableAddButton({super.key});
@@ -16,7 +16,7 @@ class TableAddButton extends StatelessWidget {
             barrierColor:
                 Theme.of(context).colorScheme.onBackground.withOpacity(0.25),
             context: context,
-            builder: (context) => const TableAddModal(),
+            builder: (context) => const TableAddForm(),
           );
         },
         child: const Icon(Iconsax.add_circle),

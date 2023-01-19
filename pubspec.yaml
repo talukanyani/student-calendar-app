@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   fluentui_system_icons: ^1.1.189
   iconsax: ^0.0.8
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

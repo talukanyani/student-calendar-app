@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/subject.dart';
+import 'package:sc_app/models/subject.dart';
+
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
 import 'widgets/subject_table.dart';
 import 'widgets/table_add_button.dart';
-
-import 'package:sc_app/data/subject.dart';
 
 class AddScreen extends StatelessWidget {
   const AddScreen({super.key});
@@ -23,22 +25,27 @@ class AddScreen extends StatelessWidget {
 class Body extends StatelessWidget {
   const Body({super.key});
 
-  static int tablesCount = subjectsData.length;
-
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      physics: const BouncingScrollPhysics(),
-      itemCount: tablesCount + 1,
-      itemBuilder: (context, index) {
-        if (index == tablesCount) {
-          return const TableAddButton();
-        }
-        return SubjectTable(
-          subjectName: subjectsData[index].subjectName,
-          color: subjectsData[index].color,
-          activities: subjectsData[index].activities,
+    return Consumer<SubjectController>(
+      builder: (context, subject, child) {
+        final List<SubjectModel> subjectData = subject.subjects;
+
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          physics: const BouncingScrollPhysics(),
+          itemCount: subjectData.length + 1,
+          itemBuilder: (context, index) {
+            if (index == subjectData.length) {
+              return const TableAddButton();
+            }
+            return SubjectTable(
+              tableIndex: index,
+              subjectId: subjectData[index].id,
+              subjectName: subjectData[index].name,
+              subjectColor: subjectData[index].color,
+            );
+          },
         );
       },
     );

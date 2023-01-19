@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ActivityInput extends StatelessWidget {
-  const ActivityInput({super.key});
+  const ActivityInput({super.key, required this.inputController});
+
+  final TextEditingController inputController;
 
   static const List<String> _activityOptions = <String>[
     'Test',
@@ -64,11 +67,18 @@ class ActivityInput extends StatelessWidget {
           ),
         );
       },
-      fieldViewBuilder:
-          (context, textEditingController, focusNode, onFieldSubmitted) {
+      fieldViewBuilder: (context, _, focusNode, onFieldSubmitted) {
         return TextField(
-          controller: textEditingController,
+          controller: inputController,
           focusNode: focusNode,
+          inputFormatters: [
+            TextInputFormatter.withFunction((oldValue, newValue) {
+              return newValue.text.startsWith(' ') ? oldValue : newValue;
+            }),
+            TextInputFormatter.withFunction((oldValue, newValue) {
+              return newValue.text.contains('  ') ? oldValue : newValue;
+            }),
+          ],
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
           maxLength: 30,
