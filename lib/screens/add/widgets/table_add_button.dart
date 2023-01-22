@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
-import 'table_container.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/subject.dart';
+
+import 'snackbar.dart';
 import '../modals/table_add_form.dart';
 
 class TableAddButton extends StatelessWidget {
@@ -9,18 +11,40 @@ class TableAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TableContainer(
-      child: RawMaterialButton(
-        onPressed: () {
-          showDialog(
-            barrierColor:
-                Theme.of(context).colorScheme.onBackground.withOpacity(0.25),
-            context: context,
-            builder: (context) => const TableAddForm(),
-          );
-        },
-        child: const Icon(Iconsax.add_circle),
-      ),
+    final SubjectController subjectProvider =
+        Provider.of<SubjectController>(context, listen: false);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: OutlinedButton(
+            onPressed: () {
+              if (subjectProvider.subjects.length >= 20) {
+                showFeedback(
+                  context,
+                  'You have reached maximum number of subject tables.',
+                );
+                return;
+              }
+
+              showDialog(
+                barrierColor: Theme.of(context)
+                    .colorScheme
+                    .onBackground
+                    .withOpacity(0.25),
+                context: context,
+                builder: (context) => const TableAddForm(),
+              );
+            },
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.onBackground,
+            ),
+            child: const Text('ADD SUBJECT'),
+          ),
+        ),
+      ],
     );
   }
 }

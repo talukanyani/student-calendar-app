@@ -8,6 +8,8 @@ import './widgets_theme/bottom_bar_theme.dart';
 import './widgets_theme/text_theme.dart';
 import './widgets_theme/bottom_sheet_theme.dart';
 import './widgets_theme/input_theme.dart';
+import './widgets_theme/list_tile_theme.dart';
+import './widgets_theme/popup_menu_theme.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
@@ -26,10 +28,12 @@ ThemeData lightTheme() {
     focusColor: brownLight,
     indicatorColor: brownDark,
     toggleableActiveColor: green,
-    textTheme: textTheme(black40, grey80),
+    textTheme: textTheme(black20, grey80),
     appBarTheme: topBarTheme(white240, grey80),
     bottomNavigationBarTheme: bottomBarTheme(white235, grey80),
     bottomSheetTheme: bottomSheetTheme(white235),
     inputDecorationTheme: inputTheme(borderColor: grey200, iconColor: grey160),
+    popupMenuTheme: popupMenuTheme(bgColor: white255),
+    listTileTheme: listTileTheme(),
   );
 }

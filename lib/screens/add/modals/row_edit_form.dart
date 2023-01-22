@@ -4,27 +4,32 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/activity.dart';
+import 'package:sc_app/models/activity.dart';
+
+import 'package:sc_app/helpers/pad.dart';
 
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
 import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
-class RowAddForm extends StatefulWidget {
-  const RowAddForm({
+class RowEditForm extends StatefulWidget {
+  const RowEditForm({
     super.key,
     required this.subjectId,
     required this.subjectName,
+    required this.activity,
   });
 
   final int subjectId;
   final String subjectName;
+  final ActivityModel activity;
 
   @override
-  State<RowAddForm> createState() => _RowAddFormState();
+  State<RowEditForm> createState() => _RowEditFormState();
 }
 
-class _RowAddFormState extends State<RowAddForm> {
+class _RowEditFormState extends State<RowEditForm> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
@@ -34,9 +39,10 @@ class _RowAddFormState extends State<RowAddForm> {
   static final _dateInputController = TextEditingController();
   static final _timeInputController = TextEditingController();
 
-  Future<void> addActivity(BuildContext context) async {
-    Provider.of<ActivityController>(context, listen: false).addActivity(
+  Future<void> editActivity(BuildContext context) async {
+    Provider.of<ActivityController>(context, listen: false).editActivity(
       widget.subjectId,
+      widget.activity.id,
       _activityInputController.text,
       DateTime(
         _selectedDate!.year,
@@ -46,6 +52,30 @@ class _RowAddFormState extends State<RowAddForm> {
         _selectedTime!.minute,
       ),
     );
+  }
+
+  DateTime getActivityDate() => widget.activity.dateTime;
+
+  @override
+  void initState() {
+    _activityInputController.text = widget.activity.activity;
+
+    _dateInputController.text =
+        getActivityDate().toLocal().toString().split(' ')[0];
+    setState(() {
+      _selectedDate = getActivityDate();
+    });
+
+    _timeInputController.text =
+        '${padTwoNums(getActivityDate().hour)}:${padTwoNums(getActivityDate().minute)}';
+    setState(() {
+      _selectedTime = TimeOfDay(
+        hour: getActivityDate().hour,
+        minute: getActivityDate().minute,
+      );
+    });
+
+    super.initState();
   }
 
   @override
@@ -61,7 +91,7 @@ class _RowAddFormState extends State<RowAddForm> {
     return Modal(
       children: [
         Text(
-          'Add ${widget.subjectName} Activity',
+          'Edit ${widget.subjectName} Activity',
           style: Theme.of(context).textTheme.headline6,
         ),
         const SizedBox(height: 20),
@@ -160,14 +190,28 @@ class _RowAddFormState extends State<RowAddForm> {
                     _selectedDate == null ||
                     _selectedTime == null) {
                   showFeedback(context, 'Please fill all the fields.');
-                } else {
-                  addActivity(context).then((_) {
-                    Navigator.pop(context);
-                  }).then((_) {
-                    showFeedback(context,
-                        'One activity was added to ${widget.subjectName}');
-                  });
+                  return;
                 }
+
+                if (widget.activity.activity == _activityInputController.text &&
+                    getActivityDate() ==
+                        DateTime(
+                          _selectedDate!.year,
+                          _selectedDate!.month,
+                          _selectedDate!.day,
+                          _selectedTime!.hour,
+                          _selectedTime!.minute,
+                        )) {
+                  showFeedback(context, 'You did not change anything.');
+                  return;
+                }
+
+                editActivity(context).then((_) {
+                  Navigator.pop(context);
+                }).then((_) {
+                  showFeedback(context,
+                      'One of ${widget.subjectName} activities was edited.');
+                });
               },
               style: OutlinedButton.styleFrom(
                 fixedSize: const Size.fromWidth(96),
@@ -176,7 +220,7 @@ class _RowAddFormState extends State<RowAddForm> {
                   color: Theme.of(context).colorScheme.primaryContainer,
                 ),
               ),
-              child: const Text('Add'),
+              child: const Text('Save'),
             ),
           ],
         ),

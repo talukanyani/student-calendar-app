@@ -20,7 +20,7 @@ ColorScheme colorScheme() {
     onBackground: black20,
     surface: white250,
     onSurface: black20,
-    surfaceVariant: white235,
+    surfaceVariant: white240,
     onSurfaceVariant: grey80,
     error: errorRed,
     onError: white245,

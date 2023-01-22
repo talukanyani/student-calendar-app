@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,25 +11,44 @@ import '../widgets/snackbar.dart';
 import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
-class TableAddForm extends StatefulWidget {
-  const TableAddForm({super.key});
+class TableEditForm extends StatefulWidget {
+  const TableEditForm({
+    super.key,
+    required this.subjectId,
+    required this.subjectName,
+    required this.subjectColor,
+  });
+
+  final int subjectId;
+  final String subjectName;
+  final String subjectColor;
 
   @override
-  State<TableAddForm> createState() => _TableAddFormState();
+  State<TableEditForm> createState() => _TableEditFormState();
 }
 
-class _TableAddFormState extends State<TableAddForm> {
-  String _selectedColor = _colors[Random().nextInt(7)];
+class _TableEditFormState extends State<TableEditForm> {
+  String _selectedColor = _colors[0];
 
   static final List<String> _colors = [...tableColors.keys];
 
   static final _titleInputController = TextEditingController();
 
-  Future<void> addSubject(BuildContext context) async {
-    Provider.of<SubjectController>(context, listen: false).addSubject(
+  _onEditPressed(BuildContext context) {}
+
+  Future<void> editSubject(BuildContext context) async {
+    Provider.of<SubjectController>(context, listen: false).editSubject(
+      widget.subjectId,
       _titleInputController.text,
       _selectedColor,
     );
+  }
+
+  @override
+  void initState() {
+    _titleInputController.text = widget.subjectName;
+    setState(() => _selectedColor = widget.subjectColor);
+    super.initState();
   }
 
   @override
@@ -44,7 +62,7 @@ class _TableAddFormState extends State<TableAddForm> {
     return Modal(
       children: [
         Text(
-          'Add Subject Table',
+          'Edit Subject Table',
           style: Theme.of(context).textTheme.headline6,
         ),
         const SizedBox(height: 20),
@@ -106,13 +124,20 @@ class _TableAddFormState extends State<TableAddForm> {
               onPressed: () {
                 if (_titleInputController.text.isEmpty) {
                   showFeedback(context, 'Please enter a title.');
-                } else {
-                  addSubject(context).then((_) {
-                    Navigator.pop(context);
-                  }).then((_) {
-                    showFeedback(context, 'One subject table was added');
-                  });
+                  return;
                 }
+
+                if (_titleInputController.text == widget.subjectName &&
+                    _selectedColor == widget.subjectColor) {
+                  showFeedback(context, 'You did not change anything.');
+                  return;
+                }
+
+                editSubject(context).then((_) {
+                  Navigator.pop(context);
+                }).then((_) {
+                  showFeedback(context, 'One subject table was edited');
+                });
               },
               style: OutlinedButton.styleFrom(
                 fixedSize: const Size.fromWidth(96),
@@ -121,7 +146,7 @@ class _TableAddFormState extends State<TableAddForm> {
                   color: Theme.of(context).colorScheme.primaryContainer,
                 ),
               ),
-              child: const Text('Add'),
+              child: const Text('Save'),
             ),
           ],
         ),
