@@ -25,17 +25,13 @@ class BottomBar extends StatelessWidget {
       onTap: (int index) {
         if (index == screenIndex) return;
 
-        if (index == 0) {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        } else {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => _primaryScreens[index],
-            ),
-            (route) => route.isFirst,
-          );
-        }
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => _primaryScreens[index],
+          ),
+          (route) => route.isFirst,
+        );
       },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(

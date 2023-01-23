@@ -75,11 +75,18 @@ class _DayBoxState extends State<DayBox> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: buttonSplash
-                ? Theme.of(context).colorScheme.primaryContainer
-                : Theme.of(context).colorScheme.tertiary.withOpacity(
-                      getOpacity(activities.length),
+            color: Theme.of(context).colorScheme.tertiary.withOpacity(
+                  getOpacity(activities.length),
+                ),
+            boxShadow: buttonSplash
+                ? [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      blurRadius: 8,
+                      spreadRadius: 8,
                     ),
+                  ]
+                : null,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               width: isToday ? 4 : 1,
