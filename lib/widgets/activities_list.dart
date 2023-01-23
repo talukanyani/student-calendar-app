@@ -1,50 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/helpers/same_date.dart';
+import 'package:sc_app/models/subject_activity.dart';
 
 class ActivitiesList extends StatelessWidget {
-  const ActivitiesList({super.key});
+  const ActivitiesList({
+    super.key,
+    required this.date,
+    required this.activities,
+  });
 
-  static List<Map<String, String>> activities = <Map<String, String>>[
-    {
-      'subject': 'Module 1',
-      'activity': 'Test 1',
-      'time': '09:00',
-    },
-    {
-      'subject': 'Module 2',
-      'activity': 'Quiz 3',
-      'time': '23:59',
-    },
-    {
-      'subject': 'Module 1',
-      'activity': 'Assignment 2',
-      'time': '23:59',
-    },
-  ];
+  final DateTime date;
+  final List<SubjectActivityModel> activities;
+
+  String get dateWord {
+    DateTime today = DateTime.now();
+    DateTime tomorrow = today.add(const Duration(days: 1));
+
+    if (isSameDay(date, today)) return 'today';
+
+    if (isSameDay(date, tomorrow)) return 'tomorrow';
+
+    return 'on this day';
+  }
+
+  TimeOfDay getTime(index) {
+    DateTime date = activities[index].date;
+    return TimeOfDay(hour: date.hour, minute: date.minute);
+  }
 
   @override
   Widget build(BuildContext context) {
     if (activities.isEmpty) {
-      return const Center(
-        child: TextBox(text: 'You have no activity on this day'),
+      return Center(
+        child: TextBox(text: 'You have no activity $dateWord'),
       );
     }
 
     return ListView.builder(
+      primary: false,
+      physics: const BouncingScrollPhysics(),
       itemExtent: 48,
       itemCount: activities.length,
       itemBuilder: (context, index) {
         return ListTile(
+          contentPadding: const EdgeInsets.all(0),
           leading: Column(
             children: <Widget>[
               index == 0 ? const SizedBox(height: 12) : const VertLine(),
-              TextBox(text: activities[index]['time'].toString()),
+              TextBox(text: getTime(index).format(context)),
               index == (activities.length - 1)
                   ? const SizedBox(height: 12)
                   : const VertLine(),
             ],
           ),
           title: Text(
-            "${activities[index]['subject']} ${activities[index]['activity']}",
+            '${activities[index].subject} ${activities[index].activity}',
             style: const TextStyle(fontSize: 15),
           ),
         );

@@ -41,7 +41,12 @@ class ActivitiesListBox extends StatelessWidget {
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
-          const Expanded(child: ActivitiesList()),
+          Expanded(
+            child: ActivitiesList(
+              activities: const [],
+              date: DateTime.now(),
+            ),
+          ),
         ],
       ),
     );

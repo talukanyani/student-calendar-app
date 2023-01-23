@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:sc_app/helpers/month_names.dart';
+import 'package:sc_app/helpers/calendar_names.dart';
 
 import 'calendar_day.dart';
 
@@ -70,24 +70,12 @@ class _CalendarState extends State<Calendar> {
     return startDate.add(Duration(days: dayIndex));
   }
 
-  bool isCurrDate(dayIndex, monthIndex) {
-    var dayBox = getDate(dayIndex, monthIndex);
-
-    if (dayBox.day == currDate.day &&
-        dayBox.month == currDate.month &&
-        dayBox.year == currDate.year) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   DateTime displayedMonthDate() {
     return getDate(7, _displayedMonthIndex);
   }
 
   String displayedMonthName() {
-    return getFullMonthName(displayedMonthDate().month - 1);
+    return getMonthFullName(displayedMonthDate().month - 1);
   }
 
   String displayedMonthYear() {
@@ -201,9 +189,8 @@ class _CalendarState extends State<Calendar> {
                       ),
                       itemCount: 42,
                       itemBuilder: (context, dayIndex) {
-                        return Day(
-                          date: getDate(dayIndex, monthIndex).day,
-                          isCurrentDate: isCurrDate(dayIndex, monthIndex),
+                        return DayBox(
+                          date: getDate(dayIndex, monthIndex),
                           isInDisplayedMonth:
                               getDate(dayIndex, monthIndex).month ==
                                   displayedMonthDate().month,

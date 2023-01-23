@@ -8,7 +8,6 @@ import './widgets_theme/bottom_bar_theme.dart';
 import './widgets_theme/text_theme.dart';
 import './widgets_theme/bottom_sheet_theme.dart';
 import './widgets_theme/input_theme.dart';
-import './widgets_theme/list_tile_theme.dart';
 import './widgets_theme/popup_menu_theme.dart';
 
 ThemeData lightTheme() {
@@ -34,6 +33,5 @@ ThemeData lightTheme() {
     bottomSheetTheme: bottomSheetTheme(white235),
     inputDecorationTheme: inputTheme(borderColor: grey200, iconColor: grey160),
     popupMenuTheme: popupMenuTheme(bgColor: white255),
-    listTileTheme: listTileTheme(),
   );
 }

@@ -7,7 +7,8 @@ import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/models/activity.dart';
 
 import 'package:sc_app/helpers/pad.dart';
-import 'package:sc_app/helpers/month_names.dart';
+import 'package:sc_app/helpers/calendar_names.dart';
+import 'package:sc_app/screens/add/widgets/popup_menu_item.dart';
 import 'package:sc_app/utils/table_colors.dart';
 
 import '../modals/row_add_form.dart';
@@ -53,15 +54,6 @@ class SubjectTable extends StatelessWidget {
     );
   }
 
-  onPopMenuItemTap(BuildContext context, Widget modal) {
-    Navigator.pop(context);
-
-    Future.delayed(
-      const Duration(seconds: 1),
-      showModal(context, modal),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final SubjectController subjectProvider = Provider.of<SubjectController>(
@@ -72,6 +64,7 @@ class SubjectTable extends StatelessWidget {
       context,
       listen: false,
     );
+
     return TableContainer(
       child: Column(
         children: <Widget>[
@@ -94,39 +87,43 @@ class SubjectTable extends StatelessWidget {
                 child: PopupMenuButton(
                   position: PopupMenuPosition.under,
                   icon: const Icon(Iconsax.more_circle),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      padding: const EdgeInsets.all(0),
-                      child: ListTile(
-                        onTap: () => onPopMenuItemTap(
-                          context,
-                          TableEditForm(
-                            subjectId: subjectId,
-                            subjectName: subjectName,
-                            subjectColor: subjectColor,
+                  itemBuilder: (context) => <PopupMenuItem>[
+                    popupMenuItem(
+                      itemName: 'Edit',
+                      itemIcon: Iconsax.edit,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Future.delayed(
+                          const Duration(seconds: 1),
+                          showModal(
+                            context,
+                            TableEditForm(
+                              subjectId: subjectId,
+                              subjectName: subjectName,
+                              subjectColor: subjectColor,
+                            ),
                           ),
-                        ),
-                        title: const Text('Edit'),
-                        leading: const Icon(Iconsax.edit, size: 20),
-                        visualDensity: const VisualDensity(vertical: -3),
-                      ),
+                        );
+                      },
                     ),
-                    PopupMenuItem(
-                      padding: const EdgeInsets.all(0),
-                      child: ListTile(
-                        onTap: () => onPopMenuItemTap(
-                          context,
-                          DeleteAlert(
-                            contentName: '$subjectName subject table',
-                            deleteContent: () {
-                              subjectProvider.removeSubject(subjectId);
-                            },
+                    popupMenuItem(
+                      itemName: 'Delete',
+                      itemIcon: Iconsax.trash,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Future.delayed(
+                          const Duration(seconds: 1),
+                          showModal(
+                            context,
+                            DeleteAlert(
+                              contentName: '$subjectName subject table',
+                              deleteContent: () {
+                                subjectProvider.removeSubject(subjectId);
+                              },
+                            ),
                           ),
-                        ),
-                        title: const Text('Delete'),
-                        leading: const Icon(Iconsax.trash, size: 20),
-                        visualDensity: const VisualDensity(vertical: -3),
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -205,46 +202,47 @@ class SubjectTable extends StatelessWidget {
                             child: PopupMenuButton(
                               padding: const EdgeInsets.all(0),
                               icon: const Icon(Iconsax.more),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  padding: const EdgeInsets.all(0),
-                                  child: ListTile(
-                                    onTap: () => onPopMenuItemTap(
-                                      context,
-                                      RowEditForm(
-                                        subjectId: subjectId,
-                                        subjectName: subjectName,
-                                        activity: activities[index],
+                              itemBuilder: (context) => <PopupMenuItem>[
+                                popupMenuItem(
+                                  itemName: 'Edit',
+                                  itemIcon: Iconsax.edit,
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    Future.delayed(
+                                      const Duration(seconds: 1),
+                                      showModal(
+                                        context,
+                                        RowEditForm(
+                                          subjectId: subjectId,
+                                          subjectName: subjectName,
+                                          activity: activities[index],
+                                        ),
                                       ),
-                                    ),
-                                    title: const Text('Edit'),
-                                    leading: const Icon(Iconsax.edit, size: 20),
-                                    visualDensity:
-                                        const VisualDensity(vertical: -3),
-                                  ),
+                                    );
+                                  },
                                 ),
-                                PopupMenuItem(
-                                  padding: const EdgeInsets.all(0),
-                                  child: ListTile(
-                                    onTap: () => onPopMenuItemTap(
-                                      context,
-                                      DeleteAlert(
-                                        contentName:
-                                            '${activities[index].activity} activity row',
-                                        deleteContent: () {
-                                          activityProvider.removeActivity(
-                                            subjectId,
-                                            activities[index].id,
-                                          );
-                                        },
+                                popupMenuItem(
+                                  itemName: 'Delete',
+                                  itemIcon: Iconsax.trash,
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    Future.delayed(
+                                      const Duration(seconds: 1),
+                                      showModal(
+                                        context,
+                                        DeleteAlert(
+                                          contentName:
+                                              '${activities[index].activity} activity row',
+                                          deleteContent: () {
+                                            activityProvider.removeActivity(
+                                              subjectId,
+                                              activities[index].id,
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    title: const Text('Delete'),
-                                    leading:
-                                        const Icon(Iconsax.trash, size: 20),
-                                    visualDensity:
-                                        const VisualDensity(vertical: -3),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

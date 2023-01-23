@@ -79,7 +79,7 @@ class _RowAddFormState extends State<RowAddForm> {
                   TextField(
                     onTap: () => showDatePicker(
                       context: context,
-                      initialDate: currDate,
+                      initialDate: _selectedDate ?? currDate,
                       firstDate: DateTime(currDate.year - 1),
                       lastDate: DateTime(currDate.year + 1, 12, 31),
                     ).then((pickedDate) {
@@ -119,7 +119,8 @@ class _RowAddFormState extends State<RowAddForm> {
                   TextField(
                     onTap: () => showTimePicker(
                       context: context,
-                      initialTime: const TimeOfDay(hour: 10, minute: 0),
+                      initialTime:
+                          _selectedTime ?? const TimeOfDay(hour: 10, minute: 0),
                     ).then((pickedTime) {
                       if (pickedTime != null) {
                         _timeInputController.text = pickedTime.format(context);
