@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/all_activities.dart';
 
 import 'package:sc_app/helpers/same_date.dart';
+import 'package:sc_app/helpers/show_modal.dart';
 
 import '../modals/day_box_activities.dart';
 
@@ -53,11 +54,9 @@ class _DayBoxState extends State<DayBox> {
     final activities = activitiesProvider.getDayActivities(widget.date);
 
     return GestureDetector(
-      onTap: () => showDialog(
-        barrierColor:
-            Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
-        context: context,
-        builder: (context) => DayBoxActivitiesModal(
+      onTap: () => showModal(
+        context,
+        modal: DayBoxActivitiesModal(
           date: widget.date,
           activities: activities,
         ),

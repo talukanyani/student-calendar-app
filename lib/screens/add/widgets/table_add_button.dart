@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
 
+import 'package:sc_app/helpers/show_modal.dart';
+
 import 'snackbar.dart';
 import '../modals/table_add_form.dart';
 
@@ -29,13 +31,9 @@ class TableAddButton extends StatelessWidget {
                 return;
               }
 
-              showDialog(
-                barrierColor: Theme.of(context)
-                    .colorScheme
-                    .onBackground
-                    .withOpacity(0.25),
-                context: context,
-                builder: (context) => const TableAddForm(),
+              showModal(
+                context,
+                modal: const TableAddForm(),
               );
             },
             style: OutlinedButton.styleFrom(

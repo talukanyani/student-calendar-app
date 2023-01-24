@@ -8,6 +8,7 @@ import 'package:sc_app/models/activity.dart';
 
 import 'package:sc_app/helpers/pad.dart';
 import 'package:sc_app/helpers/calendar_names.dart';
+import 'package:sc_app/helpers/show_modal.dart';
 import 'package:sc_app/screens/add/widgets/popup_menu_item.dart';
 import 'package:sc_app/utils/table_colors.dart';
 
@@ -43,15 +44,6 @@ class SubjectTable extends StatelessWidget {
     }
 
     return year.toString();
-  }
-
-  showModal(BuildContext context, Widget modal) {
-    showDialog(
-      barrierColor:
-          Theme.of(context).colorScheme.onBackground.withOpacity(0.25),
-      context: context,
-      builder: (context) => modal,
-    );
   }
 
   @override
@@ -98,7 +90,7 @@ class SubjectTable extends StatelessWidget {
                           const Duration(seconds: 1),
                           showModal(
                             context,
-                            TableEditForm(
+                            modal: TableEditForm(
                               subjectId: subjectId,
                               subjectName: subjectName,
                               subjectColor: subjectColor,
@@ -116,7 +108,7 @@ class SubjectTable extends StatelessWidget {
                           const Duration(seconds: 1),
                           showModal(
                             context,
-                            DeleteAlert(
+                            modal: DeleteAlert(
                               contentName: '$subjectName subject table',
                               deleteContent: () {
                                 subjectProvider.removeSubject(subjectId);
@@ -213,7 +205,7 @@ class SubjectTable extends StatelessWidget {
                                       const Duration(seconds: 1),
                                       showModal(
                                         context,
-                                        RowEditForm(
+                                        modal: RowEditForm(
                                           subjectId: subjectId,
                                           subjectName: subjectName,
                                           activity: activities[index],
@@ -231,7 +223,7 @@ class SubjectTable extends StatelessWidget {
                                       const Duration(seconds: 1),
                                       showModal(
                                         context,
-                                        DeleteAlert(
+                                        modal: DeleteAlert(
                                           contentName:
                                               '${activities[index].activity} activity row',
                                           deleteContent: () {
@@ -274,7 +266,7 @@ class SubjectTable extends StatelessWidget {
 
                   showModal(
                     context,
-                    RowAddForm(
+                    modal: RowAddForm(
                       subjectId: subjectId,
                       subjectName: subjectName,
                     ),
