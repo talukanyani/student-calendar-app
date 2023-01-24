@@ -26,7 +26,19 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool isBackup = false;
-  String backupSettingValue = 'on_save';
+  String backupTime = 'on_save';
+
+  RadioListTile backupTimeOption({
+    required String title,
+    required String value,
+  }) {
+    return RadioListTile(
+      value: value,
+      groupValue: backupTime,
+      onChanged: (value) => setState(() => backupTime = value!),
+      title: Text(title, style: const TextStyle(fontSize: 15)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +47,7 @@ class _BodyState extends State<Body> {
         RectContainer(
           child: ListTile(
             title: const Text('Backup'),
-            subtitle: const Text('Turn on/off backup'),
+            subtitle: const Text('Turn backup on/off'),
             trailing: Switch(
               value: isBackup,
               onChanged: (value) {
@@ -60,30 +72,15 @@ class _BodyState extends State<Body> {
             child: RectContainer(
               child: Column(
                 children: [
-                  RadioListTile(
+                  backupTimeOption(
+                    title: 'Automatically Backup On Save',
                     value: 'on_save',
-                    groupValue: backupSettingValue,
-                    onChanged: (value) {
-                      setState(() => backupSettingValue = value!);
-                    },
-                    title: const Text('Automatically backup on save'),
                   ),
-                  RadioListTile(
+                  backupTimeOption(
+                    title: 'Automatically Backup Every Week',
                     value: 'every_week',
-                    groupValue: backupSettingValue,
-                    onChanged: (value) {
-                      setState(() => backupSettingValue = value!);
-                    },
-                    title: const Text('Automatically backup every week'),
                   ),
-                  RadioListTile(
-                    value: 'manually',
-                    groupValue: backupSettingValue,
-                    onChanged: (value) {
-                      setState(() => backupSettingValue = value!);
-                    },
-                    title: const Text('Manually backup'),
-                  ),
+                  backupTimeOption(title: 'Manually Backup', value: 'manually'),
                 ],
               ),
             ),

@@ -23,7 +23,7 @@ class Box extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
             decoration: BoxDecoration(
               color:
-                  Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.2),
+                  Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.4),
               border: Border.all(color: Theme.of(context).dividerColor),
               borderRadius: BorderRadius.circular(8),
             ),
