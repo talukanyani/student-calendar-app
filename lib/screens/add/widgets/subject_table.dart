@@ -16,7 +16,7 @@ import '../modals/row_edit_form.dart';
 import '../modals/table_edit_form.dart';
 import '../modals/delete_alert.dart';
 
-import 'table_container.dart';
+import 'package:sc_app/widgets/rect_container.dart';
 import 'oval_text_container.dart';
 import 'snackbar.dart';
 
@@ -65,7 +65,8 @@ class SubjectTable extends StatelessWidget {
       listen: false,
     );
 
-    return TableContainer(
+    return RectContainer(
+      padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
           Row(

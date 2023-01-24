@@ -32,7 +32,6 @@ class Body extends StatelessWidget {
         final List<SubjectModel> subjectData = subject.subjects;
 
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
           physics: const BouncingScrollPhysics(),
           itemCount: subjectData.length + 1,
           itemBuilder: (context, index) {
