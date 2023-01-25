@@ -4,12 +4,12 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 
-import 'profile_settings/profile.dart';
-import 'backup_settings/backup.dart';
-import 'app_settings/app.dart';
-import 'help_screen/help.dart';
-import 'Feedback_screen/feedback.dart';
-import 'about_screen/about.dart';
+import 'screens/profile/profile.dart';
+import 'screens/backup/backup.dart';
+import 'screens/personalisation/personalisation.dart';
+import 'screens/help/help.dart';
+import 'screens/feedback/feedback.dart';
+import 'screens/about/about.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

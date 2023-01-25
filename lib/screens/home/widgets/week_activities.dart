@@ -8,6 +8,16 @@ class WeekActivities extends StatelessWidget {
 
   final int activitiesCount;
 
+  String get word1 {
+    if (activitiesCount == 0) return 'no';
+    return activitiesCount.toString();
+  }
+
+  String get word2 {
+    if (activitiesCount <= 1) return 'activity';
+    return 'activities';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -15,7 +25,7 @@ class WeekActivities extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('You have $activitiesCount activities this week'),
+          Text('You have $word1 $word2 this week'),
           const SizedBox(height: 16),
           SizedBox(
             height: 32,

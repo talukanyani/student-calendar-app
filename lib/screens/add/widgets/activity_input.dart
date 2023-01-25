@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:sc_app/helpers/text_input_formatters.dart';
 
 class ActivityInput extends StatelessWidget {
   const ActivityInput({super.key, required this.inputController});
@@ -72,12 +72,8 @@ class ActivityInput extends StatelessWidget {
           controller: inputController,
           focusNode: focusNode,
           inputFormatters: [
-            TextInputFormatter.withFunction((oldValue, newValue) {
-              return newValue.text.startsWith(' ') ? oldValue : newValue;
-            }),
-            TextInputFormatter.withFunction((oldValue, newValue) {
-              return newValue.text.contains('  ') ? oldValue : newValue;
-            }),
+            noSpaceAtStart(),
+            noDoubleSpace(),
           ],
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
