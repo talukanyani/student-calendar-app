@@ -71,10 +71,9 @@ class ProfileBody extends StatelessWidget {
             OutlinedButton(
               onPressed: () {},
               style: OutlinedButton.styleFrom(
-                backgroundColor:
-                    Theme.of(context).primaryColor.withOpacity(0.1),
+                backgroundColor: CustomColorScheme.background5,
                 foregroundColor: Theme.of(context).colorScheme.onBackground,
-                fixedSize: const Size.fromWidth(128),
+                fixedSize: const Size(128, 32),
               ),
               child: const Text('Log Out'),
             ),

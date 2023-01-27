@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 
 class SecurityCode extends StatelessWidget {
@@ -21,9 +22,9 @@ class SecurityCode extends StatelessWidget {
         'Security Code',
         style: Theme.of(context).textTheme.headline6,
       ),
-      const SizedBox(height: 16),
+      const SizedBox(height: 20),
       Text('Enter security code which was sent to $email'),
-      const SizedBox(height: 12),
+      const SizedBox(height: 16),
       TextField(
         controller: inputController,
         inputFormatters: [noSpace()],
@@ -35,8 +36,8 @@ class SecurityCode extends StatelessWidget {
           counterText: '',
         ),
       ),
-      const SizedBox(height: 4),
-      ElevatedButton(
+      const SizedBox(height: 8),
+      ForegroundFilledBtn(
         onPressed: () {},
         child: Text('Confirm and $actionName'),
       ),

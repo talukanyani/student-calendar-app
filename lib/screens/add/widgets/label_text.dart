@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 
 class LabelText extends StatelessWidget {
   const LabelText({super.key, required this.text});
@@ -7,14 +8,13 @@ class LabelText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Theme.of(context).disabledColor,
-        ),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1
+            ?.copyWith(color: CustomColorScheme.grey3),
       ),
     );
   }

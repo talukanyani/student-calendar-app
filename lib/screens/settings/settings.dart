@@ -57,7 +57,7 @@ class Body extends StatelessWidget {
         ),
         Tile(
           title: 'About',
-          icon: FluentIcons.align_bottom_24_filled,
+          icon: FluentIcons.info_24_filled,
           page: AboutScreen(),
         ),
       ],
@@ -124,7 +124,9 @@ class ProfileTile extends StatelessWidget {
               ),
               Text(
                 'Profile',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6?.copyWith(
+                      color: CustomColorScheme.grey4,
+                    ),
               ),
               Text(
                 'Manage your profile',

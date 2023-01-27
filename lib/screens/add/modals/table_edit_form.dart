@@ -6,6 +6,7 @@ import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/table_colors.dart';
 
+import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
 import '../widgets/label_text.dart';
@@ -33,8 +34,6 @@ class _TableEditFormState extends State<TableEditForm> {
   static final List<String> _colors = [...tableColors.keys];
 
   static final _titleInputController = TextEditingController();
-
-  _onEditPressed(BuildContext context) {}
 
   Future<void> editSubject(BuildContext context) async {
     Provider.of<SubjectController>(context, listen: false).editSubject(
@@ -116,33 +115,29 @@ class _TableEditFormState extends State<TableEditForm> {
               child: const Text('Cancel'),
             ),
             const SizedBox(width: 8),
-            OutlinedButton(
-              onPressed: () {
-                if (_titleInputController.text.isEmpty) {
-                  showFeedback(context, 'Please enter a title.');
-                  return;
-                }
+            SizedBox(
+              width: 96,
+              child: PrimaryBorderBtn(
+                onPressed: () {
+                  if (_titleInputController.text.isEmpty) {
+                    showFeedback(context, 'Please enter a title.');
+                    return;
+                  }
 
-                if (_titleInputController.text == widget.subjectName &&
-                    _selectedColor == widget.subjectColor) {
-                  showFeedback(context, 'You did not change anything.');
-                  return;
-                }
+                  if (_titleInputController.text == widget.subjectName &&
+                      _selectedColor == widget.subjectColor) {
+                    showFeedback(context, 'You did not change anything.');
+                    return;
+                  }
 
-                editSubject(context).then((_) {
-                  Navigator.pop(context);
-                }).then((_) {
-                  showFeedback(context, 'One subject table was edited');
-                });
-              },
-              style: OutlinedButton.styleFrom(
-                fixedSize: const Size.fromWidth(96),
-                side: BorderSide(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                ),
+                  editSubject(context).then((_) {
+                    Navigator.pop(context);
+                  }).then((_) {
+                    showFeedback(context, 'One subject table was edited');
+                  });
+                },
+                child: const Text('Save'),
               ),
-              child: const Text('Save'),
             ),
           ],
         ),

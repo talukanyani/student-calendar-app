@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/themes/color_scheme.dart';
+
+import 'package:sc_app/widgets/buttons.dart';
 import '../widgets/bullet_list.dart';
 
 class EditName extends StatelessWidget {
@@ -25,40 +27,29 @@ class EditName extends StatelessWidget {
               Text('You won\'t be able to edit name again until next 7 days.'),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           Text(
             'Enter New Name',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: CustomColorScheme.grey4,
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: CustomColorScheme.grey4,
+                ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: inputController,
+            keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.words,
+            maxLength: 20,
+            style: const TextStyle(fontSize: 20),
+            decoration: const InputDecoration(
+              hintText: 'Name',
+              counterText: '',
             ),
           ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: TextField(
-                  controller: inputController,
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  maxLength: 20,
-                  style: const TextStyle(fontSize: 20),
-                  decoration: const InputDecoration(
-                    hintText: 'Name',
-                    counterText: '',
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(elevation: 0),
-                  child: const Text('Change'),
-                ),
-              )
-            ],
+          const SizedBox(height: 8),
+          ForegroundFilledBtn(
+            onPressed: () {},
+            child: const Text('Change'),
           ),
         ],
       ),

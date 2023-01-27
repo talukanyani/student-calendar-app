@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/helpers/show_modal.dart';
 import 'package:sc_app/themes/color_scheme.dart';
+import 'package:sc_app/widgets/buttons.dart';
 import '../modals/security_code.dart';
 
 class ChangePassword extends StatelessWidget {
@@ -20,10 +21,9 @@ class ChangePassword extends StatelessWidget {
         children: [
           Text(
             'Enter Old Password',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: CustomColorScheme.grey4,
-            ),
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: CustomColorScheme.grey4,
+                ),
           ),
           const SizedBox(height: 4),
           TextField(
@@ -39,10 +39,9 @@ class ChangePassword extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Enter New Password',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: CustomColorScheme.grey4,
-            ),
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: CustomColorScheme.grey4,
+                ),
           ),
           const SizedBox(height: 4),
           TextField(
@@ -56,7 +55,7 @@ class ChangePassword extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
+          ForegroundFilledBtn(
             onPressed: () {
               showModal(
                 context,
@@ -66,7 +65,6 @@ class ChangePassword extends StatelessWidget {
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(elevation: 0),
             child: const Text('Change Password'),
           ),
         ],

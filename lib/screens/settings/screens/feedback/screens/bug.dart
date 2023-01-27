@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/widgets/buttons.dart';
 
-class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+class BugScreen extends StatelessWidget {
+  const BugScreen({super.key});
 
   static final inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Help')),
+      appBar: AppBar(title: const Text('Report Bug')),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(16),
@@ -22,13 +22,13 @@ class HelpScreen extends StatelessWidget {
             maxLength: 500,
             style: const TextStyle(fontSize: 20),
             decoration: const InputDecoration(
-              hintText: 'Ask for a solution here..',
+              hintText: 'Explain what went wrong...',
             ),
           ),
           ForegroundFilledBtn(
             onPressed: () {},
             child: const Text('Send'),
-          )
+          ),
         ],
       ),
     );

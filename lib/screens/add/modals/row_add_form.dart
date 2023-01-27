@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/activity.dart';
 
+import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
 import '../widgets/activity_input.dart';
@@ -155,29 +156,25 @@ class _RowAddFormState extends State<RowAddForm> {
               child: const Text('Cancel'),
             ),
             const SizedBox(width: 8),
-            OutlinedButton(
-              onPressed: () {
-                if (_activityInputController.text.isEmpty ||
-                    _selectedDate == null ||
-                    _selectedTime == null) {
-                  showFeedback(context, 'Please fill all the fields.');
-                } else {
-                  addActivity(context).then((_) {
-                    Navigator.pop(context);
-                  }).then((_) {
-                    showFeedback(context,
-                        'One activity was added to ${widget.subjectName}');
-                  });
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                fixedSize: const Size.fromWidth(96),
-                side: BorderSide(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                ),
+            SizedBox(
+              width: 96,
+              child: PrimaryBorderBtn(
+                onPressed: () {
+                  if (_activityInputController.text.isEmpty ||
+                      _selectedDate == null ||
+                      _selectedTime == null) {
+                    showFeedback(context, 'Please fill all the fields.');
+                  } else {
+                    addActivity(context).then((_) {
+                      Navigator.pop(context);
+                    }).then((_) {
+                      showFeedback(context,
+                          'One activity was added to ${widget.subjectName}');
+                    });
+                  }
+                },
+                child: const Text('Add'),
               ),
-              child: const Text('Add'),
             ),
           ],
         ),

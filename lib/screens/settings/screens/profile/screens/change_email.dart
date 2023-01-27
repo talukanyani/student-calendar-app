@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:sc_app/helpers/show_modal.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
+
 import 'package:sc_app/themes/color_scheme.dart';
 
+import 'package:sc_app/widgets/buttons.dart';
 import '../modals/security_code.dart';
 import '../widgets/bullet_list.dart';
 
@@ -29,59 +31,94 @@ class ChangeEmail extends StatelessWidget {
           const SizedBox(height: 4),
           BulletList(
             texts: [
-              Text(
-                'You won\'t be able to change back to $email in the next 30 days.',
+              RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: 'You won\'t be able to change back to ',
+                    ),
+                    TextSpan(
+                      text: email,
+                      style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const TextSpan(text: ' in the next 14 days.')
+                  ],
+                ),
               ),
-              Text(
-                'You won\'t be able to change another profile\'s email to $email in the next 30 days.',
+              RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text:
+                          'You won\'t be able to change another profile\'s email to ',
+                    ),
+                    TextSpan(
+                      text: email,
+                      style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const TextSpan(text: ' in the next 14 days.')
+                  ],
+                ),
               ),
-              Text(
-                'You wont be able to create new profile using $email in the next 30 days.',
+              RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: 'You wont be able to create new profile using ',
+                    ),
+                    TextSpan(
+                      text: email,
+                      style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const TextSpan(text: ' in the next 14 days.')
+                  ],
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           Text(
             'Enter New Email',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: CustomColorScheme.grey4,
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: CustomColorScheme.grey4,
+                ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: inputController,
+            inputFormatters: [noSpace()],
+            keyboardType: TextInputType.emailAddress,
+            maxLength: 50,
+            style: const TextStyle(fontSize: 20),
+            decoration: const InputDecoration(
+              hintText: 'Email',
+              counterText: '',
             ),
           ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: TextField(
-                  controller: inputController,
-                  inputFormatters: [noSpace()],
-                  keyboardType: TextInputType.emailAddress,
-                  maxLength: 50,
-                  style: const TextStyle(fontSize: 20),
-                  decoration: const InputDecoration(
-                    hintText: 'Email',
-                    counterText: '',
-                  ),
+          const SizedBox(height: 8),
+          ForegroundFilledBtn(
+            onPressed: () {
+              showModal(
+                context,
+                modal: SecurityCode(
+                  email: email,
+                  actionName: 'change',
                 ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    showModal(
-                      context,
-                      modal: SecurityCode(
-                        email: email,
-                        actionName: 'change',
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(elevation: 0),
-                  child: const Text('Change'),
-                ),
-              )
-            ],
+              );
+            },
+            child: const Text('Change'),
           ),
         ],
       ),

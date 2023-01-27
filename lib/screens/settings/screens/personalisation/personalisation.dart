@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 
 class AppSettings extends StatelessWidget {
@@ -69,32 +70,35 @@ class _BodyState extends State<Body> {
     return ListView(
       primary: false,
       children: [
-        const HeadingText(text: 'Theme Mode'),
         RectContainer(
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const HeadingText(text: 'Theme Mode'),
               themeOption(title: 'Light', value: ThemeMode.light),
               themeOption(title: 'Dark', value: ThemeMode.dark),
               themeOption(title: 'System', value: ThemeMode.system),
             ],
           ),
         ),
-        const HeadingText(text: 'Tables Sort By'),
         RectContainer(
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const HeadingText(text: 'Tables Sort By'),
               sortTablesOption(title: 'Date Added', value: 'date_added'),
               sortTablesOption(title: 'Name', value: 'name'),
             ],
           ),
         ),
-        const HeadingText(text: 'Calendar Week Start'),
         RectContainer(
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const HeadingText(text: 'Calendar Week Start'),
               calendarWeekOption(title: 'Monday', value: 'mon'),
               calendarWeekOption(title: 'Sunday', value: 'sun'),
               calendarWeekOption(title: 'Saturday', value: 'sat'),
@@ -114,14 +118,12 @@ class HeadingText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, top: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Theme.of(context).primaryColor,
-        ),
+        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+              color: Theme.of(context).primaryColor,
+            ),
       ),
     );
   }

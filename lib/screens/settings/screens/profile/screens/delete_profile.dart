@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:sc_app/helpers/show_modal.dart';
+
 import 'package:sc_app/themes/color_scheme.dart';
+
+import 'package:sc_app/widgets/buttons.dart';
 import '../modals/security_code.dart';
 import '../widgets/bullet_list.dart';
 
@@ -26,14 +30,48 @@ class DeleteProfile extends StatelessWidget {
           const SizedBox(height: 4),
           BulletList(
             texts: [
-              Text(
-                'You won\'t be able to create new profile using $email in the next 30 days.',
+              RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: 'You won\'t be able to create new profile using ',
+                    ),
+                    TextSpan(
+                      text: email,
+                      style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const TextSpan(text: ' in the next 14 days.')
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text:
+                          'You won\'t be able to change another profile\'s email to ',
+                    ),
+                    TextSpan(
+                      text: email,
+                      style: const TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const TextSpan(text: ' in the next 14 days.')
+                  ],
+                ),
               ),
               Text(
-                  'You won\'t be able to change another profile\'s email to $email in the next 30 days.'),
-              Text(
                 'You will lose all your back ups.',
-                style: TextStyle(color: Theme.of(context).errorColor),
+                style: TextStyle(
+                  color: Theme.of(context).errorColor,
+                ),
               ),
               RichText(
                 text: TextSpan(
@@ -52,15 +90,14 @@ class DeleteProfile extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           Text(
             'Enter Password',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: CustomColorScheme.grey4,
-            ),
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: CustomColorScheme.grey4,
+                ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           TextField(
             controller: inputController,
             keyboardType: TextInputType.visiblePassword,
@@ -72,7 +109,7 @@ class DeleteProfile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          ElevatedButton(
+          ForegroundFilledBtn(
             onPressed: () {
               showModal(
                 context,
@@ -82,7 +119,6 @@ class DeleteProfile extends StatelessWidget {
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(elevation: 0),
             child: const Text('Permanantly Delete'),
           )
         ],

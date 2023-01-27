@@ -22,16 +22,19 @@ ThemeData lightTheme() {
     errorColor: errorRed,
     disabledColor: grey160,
     shadowColor: grey200,
-    hintColor: grey120,
+    hintColor: grey160,
     dividerColor: grey160,
     focusColor: brownLight,
     indicatorColor: brownDark,
     toggleableActiveColor: green,
-    textTheme: textTheme(black20, grey80),
+    textTheme: textTheme(onBackground: black20),
     appBarTheme: topBarTheme(white240, grey80),
     bottomNavigationBarTheme: bottomBarTheme(white235, grey80),
     bottomSheetTheme: bottomSheetTheme(white235),
-    inputDecorationTheme: inputTheme(borderColor: grey200, iconColor: grey160),
+    inputDecorationTheme: inputTheme(
+      borderColor: grey120,
+      hintColor: grey160,
+    ),
     popupMenuTheme: popupMenuTheme(bgColor: white255),
   );
 }

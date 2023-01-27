@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/widgets/buttons.dart';
 
 class LoginBody extends StatelessWidget {
   const LoginBody({super.key});
@@ -9,20 +10,12 @@ class LoginBody extends StatelessWidget {
       primary: false,
       padding: const EdgeInsets.all(16),
       children: [
-        ElevatedButton(
+        ForegroundFilledBtn(
           onPressed: () {},
-          style: ElevatedButton.styleFrom(elevation: 0),
           child: const Text('Login'),
         ),
-        OutlinedButton(
+        ForegroundBorderBtn(
           onPressed: () {},
-          style: OutlinedButton.styleFrom(
-            elevation: 0,
-            side: BorderSide(
-              width: 2,
-              color: Theme.of(context).colorScheme.primaryContainer,
-            ),
-          ),
           child: const Text('Create New Profile'),
         ),
       ],

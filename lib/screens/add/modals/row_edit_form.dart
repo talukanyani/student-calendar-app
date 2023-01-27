@@ -8,6 +8,7 @@ import 'package:sc_app/models/activity.dart';
 
 import 'package:sc_app/helpers/pad.dart';
 
+import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
 import '../widgets/activity_input.dart';
@@ -185,43 +186,40 @@ class _RowEditFormState extends State<RowEditForm> {
               child: const Text('Cancel'),
             ),
             const SizedBox(width: 8),
-            OutlinedButton(
-              onPressed: () {
-                if (_activityInputController.text.isEmpty ||
-                    _selectedDate == null ||
-                    _selectedTime == null) {
-                  showFeedback(context, 'Please fill all the fields.');
-                  return;
-                }
+            SizedBox(
+              width: 96,
+              child: PrimaryBorderBtn(
+                onPressed: () {
+                  if (_activityInputController.text.isEmpty ||
+                      _selectedDate == null ||
+                      _selectedTime == null) {
+                    showFeedback(context, 'Please fill all the fields.');
+                    return;
+                  }
 
-                if (widget.activity.activity == _activityInputController.text &&
-                    getActivityDate() ==
-                        DateTime(
-                          _selectedDate!.year,
-                          _selectedDate!.month,
-                          _selectedDate!.day,
-                          _selectedTime!.hour,
-                          _selectedTime!.minute,
-                        )) {
-                  showFeedback(context, 'You did not change anything.');
-                  return;
-                }
+                  if (widget.activity.activity ==
+                          _activityInputController.text &&
+                      getActivityDate() ==
+                          DateTime(
+                            _selectedDate!.year,
+                            _selectedDate!.month,
+                            _selectedDate!.day,
+                            _selectedTime!.hour,
+                            _selectedTime!.minute,
+                          )) {
+                    showFeedback(context, 'You did not change anything.');
+                    return;
+                  }
 
-                editActivity(context).then((_) {
-                  Navigator.pop(context);
-                }).then((_) {
-                  showFeedback(context,
-                      'One of ${widget.subjectName} activities was edited.');
-                });
-              },
-              style: OutlinedButton.styleFrom(
-                fixedSize: const Size.fromWidth(96),
-                side: BorderSide(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                ),
+                  editActivity(context).then((_) {
+                    Navigator.pop(context);
+                  }).then((_) {
+                    showFeedback(context,
+                        'One of ${widget.subjectName} activities was edited.');
+                  });
+                },
+                child: const Text('Save'),
               ),
-              child: const Text('Save'),
             ),
           ],
         ),

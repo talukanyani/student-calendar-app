@@ -7,6 +7,7 @@ import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/table_colors.dart';
 
+import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
 import '../widgets/label_text.dart';
@@ -98,26 +99,22 @@ class _TableAddFormState extends State<TableAddForm> {
               child: const Text('Cancel'),
             ),
             const SizedBox(width: 8),
-            OutlinedButton(
-              onPressed: () {
-                if (_titleInputController.text.isEmpty) {
-                  showFeedback(context, 'Please enter a title.');
-                } else {
-                  addSubject(context).then((_) {
-                    Navigator.pop(context);
-                  }).then((_) {
-                    showFeedback(context, 'One subject table was added');
-                  });
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                fixedSize: const Size.fromWidth(96),
-                side: BorderSide(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                ),
+            SizedBox(
+              width: 96,
+              child: PrimaryBorderBtn(
+                onPressed: () {
+                  if (_titleInputController.text.isEmpty) {
+                    showFeedback(context, 'Please enter a title.');
+                  } else {
+                    addSubject(context).then((_) {
+                      Navigator.pop(context);
+                    }).then((_) {
+                      showFeedback(context, 'One subject table was added');
+                    });
+                  }
+                },
+                child: const Text('Add'),
               ),
-              child: const Text('Add'),
             ),
           ],
         ),
