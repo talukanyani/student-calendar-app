@@ -8,8 +8,9 @@ import 'package:sc_app/controllers/all_activities.dart';
 import 'package:sc_app/themes/theme.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 
-import '/widgets/android_system_navbar.dart';
-import '/screens/home/home.dart';
+import 'widgets/android_system_navbar.dart';
+import 'screens/welcome/welcome.dart';
+import 'screens/home/home.dart';
 
 void main() => runApp(const App());
 
@@ -41,6 +42,7 @@ class App extends StatelessWidget {
         child: MaterialApp(
           title: 'Student Calendar',
           home: const HomeScreen(),
+          // home: const WelcomeScreen(),
           theme: lightTheme(),
           debugShowCheckedModeBanner: false,
         ),

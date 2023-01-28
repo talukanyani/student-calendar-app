@@ -71,7 +71,7 @@ class PrimaryFilledBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: OutlinedButton.styleFrom(elevation: 0, shape: shape),
+      style: ElevatedButton.styleFrom(elevation: 0, shape: shape),
       child: child,
     );
   }
@@ -97,6 +97,31 @@ class PrimaryBorderBtn extends StatelessWidget {
           width: 2,
           color: Theme.of(context).colorScheme.primaryContainer,
         ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class GreyFilledBtn extends StatelessWidget {
+  const GreyFilledBtn({
+    super.key,
+    required this.onPressed,
+    required this.child,
+  });
+
+  final void Function() onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        shape: shape,
+        backgroundColor: CustomColorScheme.background5,
+        foregroundColor: Theme.of(context).colorScheme.onBackground,
       ),
       child: child,
     );

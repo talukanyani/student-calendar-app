@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 TextTheme textTheme({required Color onBackground}) {
   return TextTheme(
+    headline3: TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.w500,
+      color: onBackground,
+    ),
     headline4: TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.w500,

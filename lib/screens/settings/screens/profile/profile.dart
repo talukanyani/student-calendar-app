@@ -14,19 +14,19 @@ import 'screens/delete_profile.dart';
 class ProfileSettings extends StatelessWidget {
   const ProfileSettings({super.key});
 
-  static bool isLoggedIn = true;
+  static bool isLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
-      body: isLoggedIn ? const ProfileBody() : const LoginBody(),
+      body: isLoggedIn ? const ProfileManageBody() : const ProfileLoginBody(),
     );
   }
 }
 
-class ProfileBody extends StatelessWidget {
-  const ProfileBody({super.key});
+class ProfileManageBody extends StatelessWidget {
+  const ProfileManageBody({super.key});
 
   static const name = 'Talukanyani';
   static const email = 'tmutshaeni@hotmail.com';
