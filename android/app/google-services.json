@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1038255999180",
+    "project_id": "student-calendar-7246c",
+    "storage_bucket": "student-calendar-7246c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038255999180:android:ffab2d6d57dc7509b31a69",
+        "android_client_info": {
+          "package_name": "com.example.sc_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038255999180-pd1n78au48qnnpk6on0372eqa8m17oo4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATrcJqR8sUWg3aTwpAVnmtr2BZ9HEOOFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038255999180-pd1n78au48qnnpk6on0372eqa8m17oo4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038255999180-5ip5umkad236lm50iqfd9qrckg5slj4n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.scApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

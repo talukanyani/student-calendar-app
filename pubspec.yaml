@@ -39,6 +39,10 @@ dependencies:
   fluentui_system_icons: ^1.1.189
   iconsax: ^0.0.8
   provider: ^6.0.5
+  firebase_core: ^2.4.1
+  cloud_firestore: ^4.3.1
+  firebase_analytics: ^10.1.0
+  firebase_auth: ^4.2.5
 
 dev_dependencies:
   flutter_test:
