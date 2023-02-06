@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
+import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/models/activity.dart';
-
 import 'package:sc_app/helpers/pad.dart';
 import 'package:sc_app/helpers/calendar_names.dart';
 import 'package:sc_app/helpers/show_modal.dart';
-import 'package:sc_app/screens/add/widgets/popup_menu_item.dart';
 import 'package:sc_app/utils/table_colors.dart';
-
+import 'package:sc_app/widgets/rect_container.dart';
 import '../modals/row_add_form.dart';
 import '../modals/row_edit_form.dart';
 import '../modals/table_edit_form.dart';
 import '../modals/delete_alert.dart';
-
-import 'package:sc_app/widgets/rect_container.dart';
+import 'popup_menu_item.dart';
 import 'oval_text_container.dart';
 import 'snackbar.dart';
 
@@ -25,13 +21,13 @@ class SubjectTable extends StatelessWidget {
   const SubjectTable({
     super.key,
     required this.tableIndex,
-    required this.subjectId,
+    required this.subjectTimeId,
     required this.subjectName,
     required this.subjectColor,
   });
 
   final int tableIndex;
-  final int subjectId;
+  final int subjectTimeId;
   final String subjectName;
   final String subjectColor;
 
@@ -52,7 +48,7 @@ class SubjectTable extends StatelessWidget {
       context,
       listen: false,
     );
-    final ActivityController activityProvider = Provider.of<ActivityController>(
+    final activityProvider = Provider.of<SubjectActivitiesController>(
       context,
       listen: false,
     );
@@ -91,7 +87,7 @@ class SubjectTable extends StatelessWidget {
                           showModal(
                             context,
                             modal: TableEditForm(
-                              subjectId: subjectId,
+                              subjectId: subjectTimeId,
                               subjectName: subjectName,
                               subjectColor: subjectColor,
                             ),
@@ -111,7 +107,7 @@ class SubjectTable extends StatelessWidget {
                             modal: DeleteAlert(
                               contentName: '$subjectName subject table',
                               deleteContent: () {
-                                subjectProvider.removeSubject(subjectId);
+                                subjectProvider.removeSubject(subjectTimeId);
                               },
                             ),
                           ),
@@ -124,7 +120,7 @@ class SubjectTable extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Consumer<ActivityController>(
+          Consumer<SubjectActivitiesController>(
             builder: (context, activity, child) {
               final List<ActivityModel> activities =
                   activity.subjectController.subjects[tableIndex].activities;
@@ -206,7 +202,7 @@ class SubjectTable extends StatelessWidget {
                                       showModal(
                                         context,
                                         modal: RowEditForm(
-                                          subjectId: subjectId,
+                                          subjectTimeId: subjectTimeId,
                                           subjectName: subjectName,
                                           activity: activities[index],
                                         ),
@@ -228,8 +224,8 @@ class SubjectTable extends StatelessWidget {
                                               '${activities[index].activity} activity row',
                                           deleteContent: () {
                                             activityProvider.removeActivity(
-                                              subjectId,
-                                              activities[index].id,
+                                              subjectTimeId,
+                                              activities[index].timeId,
                                             );
                                           },
                                         ),
@@ -267,7 +263,7 @@ class SubjectTable extends StatelessWidget {
                   showModal(
                     context,
                     modal: RowAddForm(
-                      subjectId: subjectId,
+                      subjectTimeId: subjectTimeId,
                       subjectName: subjectName,
                     ),
                   );

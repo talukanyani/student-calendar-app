@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:iconsax/iconsax.dart';
-
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
+import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/models/activity.dart';
-
 import 'package:sc_app/helpers/pad.dart';
-
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
@@ -17,12 +13,12 @@ import '../widgets/label_text.dart';
 class RowEditForm extends StatefulWidget {
   const RowEditForm({
     super.key,
-    required this.subjectId,
+    required this.subjectTimeId,
     required this.subjectName,
     required this.activity,
   });
 
-  final int subjectId;
+  final int subjectTimeId;
   final String subjectName;
   final ActivityModel activity;
 
@@ -41,9 +37,10 @@ class _RowEditFormState extends State<RowEditForm> {
   static final _timeInputController = TextEditingController();
 
   Future<void> editActivity(BuildContext context) async {
-    Provider.of<ActivityController>(context, listen: false).editActivity(
-      widget.subjectId,
-      widget.activity.id,
+    Provider.of<SubjectActivitiesController>(context, listen: false)
+        .editActivity(
+      widget.subjectTimeId,
+      widget.activity.timeId,
       _activityInputController.text,
       DateTime(
         _selectedDate!.year,

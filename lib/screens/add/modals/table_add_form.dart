@@ -1,12 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
-
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/table_colors.dart';
-
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
@@ -29,6 +26,7 @@ class _TableAddFormState extends State<TableAddForm> {
 
   Future<void> addSubject(BuildContext context) async {
     Provider.of<SubjectController>(context, listen: false).addSubject(
+      DateTime.now().millisecondsSinceEpoch,
       _titleInputController.text,
       _selectedColor,
     );

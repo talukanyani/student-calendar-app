@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:iconsax/iconsax.dart';
-
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
-
+import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/snackbar.dart';
@@ -14,11 +11,11 @@ import '../widgets/label_text.dart';
 class RowAddForm extends StatefulWidget {
   const RowAddForm({
     super.key,
-    required this.subjectId,
+    required this.subjectTimeId,
     required this.subjectName,
   });
 
-  final int subjectId;
+  final int subjectTimeId;
   final String subjectName;
 
   @override
@@ -36,8 +33,10 @@ class _RowAddFormState extends State<RowAddForm> {
   static final _timeInputController = TextEditingController();
 
   Future<void> addActivity(BuildContext context) async {
-    Provider.of<ActivityController>(context, listen: false).addActivity(
-      widget.subjectId,
+    Provider.of<SubjectActivitiesController>(context, listen: false)
+        .addActivity(
+      widget.subjectTimeId,
+      DateTime.now().millisecondsSinceEpoch,
       _activityInputController.text,
       DateTime(
         _selectedDate!.year,

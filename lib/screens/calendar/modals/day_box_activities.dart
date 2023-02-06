@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:sc_app/models/subject_activity.dart';
-
+import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/helpers/calendar_names.dart';
 import 'package:sc_app/helpers/same_date.dart';
-
 import 'package:sc_app/widgets/activities_list.dart';
 import 'package:sc_app/widgets/modal.dart';
 
@@ -16,7 +13,7 @@ class DayBoxActivitiesModal extends StatelessWidget {
   });
 
   final DateTime date;
-  final List<SubjectActivityModel> activities;
+  final List<ActivityModel> activities;
 
   String get title {
     DateTime today = DateTime.now();

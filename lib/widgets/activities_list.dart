@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/helpers/same_date.dart';
-import 'package:sc_app/models/subject_activity.dart';
+import 'package:sc_app/models/activity.dart';
 
 class ActivitiesList extends StatelessWidget {
   const ActivitiesList({
@@ -10,7 +10,7 @@ class ActivitiesList extends StatelessWidget {
   });
 
   final DateTime date;
-  final List<SubjectActivityModel> activities;
+  final List<ActivityModel> activities;
 
   String get dateWord {
     DateTime today = DateTime.now();
@@ -24,7 +24,7 @@ class ActivitiesList extends StatelessWidget {
   }
 
   TimeOfDay getTime(index) {
-    DateTime date = activities[index].date;
+    DateTime date = activities[index].dateTime;
     return TimeOfDay(hour: date.hour, minute: date.minute);
   }
 
@@ -54,7 +54,7 @@ class ActivitiesList extends StatelessWidget {
             ],
           ),
           title: Text(
-            '${activities[index].subject} ${activities[index].activity}',
+            '${activities[index].subjectName} ${activities[index].activity}',
             style: const TextStyle(fontSize: 15),
           ),
         );

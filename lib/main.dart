@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/controllers/subject.dart';
+import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/controllers/all_activities.dart';
 
 import 'package:sc_app/themes/theme.dart';
@@ -31,10 +31,11 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<SubjectController>(
           create: (_) => SubjectController(),
         ),
-        ChangeNotifierProxyProvider<SubjectController, ActivityController>(
-          create: (context) => ActivityController(SubjectController()),
-          update: (context, subjectController, activityController) {
-            return ActivityController(subjectController);
+        ChangeNotifierProxyProvider<SubjectController,
+            SubjectActivitiesController>(
+          create: (context) => SubjectActivitiesController(SubjectController()),
+          update: (context, subjectController, subjectActivitiesController) {
+            return SubjectActivitiesController(subjectController);
           },
         ),
         ChangeNotifierProxyProvider<SubjectController, AllActivitiesController>(

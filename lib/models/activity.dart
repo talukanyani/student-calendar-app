@@ -1,7 +1,15 @@
 class ActivityModel {
-  int id;
+  int timeId;
+  String? docId;
+  String subjectName;
   String activity;
   DateTime dateTime;
 
-  ActivityModel(this.id, this.activity, this.dateTime);
+  ActivityModel({
+    required this.timeId,
+    this.docId,
+    required this.subjectName,
+    required this.activity,
+    required this.dateTime,
+  });
 }

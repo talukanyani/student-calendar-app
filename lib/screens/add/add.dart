@@ -40,7 +40,7 @@ class Body extends StatelessWidget {
             }
             return SubjectTable(
               tableIndex: index,
-              subjectId: subjectData[index].id,
+              subjectTimeId: subjectData[index].timeId,
               subjectName: subjectData[index].name,
               subjectColor: subjectData[index].color,
             );

@@ -1,10 +1,17 @@
 import 'activity.dart';
 
 class SubjectModel {
-  int id;
+  int timeId;
+  String? docId;
   String name;
   String color;
   List<ActivityModel> activities;
 
-  SubjectModel(this.id, this.name, this.color, this.activities);
+  SubjectModel({
+    required this.timeId,
+    this.docId,
+    required this.name,
+    required this.color,
+    required this.activities,
+  });
 }
