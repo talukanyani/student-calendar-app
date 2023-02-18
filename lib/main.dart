@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/controllers/all_activities.dart';
-
+import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/theme.dart';
 import 'package:sc_app/themes/color_scheme.dart';
-
 import 'widgets/android_system_navbar.dart';
 import 'screens/welcome/welcome.dart';
 import 'screens/home/home.dart';
@@ -33,17 +30,20 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<SubjectController,
             SubjectActivitiesController>(
-          create: (context) => SubjectActivitiesController(SubjectController()),
-          update: (context, subjectController, subjectActivitiesController) {
+          create: (_) => SubjectActivitiesController(SubjectController()),
+          update: (_, subjectController, __) {
             return SubjectActivitiesController(subjectController);
           },
         ),
         ChangeNotifierProxyProvider<SubjectController, AllActivitiesController>(
-          create: (context) => AllActivitiesController(SubjectController()),
-          update: (context, subjectController, allActivitiesController) {
+          create: (_) => AllActivitiesController(SubjectController()),
+          update: (_, subjectController, __) {
             return AllActivitiesController(subjectController);
           },
         ),
+        ChangeNotifierProvider<AuthenticationController>(
+          create: (_) => AuthenticationController(),
+        )
       ],
       child: AndroidSystemNavbarStyle(
         color: CustomColorScheme.background5,

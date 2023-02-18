@@ -1,15 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import '../widgets/loading.dart';
 import 'create_profile.dart';
 import 'reset_password.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String? errorMessage;
+  String? emailErrorMessage;
+  String? passwordErrorMessage;
 
   static final _emailInputController = TextEditingController();
   static final _passwordInputController = TextEditingController();
+
+  login(BuildContext context) {
+    final authProvider =
+        Provider.of<AuthenticationController>(context, listen: false);
+
+    showLoading(context);
+
+    authProvider
+        .login(
+      _emailInputController.text,
+      _passwordInputController.text,
+    )
+        .then((value) {
+      Navigator.pop(context);
+
+      switch (value) {
+        case 'user-not-found':
+          setState(() {
+            emailErrorMessage = 'There is no profile for this email.';
+          });
+          break;
+        case 'wrong-password':
+          setState(() {
+            passwordErrorMessage = 'Password is incorrect.';
+          });
+          break;
+        case 'error':
+          setState(() {
+            errorMessage = 'There was an error while logging you in.';
+          });
+          break;
+        default:
+          Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailInputController.clear();
+    _passwordInputController.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +84,14 @@ class LoginScreen extends StatelessWidget {
             maxLength: 50,
             inputFormatters: [noSpace()],
             style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Email',
+              errorText: emailErrorMessage,
               counterText: '',
             ),
+            onTap: () {
+              setState(() => emailErrorMessage = null);
+            },
           ),
           const SizedBox(height: 16),
           TextField(
@@ -40,10 +99,14 @@ class LoginScreen extends StatelessWidget {
             keyboardType: TextInputType.visiblePassword,
             maxLength: 30,
             style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Password',
+              errorText: passwordErrorMessage,
               counterText: '',
             ),
+            onTap: () {
+              setState(() => passwordErrorMessage = null);
+            },
           ),
           const SizedBox(height: 4),
           GestureDetector(
@@ -64,10 +127,17 @@ class LoginScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           ForegroundFilledBtn(
-            onPressed: () {},
+            onPressed: () {
+              login(context);
+            },
             child: const Text('Log In'),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
+          Text(
+            errorMessage ?? '',
+            style: TextStyle(color: Theme.of(context).errorColor),
+          ),
+          SizedBox(height: errorMessage == null ? 0 : 2),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);

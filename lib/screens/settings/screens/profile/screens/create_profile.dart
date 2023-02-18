@@ -1,15 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import '../widgets/loading.dart';
 import 'login.dart';
 
-class CreateProfileScreen extends StatelessWidget {
+class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({super.key});
+
+  @override
+  State<CreateProfileScreen> createState() => _CreateProfileScreenState();
+}
+
+class _CreateProfileScreenState extends State<CreateProfileScreen> {
+  String? errorMessage;
+  String? emailErrorMessage;
+  String? passwordErrorMessage;
 
   static final _nameInputController = TextEditingController();
   static final _emailInputController = TextEditingController();
   static final _passwordInputController = TextEditingController();
+
+  void createProfile(BuildContext context) {
+    final authProvider =
+        Provider.of<AuthenticationController>(context, listen: false);
+
+    showLoading(context);
+
+    authProvider
+        .createProfile(
+      _emailInputController.text,
+      _passwordInputController.text,
+    )
+        .then((value) {
+      Navigator.pop(context);
+
+      switch (value) {
+        case 'email-already-in-use':
+          setState(() {
+            emailErrorMessage = 'Email is already on an existing profile.';
+          });
+          break;
+        case 'weak-password':
+          setState(() {
+            passwordErrorMessage = 'Password is too weak.';
+          });
+          break;
+        case 'error':
+          setState(() {
+            errorMessage = 'There was an error while creating your profile.';
+          });
+          break;
+        default:
+          Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameInputController.clear();
+    _emailInputController.clear();
+    _passwordInputController.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +101,14 @@ class CreateProfileScreen extends StatelessWidget {
             maxLength: 50,
             inputFormatters: [noSpace()],
             style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Email',
+              errorText: emailErrorMessage,
               counterText: '',
             ),
+            onTap: () {
+              setState(() => emailErrorMessage = null);
+            },
           ),
           const SizedBox(height: 16),
           TextField(
@@ -56,17 +116,28 @@ class CreateProfileScreen extends StatelessWidget {
             keyboardType: TextInputType.visiblePassword,
             maxLength: 30,
             style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Password',
+              errorText: passwordErrorMessage,
               counterText: '',
             ),
+            onTap: () {
+              setState(() => passwordErrorMessage = null);
+            },
           ),
           const SizedBox(height: 16),
           ForegroundFilledBtn(
-            onPressed: () {},
+            onPressed: () {
+              createProfile(context);
+            },
             child: const Text('Create a profile'),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
+          Text(
+            errorMessage ?? '',
+            style: TextStyle(color: Theme.of(context).errorColor),
+          ),
+          SizedBox(height: errorMessage == null ? 0 : 2),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);

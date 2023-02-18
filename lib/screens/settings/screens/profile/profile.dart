@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/rect_container.dart';
-
 import 'widgets/login_body.dart';
-
+import 'widgets/loading.dart';
 import 'screens/edit_name.dart';
 import 'screens/change_email.dart';
 import 'screens/change_password.dart';
@@ -14,10 +14,11 @@ import 'screens/delete_profile.dart';
 class ProfileSettings extends StatelessWidget {
   const ProfileSettings({super.key});
 
-  static bool isLoggedIn = false;
-
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthenticationController>(context).currentUser;
+    bool isLoggedIn = user != null;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: isLoggedIn ? const ProfileManageBody() : const ProfileLoginBody(),
@@ -25,14 +26,38 @@ class ProfileSettings extends StatelessWidget {
   }
 }
 
-class ProfileManageBody extends StatelessWidget {
+class ProfileManageBody extends StatefulWidget {
   const ProfileManageBody({super.key});
 
-  static const name = 'Talukanyani';
-  static const email = 'tmutshaeni@hotmail.com';
+  @override
+  State<ProfileManageBody> createState() => _ProfileManageBodyState();
+}
+
+class _ProfileManageBodyState extends State<ProfileManageBody> {
+  String? errorMessage;
+
+  void logout(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationController>(context, listen: false);
+
+    showLoading(context);
+
+    authProvider.logout().then((value) {
+      if (value == 'error') {
+        setState(() {
+          errorMessage = 'There was an error while logging you out.';
+        });
+      } else {
+        Navigator.pop(context);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationController>(context, listen: false);
+    final email = authProvider.currentUser!.email ?? '';
+    const name = 'Talukanyani';
+
     return ListView(
       primary: false,
       children: [
@@ -69,13 +94,18 @@ class ProfileManageBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () => logout(context),
               style: OutlinedButton.styleFrom(
                 backgroundColor: CustomColorScheme.background5,
                 foregroundColor: Theme.of(context).colorScheme.onBackground,
                 fixedSize: const Size(128, 32),
               ),
               child: const Text('Log Out'),
+            ),
+            SizedBox(height: errorMessage == null ? 0 : 4),
+            Text(
+              errorMessage ?? '',
+              style: TextStyle(color: Theme.of(context).errorColor),
             ),
           ],
         ),
@@ -92,17 +122,17 @@ class ProfileManageBody extends StatelessWidget {
               const Divider(height: 0),
               const Tile(title: 'Edit Name', page: EditName()),
               const Divider(height: 0),
-              const Tile(
+              Tile(
                 title: 'Change Email',
                 page: ChangeEmail(email: email),
               ),
               const Divider(height: 0),
-              const Tile(
+              Tile(
                 title: 'Change Password',
                 page: ChangePassword(email: email),
               ),
               const Divider(height: 0),
-              const Tile(
+              Tile(
                 title: 'Delete Profile',
                 page: DeleteProfile(email: email),
               ),
