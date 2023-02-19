@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/controllers/subject.dart';
@@ -9,10 +10,10 @@ import 'package:sc_app/helpers/calendar_names.dart';
 import 'package:sc_app/helpers/show_modal.dart';
 import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/widgets/rect_container.dart';
+import 'package:sc_app/widgets/alerts.dart';
 import '../modals/row_add_form.dart';
 import '../modals/row_edit_form.dart';
 import '../modals/table_edit_form.dart';
-import '../modals/delete_alert.dart';
 import 'popup_menu_item.dart';
 import 'oval_text_container.dart';
 import 'snackbar.dart';
@@ -104,9 +105,13 @@ class SubjectTable extends StatelessWidget {
                           const Duration(seconds: 1),
                           showModal(
                             context,
-                            modal: DeleteAlert(
-                              contentName: '$subjectName subject table',
-                              deleteContent: () {
+                            modal: Alert(
+                              title: 'Delete Permanently',
+                              titleIcon: FluentIcons.delete_24_filled,
+                              content:
+                                  '$subjectName subject table will be deleted permanently.',
+                              actionName: 'Delete',
+                              action: () {
                                 subjectProvider.removeSubject(subjectTimeId);
                               },
                             ),
@@ -219,10 +224,14 @@ class SubjectTable extends StatelessWidget {
                                       const Duration(seconds: 1),
                                       showModal(
                                         context,
-                                        modal: DeleteAlert(
-                                          contentName:
-                                              '${activities[index].activity} activity row',
-                                          deleteContent: () {
+                                        modal: Alert(
+                                          title: 'Delete Permanently',
+                                          titleIcon:
+                                              FluentIcons.delete_24_filled,
+                                          content:
+                                              '${activities[index].activity} activity row will be deleted permanently.',
+                                          actionName: 'Delete',
+                                          action: () {
                                             activityProvider.removeActivity(
                                               subjectTimeId,
                                               activities[index].timeId,

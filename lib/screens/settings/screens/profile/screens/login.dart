@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../widgets/loading.dart';
 import 'create_profile.dart';
@@ -35,20 +36,25 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordInputController.text,
     )
         .then((value) {
-      Navigator.pop(context);
+      hideLoading(context);
 
       switch (value) {
-        case 'user-not-found':
+        case AuthStatus.profileNotFound:
           setState(() {
             emailErrorMessage = 'There is no profile for this email.';
           });
           break;
-        case 'wrong-password':
+        case AuthStatus.wrongPassword:
           setState(() {
             passwordErrorMessage = 'Password is incorrect.';
           });
           break;
-        case 'error':
+        case AuthStatus.networkError:
+          setState(() {
+            errorMessage = 'Network error, check your internet connection.';
+          });
+          break;
+        case AuthStatus.unknownError:
           setState(() {
             errorMessage = 'There was an error while logging you in.';
           });
@@ -128,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 8),
           ForegroundFilledBtn(
             onPressed: () {
+              setState(() => errorMessage = null);
               login(context);
             },
             child: const Text('Log In'),

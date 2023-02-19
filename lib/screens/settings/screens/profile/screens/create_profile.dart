@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../widgets/loading.dart';
 import 'login.dart';
@@ -35,20 +36,25 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       _passwordInputController.text,
     )
         .then((value) {
-      Navigator.pop(context);
+      hideLoading(context);
 
       switch (value) {
-        case 'email-already-in-use':
+        case AuthStatus.emailInUse:
           setState(() {
             emailErrorMessage = 'Email is already on an existing profile.';
           });
           break;
-        case 'weak-password':
+        case AuthStatus.weakPassword:
           setState(() {
             passwordErrorMessage = 'Password is too weak.';
           });
           break;
-        case 'error':
+        case AuthStatus.networkError:
+          setState(() {
+            errorMessage = 'Network error, check your internet connection.';
+          });
+          break;
+        case AuthStatus.unknownError:
           setState(() {
             errorMessage = 'There was an error while creating your profile.';
           });
@@ -128,6 +134,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           const SizedBox(height: 16),
           ForegroundFilledBtn(
             onPressed: () {
+              setState(() => errorMessage = null);
               createProfile(context);
             },
             child: const Text('Create a profile'),

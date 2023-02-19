@@ -8,3 +8,5 @@ showLoading(BuildContext context) {
     barrierColor: Theme.of(context).backgroundColor.withOpacity(0.75),
   );
 }
+
+hideLoading(BuildContext context) => Navigator.pop(context);

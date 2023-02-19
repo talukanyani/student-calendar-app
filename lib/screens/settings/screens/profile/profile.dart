@@ -3,6 +3,9 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/themes/color_scheme.dart';
+import 'package:sc_app/helpers/show_modal.dart';
+import 'package:sc_app/utils/enums.dart';
+import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 import 'widgets/login_body.dart';
 import 'widgets/loading.dart';
@@ -37,24 +40,26 @@ class _ProfileManageBodyState extends State<ProfileManageBody> {
   String? errorMessage;
 
   void logout(BuildContext context) {
-    final authProvider = Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthenticationController>(context, listen: false);
 
     showLoading(context);
 
     authProvider.logout().then((value) {
-      if (value == 'error') {
+      hideLoading(context);
+
+      if (value == AuthStatus.unknownError) {
         setState(() {
           errorMessage = 'There was an error while logging you out.';
         });
-      } else {
-        Navigator.pop(context);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthenticationController>(context, listen: false);
     final email = authProvider.currentUser!.email ?? '';
     const name = 'Talukanyani';
 
@@ -94,7 +99,16 @@ class _ProfileManageBodyState extends State<ProfileManageBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             OutlinedButton(
-              onPressed: () => logout(context),
+              onPressed: () {
+                showModal(
+                  context,
+                  modal: ConfirmationAlert(
+                    title: const Text('Log Out?'),
+                    content: const Text('Are you sure you want to log out?'),
+                    action: () => logout(context),
+                  ),
+                );
+              },
               style: OutlinedButton.styleFrom(
                 backgroundColor: CustomColorScheme.background5,
                 foregroundColor: Theme.of(context).colorScheme.onBackground,
