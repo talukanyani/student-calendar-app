@@ -6,6 +6,7 @@ import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../widgets/loading.dart';
+import 'email_verification.dart';
 import 'login.dart';
 
 class CreateProfileScreen extends StatefulWidget {
@@ -60,7 +61,14 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           });
           break;
         default:
+          authProvider.updateName(_nameInputController.text);
+          authProvider.sendVerificationEmail();
           Navigator.pop(context);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const EmailVerificationScreen(),
+            ),
+          );
       }
     });
   }
@@ -160,25 +168,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
                     color: CustomColorScheme.grey4,
                   ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Divider(indent: 8, endIndent: 8),
-          const SizedBox(height: 16),
-          GreyFilledBtn(
-            onPressed: () {},
-            child: Row(
-              children: const [
-                Text('Continue With Google'),
-              ],
-            ),
-          ),
-          GreyFilledBtn(
-            onPressed: () {},
-            child: Row(
-              children: const [
-                Text('Continue With Facebook'),
-              ],
             ),
           ),
         ],

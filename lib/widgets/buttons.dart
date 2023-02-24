@@ -4,6 +4,7 @@ import 'package:sc_app/themes/color_scheme.dart';
 OutlinedBorder shape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(12),
 );
+BorderSide border(Color color) => BorderSide(width: 2, color: color);
 
 class ForegroundFilledBtn extends StatelessWidget {
   const ForegroundFilledBtn({
@@ -12,7 +13,7 @@ class ForegroundFilledBtn extends StatelessWidget {
     required this.child,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
 
   @override
@@ -37,20 +38,30 @@ class ForegroundBorderBtn extends StatelessWidget {
     required this.child,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final foregroundColor = Theme.of(context).colorScheme.onBackground;
+    final borderColor = CustomColorScheme.foreground5;
+
     return OutlinedButton(
       onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Theme.of(context).colorScheme.onBackground,
-        shape: shape,
-        side: BorderSide(
-          width: 2,
-          color: Theme.of(context).colorScheme.onBackground,
-        ),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return foregroundColor.withOpacity(0.5);
+          }
+          return foregroundColor;
+        }),
+        shape: MaterialStateProperty.all<OutlinedBorder>(shape),
+        side: MaterialStateProperty.resolveWith<BorderSide>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return border(borderColor.withOpacity(0.1));
+          }
+          return border(borderColor);
+        }),
       ),
       child: child,
     );
@@ -64,7 +75,7 @@ class PrimaryFilledBtn extends StatelessWidget {
     required this.child,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
 
   @override
@@ -84,19 +95,23 @@ class PrimaryBorderBtn extends StatelessWidget {
     required this.child,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final borderColor = Theme.of(context).colorScheme.primaryContainer;
+
     return OutlinedButton(
       onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        shape: shape,
-        side: BorderSide(
-          width: 2,
-          color: Theme.of(context).colorScheme.primaryContainer,
-        ),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(shape),
+        side: MaterialStateProperty.resolveWith<BorderSide>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return border(borderColor.withOpacity(0.1));
+          }
+          return border(borderColor);
+        }),
       ),
       child: child,
     );
@@ -110,7 +125,7 @@ class GreyFilledBtn extends StatelessWidget {
     required this.child,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Widget child;
 
   @override

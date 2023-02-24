@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/enums.dart';
 
 class Auth {
-  final _auth = FirebaseAuth.instance;
+  static final _auth = FirebaseAuth.instance;
+  final _currentUser = _auth.currentUser;
 
-  User? get currentUser => _auth.currentUser;
+  User? get currentUser => _currentUser;
 
   Future<AuthStatus> createProfile(String email, String password) async {
     try {
@@ -95,5 +98,33 @@ class Auth {
     }
 
     return AuthStatus.done;
+  }
+
+  Future<AuthStatus> updateName(String displayName) async {
+    try {
+      await _currentUser?.updateDisplayName(displayName);
+    } catch (e) {
+      return AuthStatus.unknownError;
+    }
+
+    return AuthStatus.done;
+  }
+
+  Future<void> sendVerificationEmail() async {
+    try {
+      await _currentUser?.sendEmailVerification();
+    } catch (e) {
+      return;
+    }
+  }
+
+  Future<bool> checkEmailVerified() async {
+    try {
+      await _currentUser?.reload();
+    } catch (e) {
+      return false;
+    }
+
+    return _currentUser?.emailVerified ?? false;
   }
 }

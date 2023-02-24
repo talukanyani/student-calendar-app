@@ -162,25 +162,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
             ),
           ),
-          const SizedBox(height: 16),
-          const Divider(indent: 8, endIndent: 8),
-          const SizedBox(height: 16),
-          GreyFilledBtn(
-            onPressed: () {},
-            child: Row(
-              children: const [
-                Text('Continue With Google'),
-              ],
-            ),
-          ),
-          GreyFilledBtn(
-            onPressed: () {},
-            child: Row(
-              children: const [
-                Text('Continue With Facebook'),
-              ],
-            ),
-          ),
         ],
       ),
     );
