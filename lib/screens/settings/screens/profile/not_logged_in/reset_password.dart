@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/helpers/show_modal.dart';
+import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/alerts.dart';
-import '../widgets/loading.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -24,16 +23,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
-    showLoading(context);
+    Show.loading(context);
 
     authProvider
         .resetPassword(
       _emailInputController.text,
     )
-        .then((value) {
-      hideLoading(context);
+        .then((status) {
+      Hide.loading(context);
 
-      switch (value) {
+      switch (status) {
         case AuthStatus.profileNotFound:
           setState(() {
             errorMessage = 'There is no profile for this email.';
@@ -51,15 +50,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           break;
         default:
           Navigator.pop(context);
-          showModal(
+          Show.modal(
             context,
-            modal: showModal(
-              context,
-              modal: const InfoAlert(
-                title: Text('Email Sent'),
-                content: Text(
-                  'Email with password reset link was sent. Go to change password on that link then come back here to log in with new password.\n\nIf you didn\'t recieve the email you may try again.',
-                ),
+            modal: const InfoAlert(
+              title: Text('Email Sent'),
+              content: Text(
+                'Email with password reset link was sent. Go to change password on that link then come back here to log in with new password.\n\nIf you didn\'t recieve the email you may try again.',
               ),
             ),
           );

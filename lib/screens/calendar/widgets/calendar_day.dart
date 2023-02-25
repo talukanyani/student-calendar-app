@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/all_activities.dart';
-
-import 'package:sc_app/helpers/same_date.dart';
-import 'package:sc_app/helpers/show_modal.dart';
-
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
 import '../modals/day_box_activities.dart';
 
 class DayBox extends StatefulWidget {
@@ -25,7 +22,7 @@ class DayBox extends StatefulWidget {
 class _DayBoxState extends State<DayBox> {
   bool buttonSplash = false;
 
-  bool get isToday => isSameDay(widget.date, DateTime.now());
+  bool get isToday => Helpers.isSameDay(widget.date, DateTime.now());
 
   double getOpacity(int activitiesCount) {
     switch (activitiesCount) {
@@ -54,7 +51,7 @@ class _DayBoxState extends State<DayBox> {
     final activities = activitiesProvider.getDayActivities(widget.date);
 
     return GestureDetector(
-      onTap: () => showModal(
+      onTap: () => Show.modal(
         context,
         modal: DayBoxActivitiesModal(
           date: widget.date,

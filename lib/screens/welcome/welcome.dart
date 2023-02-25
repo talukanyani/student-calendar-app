@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/widgets/android_system_navbar.dart';
 import 'package:sc_app/widgets/buttons.dart';
-import '../settings/screens/profile/screens/create_profile.dart';
-import '../settings/screens/profile/screens/login.dart';
+import '../settings/screens/profile/not_logged_in/create_profile.dart';
+import '../settings/screens/profile/not_logged_in/login.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

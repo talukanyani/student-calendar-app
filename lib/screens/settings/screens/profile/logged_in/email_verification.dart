@@ -162,6 +162,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: ListView(
+        primary: false,
         padding: const EdgeInsets.all(16),
         children: [
           Text(

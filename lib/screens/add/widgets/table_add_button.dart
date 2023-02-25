@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
-
-import 'package:sc_app/helpers/show_modal.dart';
-
-import 'snackbar.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
 import '../modals/table_add_form.dart';
 
 class TableAddButton extends StatelessWidget {
@@ -24,14 +21,15 @@ class TableAddButton extends StatelessWidget {
           child: OutlinedButton(
             onPressed: () {
               if (subjectProvider.subjects.length >= 20) {
-                showFeedback(
+                Show.snackBar(
                   context,
-                  'You have reached maximum number of subject tables.',
+                  text: 'You have reached maximum number of subject tables.',
+                  snackBarIcon: SnackBarIcon.info,
                 );
                 return;
               }
 
-              showModal(
+              Show.modal(
                 context,
                 modal: const TableAddForm(),
               );

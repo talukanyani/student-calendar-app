@@ -1,33 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/themes/color_scheme.dart';
-
 import 'package:sc_app/widgets/buttons.dart';
-import '../widgets/bullet_list.dart';
 
-class EditName extends StatelessWidget {
-  const EditName({super.key});
+class ChangeName extends StatelessWidget {
+  const ChangeName({super.key});
 
   static final inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Name')),
+      appBar: AppBar(title: const Text('Change Name')),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
-          Text(
-            'Note that if you edit name:',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          const SizedBox(height: 4),
-          const BulletList(
-            texts: [
-              Text('You won\'t be able to edit name again until next 7 days.'),
-            ],
-          ),
-          const SizedBox(height: 32),
           Text(
             'Enter New Name',
             style: Theme.of(context).textTheme.bodyText1?.copyWith(
@@ -46,7 +33,7 @@ class EditName extends StatelessWidget {
               counterText: '',
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           ForegroundFilledBtn(
             onPressed: () {},
             child: const Text('Change'),

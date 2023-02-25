@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/models/activity.dart';
-import 'package:sc_app/helpers/calendar_names.dart';
-import 'package:sc_app/helpers/same_date.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/activities_list.dart';
 import 'package:sc_app/widgets/modal.dart';
 
@@ -19,10 +19,8 @@ class DayBoxActivitiesModal extends StatelessWidget {
     DateTime today = DateTime.now();
     DateTime tomorrow = today.add(const Duration(days: 1));
 
-    if (isSameDay(date, today)) return 'Today';
-
-    if (isSameDay(date, tomorrow)) return 'Tomorrow';
-
+    if (Helpers.isSameDay(date, today)) return 'Today';
+    if (Helpers.isSameDay(date, tomorrow)) return 'Tomorrow';
     return getWeekDayFullName(date.weekday - 1);
   }
 

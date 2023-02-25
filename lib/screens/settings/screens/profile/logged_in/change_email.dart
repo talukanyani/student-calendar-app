@@ -1,71 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/show_modal.dart';
+import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
-import '../modals/security_code.dart';
 
-class ChangePassword extends StatelessWidget {
-  const ChangePassword({super.key, required this.email});
+class ChangeEmail extends StatelessWidget {
+  const ChangeEmail({super.key});
 
-  final String email;
-
-  static final inputController = TextEditingController();
+  static final _passwordInputController = TextEditingController();
+  static final _emailInputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Change Password')),
+      appBar: AppBar(title: const Text('Change Email')),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
           Text(
-            'Enter Old Password',
+            'Enter Your Password',
             style: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: CustomColorScheme.grey4,
                 ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           TextField(
-            controller: inputController,
+            controller: _passwordInputController,
             keyboardType: TextInputType.visiblePassword,
             maxLength: 30,
             style: const TextStyle(fontSize: 20),
             decoration: const InputDecoration(
-              hintText: 'Old Password',
+              hintText: 'Password',
               counterText: '',
             ),
           ),
           const SizedBox(height: 16),
           Text(
-            'Enter New Password',
+            'Enter New Email',
             style: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: CustomColorScheme.grey4,
                 ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           TextField(
-            controller: inputController,
-            keyboardType: TextInputType.visiblePassword,
-            maxLength: 30,
+            controller: _emailInputController,
+            inputFormatters: [noSpace()],
+            keyboardType: TextInputType.emailAddress,
+            maxLength: 50,
             style: const TextStyle(fontSize: 20),
             decoration: const InputDecoration(
-              hintText: 'New Password',
+              hintText: 'Email',
               counterText: '',
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           ForegroundFilledBtn(
-            onPressed: () {
-              showModal(
-                context,
-                modal: SecurityCode(
-                  email: email,
-                  actionName: 'change',
-                ),
-              );
-            },
-            child: const Text('Change Password'),
+            onPressed: () {},
+            child: const Text('Change'),
           ),
         ],
       ),

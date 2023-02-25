@@ -3,8 +3,8 @@ import 'package:sc_app/widgets/buttons.dart';
 import 'create_profile.dart';
 import 'login.dart';
 
-class NoProfileScreen extends StatelessWidget {
-  const NoProfileScreen({super.key});
+class NotLoggedInScreen extends StatelessWidget {
+  const NotLoggedInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

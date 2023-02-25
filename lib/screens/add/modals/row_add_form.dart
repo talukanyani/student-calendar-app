@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject_activities.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
-import '../widgets/snackbar.dart';
 import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
@@ -162,13 +163,20 @@ class _RowAddFormState extends State<RowAddForm> {
                   if (_activityInputController.text.isEmpty ||
                       _selectedDate == null ||
                       _selectedTime == null) {
-                    showFeedback(context, 'Please fill all the fields.');
+                    Show.snackBar(
+                      context,
+                      text: 'Please fill all the fields.',
+                      snackBarIcon: SnackBarIcon.error,
+                    );
                   } else {
                     addActivity(context).then((_) {
                       Navigator.pop(context);
                     }).then((_) {
-                      showFeedback(context,
-                          'One activity was added to ${widget.subjectName}');
+                      Show.snackBar(
+                        context,
+                        text: 'One activity was added to ${widget.subjectName}',
+                        snackBarIcon: SnackBarIcon.done,
+                      );
                     });
                   }
                 },

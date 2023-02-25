@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/same_date.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/models/activity.dart';
 
 class ActivitiesList extends StatelessWidget {
@@ -16,10 +16,8 @@ class ActivitiesList extends StatelessWidget {
     DateTime today = DateTime.now();
     DateTime tomorrow = today.add(const Duration(days: 1));
 
-    if (isSameDay(date, today)) return 'today';
-
-    if (isSameDay(date, tomorrow)) return 'tomorrow';
-
+    if (Helpers.isSameDay(date, today)) return 'today';
+    if (Helpers.isSameDay(date, tomorrow)) return 'tomorrow';
     return 'on this day';
   }
 

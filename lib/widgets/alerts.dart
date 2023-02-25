@@ -26,7 +26,7 @@ class Alert extends StatelessWidget {
       child: AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,
-        title: Row(
+        title: Wrap(
           children: [
             Icon(titleIcon),
             const SizedBox(width: 16),
@@ -122,7 +122,8 @@ class InfoAlert extends StatelessWidget {
       child: AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,
-        title: Row(
+        insetPadding: const EdgeInsets.all(16),
+        title: Wrap(
           children: [
             const Icon(FluentIcons.info_24_filled),
             const SizedBox(width: 16),

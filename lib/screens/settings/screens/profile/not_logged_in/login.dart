@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/themes/color_scheme.dart';
+import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
-import '../widgets/loading.dart';
 import 'create_profile.dart';
 import 'reset_password.dart';
 
@@ -28,17 +28,17 @@ class _LoginScreenState extends State<LoginScreen> {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
-    showLoading(context);
+    Show.loading(context);
 
     authProvider
         .login(
       _emailInputController.text,
       _passwordInputController.text,
     )
-        .then((value) {
-      hideLoading(context);
+        .then((status) {
+      Hide.loading(context);
 
-      switch (value) {
+      switch (status) {
         case AuthStatus.profileNotFound:
           setState(() {
             emailErrorMessage = 'There is no profile for this email.';

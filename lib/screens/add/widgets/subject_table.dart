@@ -4,10 +4,11 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/controllers/subject.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/models/activity.dart';
-import 'package:sc_app/helpers/pad.dart';
-import 'package:sc_app/helpers/calendar_names.dart';
-import 'package:sc_app/helpers/show_modal.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
+import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 import 'package:sc_app/widgets/alerts.dart';
@@ -16,7 +17,6 @@ import '../modals/row_edit_form.dart';
 import '../modals/table_edit_form.dart';
 import 'popup_menu_item.dart';
 import 'oval_text_container.dart';
-import 'snackbar.dart';
 
 class SubjectTable extends StatelessWidget {
   const SubjectTable({
@@ -85,7 +85,7 @@ class SubjectTable extends StatelessWidget {
                         Navigator.pop(context);
                         Future.delayed(
                           const Duration(seconds: 1),
-                          showModal(
+                          Show.modal(
                             context,
                             modal: TableEditForm(
                               subjectId: subjectTimeId,
@@ -103,16 +103,21 @@ class SubjectTable extends StatelessWidget {
                         Navigator.pop(context);
                         Future.delayed(
                           const Duration(seconds: 1),
-                          showModal(
+                          Show.modal(
                             context,
                             modal: Alert(
                               title: 'Delete Permanently',
                               titleIcon: FluentIcons.delete_24_filled,
                               content:
-                                  '$subjectName subject table will be deleted permanently.',
+                                  '$subjectName and its activities will be deleted permanently.',
                               actionName: 'Delete',
                               action: () {
                                 subjectProvider.removeSubject(subjectTimeId);
+                                Show.snackBar(
+                                  context,
+                                  text: 'One subject was deleted.',
+                                  snackBarIcon: SnackBarIcon.done,
+                                );
                               },
                             ),
                           ),
@@ -180,13 +185,13 @@ class SubjectTable extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
-                            '${padTwoNums(activities[index].dateTime.day)} ${getMonthName(activities[index].dateTime.month - 1)} ${getYear(activities[index])}',
+                            '${Helpers.padTwoNums(activities[index].dateTime.day)} ${getMonthName(activities[index].dateTime.month - 1)} ${getYear(activities[index])}',
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
-                            '${padTwoNums(activities[index].dateTime.hour)}:${padTwoNums(activities[index].dateTime.minute)}',
+                            '${Helpers.padTwoNums(activities[index].dateTime.hour)}:${Helpers.padTwoNums(activities[index].dateTime.minute)}',
                           ),
                         ),
                         Material(
@@ -204,7 +209,7 @@ class SubjectTable extends StatelessWidget {
                                     Navigator.pop(context);
                                     Future.delayed(
                                       const Duration(seconds: 1),
-                                      showModal(
+                                      Show.modal(
                                         context,
                                         modal: RowEditForm(
                                           subjectTimeId: subjectTimeId,
@@ -222,19 +227,25 @@ class SubjectTable extends StatelessWidget {
                                     Navigator.pop(context);
                                     Future.delayed(
                                       const Duration(seconds: 1),
-                                      showModal(
+                                      Show.modal(
                                         context,
                                         modal: Alert(
                                           title: 'Delete Permanently',
                                           titleIcon:
                                               FluentIcons.delete_24_filled,
                                           content:
-                                              '${activities[index].activity} activity row will be deleted permanently.',
+                                              '${activities[index].activity} activity will be deleted permanently.',
                                           actionName: 'Delete',
                                           action: () {
                                             activityProvider.removeActivity(
                                               subjectTimeId,
                                               activities[index].timeId,
+                                            );
+                                            Show.snackBar(
+                                              context,
+                                              text:
+                                                  'One activity from $subjectName was deleted.',
+                                              snackBarIcon: SnackBarIcon.done,
                                             );
                                           },
                                         ),
@@ -262,14 +273,15 @@ class SubjectTable extends StatelessWidget {
                 onPressed: () {
                   if (subjectProvider.subjects[tableIndex].activities.length >=
                       50) {
-                    showFeedback(
+                    Show.snackBar(
                       context,
-                      'You have reached maximum number of activity rows.',
+                      text: 'You have reached maximum number of activity rows.',
+                      snackBarIcon: SnackBarIcon.info,
                     );
                     return;
                   }
 
-                  showModal(
+                  Show.modal(
                     context,
                     modal: RowAddForm(
                       subjectTimeId: subjectTimeId,

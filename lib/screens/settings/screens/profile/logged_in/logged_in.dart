@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/themes/color_scheme.dart';
-import 'package:sc_app/helpers/show_modal.dart';
+import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/rect_container.dart';
-import '../widgets/loading.dart';
-import 'edit_name.dart';
+import 'change_name.dart';
 import 'change_email.dart';
 import 'change_password.dart';
 import 'delete_profile.dart';
 import 'email_verification.dart';
 
-class ProfileManageScreen extends StatefulWidget {
-  const ProfileManageScreen({super.key});
+class LoggedInScreen extends StatefulWidget {
+  const LoggedInScreen({super.key});
 
   @override
-  State<ProfileManageScreen> createState() => _ProfileManageScreenState();
+  State<LoggedInScreen> createState() => _LoggedInScreenState();
 }
 
-class _ProfileManageScreenState extends State<ProfileManageScreen> {
+class _LoggedInScreenState extends State<LoggedInScreen> {
   String? errorMessage;
 
   void logout(BuildContext context) {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
-    showLoading(context);
+    Show.loading(context);
 
-    authProvider.logout().then((value) {
-      hideLoading(context);
+    authProvider.logout().then((status) {
+      Hide.loading(context);
 
-      if (value == AuthStatus.unknownError) {
+      if (status == AuthStatus.unknownError) {
         setState(() {
           errorMessage = 'There was an error while logging you out.';
         });
@@ -87,7 +86,7 @@ class _ProfileManageScreenState extends State<ProfileManageScreen> {
             alignment: Alignment.center,
             child: OutlinedButton(
               onPressed: () {
-                showModal(
+                Show.modal(
                   context,
                   modal: ConfirmationAlert(
                     title: const Text('Log Out?'),
@@ -140,26 +139,17 @@ class _ProfileManageScreenState extends State<ProfileManageScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Manage Profile',
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 16),
                 const Divider(height: 0),
-                const Tile(title: 'Edit Name', page: EditName()),
+                const Tile(title: 'Change Name', page: ChangeName()),
                 const Divider(height: 0),
-                Tile(
-                  title: 'Change Email',
-                  page: ChangeEmail(email: email),
-                ),
+                const Tile(title: 'Change Email', page: ChangeEmail()),
                 const Divider(height: 0),
-                Tile(
-                  title: 'Change Password',
-                  page: ChangePassword(email: email),
-                ),
+                const Tile(title: 'Change Password', page: ChangePassword()),
                 const Divider(height: 0),
-                Tile(
-                  title: 'Delete Profile',
-                  page: DeleteProfile(email: email),
-                ),
+                const Tile(title: 'Delete Profile', page: DeleteProfile()),
               ],
             ),
           ),
@@ -186,7 +176,14 @@ class Tile extends StatelessWidget {
             MaterialPageRoute(builder: (context) => page),
           );
         },
-        title: Text(title),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: CustomColorScheme.grey4,
+          ),
+        ),
         trailing: const Icon(FluentIcons.ios_arrow_rtl_24_filled),
         visualDensity: const VisualDensity(vertical: -1),
       ),

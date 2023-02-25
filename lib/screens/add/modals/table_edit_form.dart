@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
-
 import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/utils/table_colors.dart';
-
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
-import '../widgets/snackbar.dart';
 import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
@@ -120,20 +118,32 @@ class _TableEditFormState extends State<TableEditForm> {
               child: PrimaryBorderBtn(
                 onPressed: () {
                   if (_titleInputController.text.isEmpty) {
-                    showFeedback(context, 'Please enter a title.');
+                    Show.snackBar(
+                      context,
+                      text: 'Please enter a title.',
+                      snackBarIcon: SnackBarIcon.error,
+                    );
                     return;
                   }
 
                   if (_titleInputController.text == widget.subjectName &&
                       _selectedColor == widget.subjectColor) {
-                    showFeedback(context, 'You did not change anything.');
+                    Show.snackBar(
+                      context,
+                      text: 'You did not change anything :)',
+                      snackBarIcon: SnackBarIcon.info,
+                    );
                     return;
                   }
 
                   editSubject(context).then((_) {
                     Navigator.pop(context);
                   }).then((_) {
-                    showFeedback(context, 'One subject table was edited');
+                    Show.snackBar(
+                      context,
+                      text: 'One subject was edited',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
                   });
                 },
                 child: const Text('Save'),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/themes/color_scheme.dart';
+import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
-import '../widgets/loading.dart';
-import 'email_verification.dart';
+import '../logged_in/email_verification.dart';
 import 'login.dart';
 
 class CreateProfileScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
-    showLoading(context);
+    Show.loading(context);
 
     authProvider
         .createProfile(
@@ -37,7 +37,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       _passwordInputController.text,
     )
         .then((value) {
-      hideLoading(context);
+      Hide.loading(context);
 
       switch (value) {
         case AuthStatus.emailInUse:

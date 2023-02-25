@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/all_activities.dart';
-
-import 'package:sc_app/helpers/calendar_names.dart';
-
+import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
 import 'package:sc_app/widgets/activities_list.dart';

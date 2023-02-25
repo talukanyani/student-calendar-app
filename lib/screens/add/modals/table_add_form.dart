@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
-import '../widgets/snackbar.dart';
 import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
@@ -102,12 +103,20 @@ class _TableAddFormState extends State<TableAddForm> {
               child: PrimaryBorderBtn(
                 onPressed: () {
                   if (_titleInputController.text.isEmpty) {
-                    showFeedback(context, 'Please enter a title.');
+                    Show.snackBar(
+                      context,
+                      text: 'Please enter a title.',
+                      snackBarIcon: SnackBarIcon.error,
+                    );
                   } else {
                     addSubject(context).then((_) {
                       Navigator.pop(context);
                     }).then((_) {
-                      showFeedback(context, 'One subject table was added');
+                      Show.snackBar(
+                        context,
+                        text: 'One subject was added',
+                        snackBarIcon: SnackBarIcon.done,
+                      );
                     });
                   }
                 },

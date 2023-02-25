@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'screens/no_profile.dart';
-import 'screens/profile_manage.dart';
+import 'logged_in/logged_in.dart';
+import 'not_logged_in/not_logged_in.dart';
 
 class ProfileSettings extends StatelessWidget {
   const ProfileSettings({super.key});
@@ -13,9 +13,9 @@ class ProfileSettings extends StatelessWidget {
     bool isLoggedIn = user != null;
 
     if (isLoggedIn) {
-      return const ProfileManageScreen();
+      return const LoggedInScreen();
     } else {
-      return const NoProfileScreen();
+      return const NotLoggedInScreen();
     }
   }
 }

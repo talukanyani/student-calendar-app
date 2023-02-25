@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/rect_container.dart';
-
 import 'screens/profile/profile.dart';
-import 'screens/backup/backup.dart';
+import 'screens/synchronisation/synchronisation.dart';
 import 'screens/personalisation/personalisation.dart';
 import 'screens/help/help.dart';
 import 'screens/feedback/feedback.dart';
@@ -18,49 +16,40 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
-      body: const Body(),
-    );
-  }
-}
-
-class Body extends StatelessWidget {
-  const Body({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      primary: false,
-      children: const [
-        ProfileTile(),
-        Tile(
-          title: 'Backup Settings',
-          subtitle: 'Save your activities to the cloud',
-          icon: FluentIcons.cloud_32_filled,
-          page: BackupSettings(),
-        ),
-        Tile(
-          title: 'App Settings',
-          subtitle: 'Personalise this app',
-          icon: FluentIcons.settings_32_filled,
-          page: AppSettings(),
-        ),
-        // Divider(),
-        Tile(
-          title: 'Help',
-          icon: FluentIcons.chat_help_24_filled,
-          page: HelpScreen(),
-        ),
-        Tile(
-          title: 'Feedback',
-          icon: FluentIcons.person_feedback_24_filled,
-          page: FeedbackScreen(),
-        ),
-        Tile(
-          title: 'About',
-          icon: FluentIcons.info_24_filled,
-          page: AboutScreen(),
-        ),
-      ],
+      body: ListView(
+        primary: false,
+        children: const [
+          ProfileTile(),
+          Tile(
+            title: 'Synchronisation Settings',
+            subtitle: 'Synchronise your data',
+            icon: FluentIcons.cloud_32_filled,
+            page: SynchronisationSettings(),
+          ),
+          Tile(
+            title: 'App Settings',
+            subtitle: 'Personalise this app',
+            icon: FluentIcons.settings_32_filled,
+            page: AppSettings(),
+          ),
+          // Divider(),
+          Tile(
+            title: 'Help',
+            icon: FluentIcons.chat_help_24_filled,
+            page: HelpScreen(),
+          ),
+          Tile(
+            title: 'Feedback',
+            icon: FluentIcons.person_feedback_24_filled,
+            page: FeedbackScreen(),
+          ),
+          Tile(
+            title: 'About',
+            icon: FluentIcons.info_24_filled,
+            page: AboutScreen(),
+          ),
+        ],
+      ),
     );
   }
 }

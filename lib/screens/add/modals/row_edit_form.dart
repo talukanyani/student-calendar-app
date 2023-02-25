@@ -3,10 +3,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject_activities.dart';
 import 'package:sc_app/models/activity.dart';
-import 'package:sc_app/helpers/pad.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
-import '../widgets/snackbar.dart';
 import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
@@ -65,7 +66,7 @@ class _RowEditFormState extends State<RowEditForm> {
     });
 
     _timeInputController.text =
-        '${padTwoNums(getActivityDate().hour)}:${padTwoNums(getActivityDate().minute)}';
+        '${Helpers.padTwoNums(getActivityDate().hour)}:${Helpers.padTwoNums(getActivityDate().minute)}';
     setState(() {
       _selectedTime = TimeOfDay(
         hour: getActivityDate().hour,
@@ -190,7 +191,11 @@ class _RowEditFormState extends State<RowEditForm> {
                   if (_activityInputController.text.isEmpty ||
                       _selectedDate == null ||
                       _selectedTime == null) {
-                    showFeedback(context, 'Please fill all the fields.');
+                    Show.snackBar(
+                      context,
+                      text: 'Please fill all the fields.',
+                      snackBarIcon: SnackBarIcon.error,
+                    );
                     return;
                   }
 
@@ -204,15 +209,23 @@ class _RowEditFormState extends State<RowEditForm> {
                             _selectedTime!.hour,
                             _selectedTime!.minute,
                           )) {
-                    showFeedback(context, 'You did not change anything.');
+                    Show.snackBar(
+                      context,
+                      text: 'You did not change anything :)',
+                      snackBarIcon: SnackBarIcon.info,
+                    );
                     return;
                   }
 
                   editActivity(context).then((_) {
                     Navigator.pop(context);
                   }).then((_) {
-                    showFeedback(context,
-                        'One of ${widget.subjectName} activities was edited.');
+                    Show.snackBar(
+                      context,
+                      text:
+                          'One of ${widget.subjectName} activities was edited.',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
                   });
                 },
                 child: const Text('Save'),

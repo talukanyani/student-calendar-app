@@ -7,3 +7,10 @@ enum AuthStatus {
   weakPassword,
   wrongPassword,
 }
+
+enum SnackBarIcon {
+  none,
+  done,
+  error,
+  info,
+}

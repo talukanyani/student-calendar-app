@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/same_date.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/models/subject.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
 
 class AllActivitiesController extends ChangeNotifier {
   AllActivitiesController(this.subjectController);
@@ -33,7 +33,7 @@ class AllActivitiesController extends ChangeNotifier {
 
   List<ActivityModel> getDayActivities(DateTime dayDate) {
     var dayActivities = allActivities.where((activity) {
-      return isSameDay(activity.dateTime, dayDate);
+      return Helpers.isSameDay(activity.dateTime, dayDate);
     });
 
     return dayActivities.toList();
