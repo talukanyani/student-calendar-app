@@ -106,10 +106,13 @@ class SubjectTable extends StatelessWidget {
                           Show.modal(
                             context,
                             modal: Alert(
-                              title: 'Delete Permanently',
-                              titleIcon: FluentIcons.delete_24_filled,
-                              content:
-                                  '$subjectName and its activities will be deleted permanently.',
+                              title: const Text('Delete Permanently'),
+                              titleIcon: const Icon(
+                                FluentIcons.delete_24_filled,
+                              ),
+                              content: Text(
+                                '$subjectName and its activities will be deleted permanently.',
+                              ),
                               actionName: 'Delete',
                               action: () {
                                 subjectProvider.removeSubject(subjectTimeId);
@@ -230,11 +233,15 @@ class SubjectTable extends StatelessWidget {
                                       Show.modal(
                                         context,
                                         modal: Alert(
-                                          title: 'Delete Permanently',
-                                          titleIcon:
-                                              FluentIcons.delete_24_filled,
-                                          content:
-                                              '${activities[index].activity} activity will be deleted permanently.',
+                                          title: const Text(
+                                            'Delete Permanently',
+                                          ),
+                                          titleIcon: const Icon(
+                                            FluentIcons.delete_24_filled,
+                                          ),
+                                          content: Text(
+                                            '${activities[index].activity} activity will be deleted permanently.',
+                                          ),
                                           actionName: 'Delete',
                                           action: () {
                                             activityProvider.removeActivity(

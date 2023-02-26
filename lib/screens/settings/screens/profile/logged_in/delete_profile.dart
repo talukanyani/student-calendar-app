@@ -1,12 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/themes/color_scheme.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/authentication.dart';
+import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/utils/enums.dart';
+import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/bullet_list.dart';
 
-class DeleteProfile extends StatelessWidget {
-  const DeleteProfile({super.key});
+class DeleteProfileScreen extends StatefulWidget {
+  const DeleteProfileScreen({super.key});
 
-  static final inputController = TextEditingController();
+  @override
+  State<DeleteProfileScreen> createState() => _DeleteProfileScreenState();
+}
+
+class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
+  String? errorMessage;
+  String? passwordErrorMessage;
+
+  final _inputController = TextEditingController();
+
+  _deleteProfile(BuildContext context) {
+    final authProvider =
+        Provider.of<AuthenticationController>(context, listen: false);
+
+    Show.loading(context);
+
+    authProvider
+        .deleteProfile(
+      _inputController.text,
+    )
+        .then((status) {
+      Hide.loading(context);
+
+      switch (status) {
+        case AuthStatus.wrongPassword:
+          setState(() {
+            passwordErrorMessage = 'Password is incorrect.';
+          });
+          break;
+        case AuthStatus.unknownError:
+          setState(() {
+            errorMessage = 'There was an error while deleting your profile.';
+          });
+          break;
+        default:
+          Navigator.pop(context);
+          Show.snackBar(
+            context,
+            text: 'Profile was successfully deleted.',
+            snackBarIcon: SnackBarIcon.done,
+          );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,20 +102,49 @@ class DeleteProfile extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextField(
-            controller: inputController,
+            controller: _inputController,
             keyboardType: TextInputType.visiblePassword,
             maxLength: 30,
             style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Password',
+              errorText: passwordErrorMessage,
               counterText: '',
             ),
+            onTap: () {
+              setState(() => passwordErrorMessage = null);
+            },
           ),
           const SizedBox(height: 16),
           ForegroundFilledBtn(
-            onPressed: () {},
+            onPressed: () {
+              setState(() => errorMessage = null);
+              Show.modal(
+                context,
+                modal: Alert(
+                  title: Text(
+                    'Delete Profile',
+                    style: TextStyle(color: Theme.of(context).errorColor),
+                  ),
+                  titleIcon: Icon(
+                    FluentIcons.warning_24_filled,
+                    color: Theme.of(context).errorColor,
+                  ),
+                  content: const Text(
+                    'Are you sure you want to delete this profile.\nYou won\'t be able to revert this action.',
+                  ),
+                  actionName: 'Delete',
+                  action: () => _deleteProfile(context),
+                ),
+              );
+            },
             child: const Text('Permanantly Delete'),
-          )
+          ),
+          const SizedBox(height: 4),
+          Text(
+            errorMessage ?? '',
+            style: TextStyle(color: Theme.of(context).errorColor),
+          ),
         ],
       ),
     );

@@ -29,13 +29,32 @@ class AuthenticationController extends ChangeNotifier {
 
   Future<AuthStatus> resetPassword(String email) {
     return Auth().resetPassword(email).then((status) {
-      notifyListeners();
       return status;
     });
   }
 
   Future<AuthStatus> updateName(String displayName) {
     return Auth().updateName(displayName).then((status) {
+      notifyListeners();
+      return status;
+    });
+  }
+
+  Future<AuthStatus> changeEmail(String password, String newEmail) {
+    return Auth().changeEmail(password, newEmail).then((status) {
+      notifyListeners();
+      return status;
+    });
+  }
+
+  Future<AuthStatus> changePassword(String oldPassword, String newPassword) {
+    return Auth().changePassword(oldPassword, newPassword).then((status) {
+      return status;
+    });
+  }
+
+  Future<AuthStatus> deleteProfile(String password) {
+    return Auth().deleteProfile(password).then((status) {
       notifyListeners();
       return status;
     });

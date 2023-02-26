@@ -13,9 +13,9 @@ class Alert extends StatelessWidget {
     required this.action,
   });
 
-  final String title;
-  final IconData titleIcon;
-  final String content;
+  final Widget title;
+  final Icon titleIcon;
+  final Widget content;
   final String actionName;
   final void Function() action;
 
@@ -28,12 +28,12 @@ class Alert extends StatelessWidget {
         elevation: 2,
         title: Wrap(
           children: [
-            Icon(titleIcon),
+            titleIcon,
             const SizedBox(width: 16),
-            Text(title),
+            title,
           ],
         ),
-        content: Text(content),
+        content: content,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
