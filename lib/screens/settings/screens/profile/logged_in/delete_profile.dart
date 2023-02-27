@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
@@ -20,19 +22,18 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
   String? errorMessage;
   String? passwordErrorMessage;
 
-  final _inputController = TextEditingController();
+  bool _isPasswordHidden = true;
 
-  _deleteProfile(BuildContext context) {
+  final _inputController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  void _deleteProfile(BuildContext context) {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
     Show.loading(context);
 
-    authProvider
-        .deleteProfile(
-      _inputController.text,
-    )
-        .then((status) {
+    authProvider.deleteProfile(_inputController.text).then((status) {
       Hide.loading(context);
 
       switch (status) {
@@ -101,42 +102,68 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
                 ),
           ),
           const SizedBox(height: 8),
-          TextField(
-            controller: _inputController,
-            keyboardType: TextInputType.visiblePassword,
-            maxLength: 30,
-            style: const TextStyle(fontSize: 20),
-            decoration: InputDecoration(
-              hintText: 'Password',
-              errorText: passwordErrorMessage,
-              counterText: '',
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _inputController,
+              keyboardType: TextInputType.visiblePassword,
+              maxLength: 64,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Password is required.';
+                } else {
+                  return null;
+                }
+              },
+              obscureText: _isPasswordHidden,
+              style: const TextStyle(fontSize: 20),
+              decoration: InputDecoration(
+                hintText: 'Password',
+                errorText: passwordErrorMessage,
+                counterText: '',
+                suffixIcon: InkWell(
+                  onTap: () {
+                    setState(() => _isPasswordHidden = !_isPasswordHidden);
+                  },
+                  child: Icon(
+                    _isPasswordHidden ? Iconsax.eye : Iconsax.eye_slash,
+                    size: 20,
+                  ),
+                ),
+                suffixIconConstraints: const BoxConstraints(
+                  minHeight: 32,
+                  minWidth: 48,
+                ),
+              ),
+              onTap: () {
+                setState(() => passwordErrorMessage = null);
+              },
             ),
-            onTap: () {
-              setState(() => passwordErrorMessage = null);
-            },
           ),
           const SizedBox(height: 16),
           ForegroundFilledBtn(
             onPressed: () {
               setState(() => errorMessage = null);
-              Show.modal(
-                context,
-                modal: Alert(
-                  title: Text(
-                    'Delete Profile',
-                    style: TextStyle(color: Theme.of(context).errorColor),
+              if (_formKey.currentState!.validate()) {
+                Show.modal(
+                  context,
+                  modal: Alert(
+                    title: Text(
+                      'Delete Profile',
+                      style: TextStyle(color: Theme.of(context).errorColor),
+                    ),
+                    titleIcon: Icon(
+                      FluentIcons.warning_24_filled,
+                      color: Theme.of(context).errorColor,
+                    ),
+                    content: const Text(
+                      'Are you sure you want to delete this profile.\nYou won\'t be able to revert this action.',
+                    ),
+                    actionName: 'Delete',
+                    action: () => _deleteProfile(context),
                   ),
-                  titleIcon: Icon(
-                    FluentIcons.warning_24_filled,
-                    color: Theme.of(context).errorColor,
-                  ),
-                  content: const Text(
-                    'Are you sure you want to delete this profile.\nYou won\'t be able to revert this action.',
-                  ),
-                  actionName: 'Delete',
-                  action: () => _deleteProfile(context),
-                ),
-              );
+                );
+              }
             },
             child: const Text('Permanantly Delete'),
           ),

@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
-import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/utils/table_colors.dart';
@@ -23,12 +23,12 @@ class _TableAddFormState extends State<TableAddForm> {
 
   static final List<String> _colors = [...tableColors.keys];
 
-  static final _titleInputController = TextEditingController();
+  final _titleInputController = TextEditingController();
 
-  Future<void> addSubject(BuildContext context) async {
+  void _addSubject(BuildContext context) {
     Provider.of<SubjectController>(context, listen: false).addSubject(
       DateTime.now().millisecondsSinceEpoch,
-      _titleInputController.text,
+      _titleInputController.text.trim(),
       _selectedColor,
     );
   }
@@ -55,8 +55,8 @@ class _TableAddFormState extends State<TableAddForm> {
           textCapitalization: TextCapitalization.words,
           maxLength: 30,
           inputFormatters: [
-            noSpaceAtStart(),
-            noDoubleSpace(),
+            InputFormatter.noSpaceAtStart(),
+            InputFormatter.noDoubleSpace(),
           ],
           style: const TextStyle(fontSize: 20),
           decoration: const InputDecoration(
@@ -109,15 +109,13 @@ class _TableAddFormState extends State<TableAddForm> {
                       snackBarIcon: SnackBarIcon.error,
                     );
                   } else {
-                    addSubject(context).then((_) {
-                      Navigator.pop(context);
-                    }).then((_) {
-                      Show.snackBar(
-                        context,
-                        text: 'One subject was added',
-                        snackBarIcon: SnackBarIcon.done,
-                      );
-                    });
+                    _addSubject(context);
+                    Navigator.pop(context);
+                    Show.snackBar(
+                      context,
+                      text: 'One subject was added',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
                   }
                 },
                 child: const Text('Add'),

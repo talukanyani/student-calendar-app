@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
-import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/utils/table_colors.dart';
@@ -31,12 +31,12 @@ class _TableEditFormState extends State<TableEditForm> {
 
   static final List<String> _colors = [...tableColors.keys];
 
-  static final _titleInputController = TextEditingController();
+  final _titleInputController = TextEditingController();
 
-  Future<void> editSubject(BuildContext context) async {
+  void _editSubject(BuildContext context) {
     Provider.of<SubjectController>(context, listen: false).editSubject(
       widget.subjectId,
-      _titleInputController.text,
+      _titleInputController.text.trim(),
       _selectedColor,
     );
   }
@@ -70,8 +70,8 @@ class _TableEditFormState extends State<TableEditForm> {
           textCapitalization: TextCapitalization.words,
           maxLength: 30,
           inputFormatters: [
-            noSpaceAtStart(),
-            noDoubleSpace(),
+            InputFormatter.noSpaceAtStart(),
+            InputFormatter.noDoubleSpace(),
           ],
           style: const TextStyle(fontSize: 20),
           decoration: const InputDecoration(
@@ -123,28 +123,22 @@ class _TableEditFormState extends State<TableEditForm> {
                       text: 'Please enter a title.',
                       snackBarIcon: SnackBarIcon.error,
                     );
-                    return;
-                  }
-
-                  if (_titleInputController.text == widget.subjectName &&
+                  } else if (_titleInputController.text == widget.subjectName &&
                       _selectedColor == widget.subjectColor) {
                     Show.snackBar(
                       context,
                       text: 'You did not change anything :)',
                       snackBarIcon: SnackBarIcon.info,
                     );
-                    return;
-                  }
-
-                  editSubject(context).then((_) {
+                  } else {
+                    _editSubject(context);
                     Navigator.pop(context);
-                  }).then((_) {
                     Show.snackBar(
                       context,
                       text: 'One subject was edited',
                       snackBarIcon: SnackBarIcon.done,
                     );
-                  });
+                  }
                 },
                 child: const Text('Save'),
               ),

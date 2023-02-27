@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
+import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
@@ -17,14 +18,15 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
   String? errorMessage;
 
   final inputController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  _changeName(BuildContext context) {
+  void _changeName(BuildContext context) {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
     Show.loading(context);
 
-    authProvider.updateName(inputController.text).then((status) {
+    authProvider.updateName(inputController.text.trim()).then((status) {
       Hide.loading(context);
 
       switch (status) {
@@ -64,22 +66,40 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                 ),
           ),
           const SizedBox(height: 8),
-          TextField(
-            controller: inputController,
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.words,
-            maxLength: 20,
-            style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
-              hintText: 'Name',
-              counterText: '',
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: inputController,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
+              maxLength: 15,
+              inputFormatters: [
+                InputFormatter.noSpaceAtStart(),
+                InputFormatter.noDoubleSpace(),
+              ],
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Name is required.';
+                } else if (!InputValidator.isValidName(value.trim())) {
+                  return 'Enter a valid name.';
+                } else {
+                  return null;
+                }
+              },
+              style: const TextStyle(fontSize: 20),
+              decoration: const InputDecoration(
+                hintText: 'Name',
+                counterText: '',
+              ),
             ),
           ),
           const SizedBox(height: 12),
           ForegroundFilledBtn(
             onPressed: () {
               setState(() => errorMessage = null);
-              _changeName(context);
+              if (_formKey.currentState!.validate()) {
+                _changeName(context);
+              }
             },
             child: const Text('Save'),
           ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
-import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../logged_in/email_verification.dart';
@@ -17,15 +18,19 @@ class CreateProfileScreen extends StatefulWidget {
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
-  String? errorMessage;
-  String? emailErrorMessage;
-  String? passwordErrorMessage;
+  String? _errorMessage;
+  String? _emailErrorMessage;
+  String? _passwordErrorMessage;
 
-  static final _nameInputController = TextEditingController();
-  static final _emailInputController = TextEditingController();
-  static final _passwordInputController = TextEditingController();
+  bool _isPasswordHidden = true;
 
-  void createProfile(BuildContext context) {
+  final _nameInputController = TextEditingController();
+  final _emailInputController = TextEditingController();
+  final _passwordInputController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  void _createProfile(BuildContext context) {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
 
@@ -42,26 +47,26 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       switch (value) {
         case AuthStatus.emailInUse:
           setState(() {
-            emailErrorMessage = 'Email is already on an existing profile.';
+            _emailErrorMessage = 'Email is already on an existing profile.';
           });
           break;
         case AuthStatus.weakPassword:
           setState(() {
-            passwordErrorMessage = 'Password is too weak.';
+            _passwordErrorMessage = 'Password is too weak.';
           });
           break;
         case AuthStatus.networkError:
           setState(() {
-            errorMessage = 'Network error, check your internet connection.';
+            _errorMessage = 'Network error, check your internet connection.';
           });
           break;
         case AuthStatus.unknownError:
           setState(() {
-            errorMessage = 'There was an error while creating your profile.';
+            _errorMessage = 'There was an error while creating your profile.';
           });
           break;
         default:
-          authProvider.updateName(_nameInputController.text);
+          authProvider.updateName(_nameInputController.text.trim());
           authProvider.sendVerificationEmail();
           Navigator.pop(context);
           Navigator.of(context).push(
@@ -93,81 +98,137 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             style: Theme.of(context).textTheme.headline4,
           ),
           const SizedBox(height: 32),
-          TextField(
-            controller: _nameInputController,
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.words,
-            maxLength: 20,
-            inputFormatters: [
-              noSpaceAtStart(),
-              noDoubleSpace(),
-            ],
-            style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(
-              hintText: 'Name',
-              counterText: '',
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameInputController,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.words,
+                  maxLength: 15,
+                  inputFormatters: [
+                    InputFormatter.noSpaceAtStart(),
+                    InputFormatter.noDoubleSpace(),
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Name is required.';
+                    } else if (!InputValidator.isValidName(value.trim())) {
+                      return 'Enter a valid name.';
+                    } else {
+                      return null;
+                    }
+                  },
+                  style: const TextStyle(fontSize: 20),
+                  decoration: const InputDecoration(
+                    hintText: 'Name',
+                    counterText: '',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailInputController,
+                  keyboardType: TextInputType.emailAddress,
+                  maxLength: 50,
+                  inputFormatters: [InputFormatter.noSpace()],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Email is required.';
+                    } else if (!InputValidator.isValidEmail(value)) {
+                      return 'Enter a valid email.';
+                    } else {
+                      return null;
+                    }
+                  },
+                  style: const TextStyle(fontSize: 20),
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    errorText: _emailErrorMessage,
+                    counterText: '',
+                  ),
+                  onTap: () {
+                    setState(() => _emailErrorMessage = null);
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordInputController,
+                  keyboardType: TextInputType.visiblePassword,
+                  maxLength: 64,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password is required.';
+                    } else if (!InputValidator.isStrongPassword(value)) {
+                      return 'Password is too weak.';
+                    } else {
+                      return null;
+                    }
+                  },
+                  obscureText: _isPasswordHidden,
+                  style: const TextStyle(fontSize: 20),
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    errorText: _passwordErrorMessage,
+                    counterText: '',
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() => _isPasswordHidden = !_isPasswordHidden);
+                      },
+                      child: Icon(
+                        _isPasswordHidden ? Iconsax.eye : Iconsax.eye_slash,
+                        size: 20,
+                      ),
+                    ),
+                    suffixIconConstraints: const BoxConstraints(
+                      minHeight: 32,
+                      minWidth: 48,
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() => _passwordErrorMessage = null);
+                  },
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _emailInputController,
-            keyboardType: TextInputType.emailAddress,
-            maxLength: 50,
-            inputFormatters: [noSpace()],
-            style: const TextStyle(fontSize: 20),
-            decoration: InputDecoration(
-              hintText: 'Email',
-              errorText: emailErrorMessage,
-              counterText: '',
-            ),
-            onTap: () {
-              setState(() => emailErrorMessage = null);
-            },
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _passwordInputController,
-            keyboardType: TextInputType.visiblePassword,
-            maxLength: 30,
-            style: const TextStyle(fontSize: 20),
-            decoration: InputDecoration(
-              hintText: 'Password',
-              errorText: passwordErrorMessage,
-              counterText: '',
-            ),
-            onTap: () {
-              setState(() => passwordErrorMessage = null);
-            },
           ),
           const SizedBox(height: 16),
           ForegroundFilledBtn(
             onPressed: () {
-              setState(() => errorMessage = null);
-              createProfile(context);
+              setState(() => _errorMessage = null);
+              if (_formKey.currentState!.validate()) {
+                _createProfile(context);
+              }
             },
             child: const Text('Create a profile'),
           ),
-          const SizedBox(height: 2),
-          Text(
-            errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
-          ),
-          SizedBox(height: errorMessage == null ? 0 : 2),
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
+          const SizedBox(height: 8),
+          _errorMessage == null
+              ? const SizedBox()
+              : Text(
+                  _errorMessage ?? '',
+                  style: TextStyle(color: Theme.of(context).errorColor),
                 ),
-              );
-            },
-            child: Text(
-              'Already have a profile?',
-              textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color: CustomColorScheme.grey4,
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
                   ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  'Already have a profile?',
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        color: CustomColorScheme.grey4,
+                      ),
+                ),
+              ),
             ),
           ),
         ],

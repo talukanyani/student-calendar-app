@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/text_input_formatters.dart';
+import 'package:sc_app/helpers/formatters_and_validators.dart';
 
 class ActivityInput extends StatelessWidget {
   const ActivityInput({super.key, required this.inputController});
@@ -71,13 +71,13 @@ class ActivityInput extends StatelessWidget {
         return TextField(
           controller: inputController,
           focusNode: focusNode,
-          inputFormatters: [
-            noSpaceAtStart(),
-            noDoubleSpace(),
-          ],
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
           maxLength: 30,
+          inputFormatters: [
+            InputFormatter.noSpaceAtStart(),
+            InputFormatter.noDoubleSpace(),
+          ],
           style: const TextStyle(fontSize: 20),
           decoration: const InputDecoration(
             hintText: 'Activity Name',

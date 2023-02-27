@@ -24,5 +24,6 @@ InputDecorationTheme inputTheme({
       color: hintColor,
     ),
     prefixIconColor: borderColor,
+    suffixIconColor: borderColor,
   );
 }
