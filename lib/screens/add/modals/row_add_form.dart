@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/subject_activities.dart';
+import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -34,11 +34,10 @@ class _RowAddFormState extends State<RowAddForm> {
   static final _timeInputController = TextEditingController();
 
   Future<void> addActivity(BuildContext context) async {
-    Provider.of<SubjectActivitiesController>(context, listen: false)
-        .addActivity(
+    Provider.of<ActivityController>(context, listen: false).addActivity(
       widget.subjectTimeId,
       DateTime.now().millisecondsSinceEpoch,
-      _activityInputController.text,
+      _activityInputController.text.trim(),
       DateTime(
         _selectedDate!.year,
         _selectedDate!.month,

@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/services/database.dart';
+import 'package:sc_app/utils/enums.dart';
+import 'setting.dart';
 
 class SubjectController extends ChangeNotifier {
-  SubjectController() {
-    updateData();
+  SubjectController(this.settingController) {
+    _updateData();
   }
+
+  final SettingController settingController;
 
   List<SubjectModel> data = [];
+
   List<SubjectModel> get subjects {
-    data.sort((a, b) {
-      return a.timeId.compareTo(b.timeId);
-    });
-
-    for (SubjectModel subject in data) {
-      subject.activities.sort((a, b) {
-        return a.dateTime.compareTo(b.dateTime);
-      });
-    }
-
+    _sortData(by: settingController.tablesSort);
+    print('talu - listener Notified');
     return data;
-  }
-
-  Future<void> updateData() async {
-    final syncedData = await Database().getSyncedData();
-    data = syncedData;
-    notifyListeners();
   }
 
   void addSubject(int timeId, String name, String color) {
@@ -57,5 +48,25 @@ class SubjectController extends ChangeNotifier {
     notifyListeners();
 
     Database().editSubject(timeId, newName, newColor);
+  }
+
+  Future<void> _updateData() async {
+    final syncedData = await Database().getSyncedData();
+    data = syncedData;
+    notifyListeners();
+  }
+
+  void _sortData({required TablesSortSetting by}) {
+    switch (by) {
+      case TablesSortSetting.name:
+        data.sort((a, b) {
+          return a.name.compareTo(b.name);
+        });
+        break;
+      default: // case TablesSortSetting.dateAdded:
+        data.sort((a, b) {
+          return a.timeId.compareTo(b.timeId);
+        });
+    }
   }
 }

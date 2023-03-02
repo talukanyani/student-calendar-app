@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/subject_activities.dart';
+import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -38,11 +38,10 @@ class _RowEditFormState extends State<RowEditForm> {
   static final _timeInputController = TextEditingController();
 
   Future<void> editActivity(BuildContext context) async {
-    Provider.of<SubjectActivitiesController>(context, listen: false)
-        .editActivity(
+    Provider.of<ActivityController>(context, listen: false).editActivity(
       widget.subjectTimeId,
       widget.activity.timeId,
-      _activityInputController.text,
+      _activityInputController.text.trim(),
       DateTime(
         _selectedDate!.year,
         _selectedDate!.month,
@@ -53,24 +52,24 @@ class _RowEditFormState extends State<RowEditForm> {
     );
   }
 
-  DateTime getActivityDate() => widget.activity.dateTime;
+  DateTime activityDate() => widget.activity.dateTime;
 
   @override
   void initState() {
     _activityInputController.text = widget.activity.activity;
 
     _dateInputController.text =
-        getActivityDate().toLocal().toString().split(' ')[0];
+        activityDate().toLocal().toString().split(' ')[0];
     setState(() {
-      _selectedDate = getActivityDate();
+      _selectedDate = activityDate();
     });
 
     _timeInputController.text =
-        '${Helpers.padTwoNums(getActivityDate().hour)}:${Helpers.padTwoNums(getActivityDate().minute)}';
+        '${Helpers.padTwoNums(activityDate().hour)}:${Helpers.padTwoNums(activityDate().minute)}';
     setState(() {
       _selectedTime = TimeOfDay(
-        hour: getActivityDate().hour,
-        minute: getActivityDate().minute,
+        hour: activityDate().hour,
+        minute: activityDate().minute,
       );
     });
 
@@ -201,7 +200,7 @@ class _RowEditFormState extends State<RowEditForm> {
 
                   if (widget.activity.activity ==
                           _activityInputController.text &&
-                      getActivityDate() ==
+                      activityDate() ==
                           DateTime(
                             _selectedDate!.year,
                             _selectedDate!.month,

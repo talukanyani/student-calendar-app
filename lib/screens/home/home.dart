@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/all_activities.dart';
+import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
@@ -30,19 +30,16 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var activitiesProvider = Provider.of<AllActivitiesController>(
-      context,
-      listen: false,
-    );
+    final activitiesController = Provider.of<ActivityController>(context);
 
-    var todayActivities = activitiesProvider.getDayActivities(today);
-    var tomorrowActivities = activitiesProvider.getDayActivities(tomorrow);
+    var todayActivities = activitiesController.dayActivities(today);
+    var tomorrowActivities = activitiesController.dayActivities(tomorrow);
 
     int next7daysActivitiesCount() {
       int activitiesCount = 0;
 
       for (var i = 0; i < 7; i++) {
-        var dayActivities = activitiesProvider.getDayActivities(
+        var dayActivities = activitiesController.dayActivities(
           today.add(Duration(days: i)),
         );
 

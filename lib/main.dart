@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
-import 'package:sc_app/controllers/subject_activities.dart';
-import 'package:sc_app/controllers/all_activities.dart';
+import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/controllers/authentication.dart';
+import 'package:sc_app/controllers/setting.dart';
 import 'package:sc_app/themes/theme.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'widgets/android_system_navbar.dart';
@@ -25,25 +25,28 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<SubjectController>(
-          create: (_) => SubjectController(),
+        ChangeNotifierProvider<SettingController>(
+          create: (_) => SettingController(),
         ),
-        ChangeNotifierProxyProvider<SubjectController,
-            SubjectActivitiesController>(
-          create: (_) => SubjectActivitiesController(SubjectController()),
-          update: (_, subjectController, __) {
-            return SubjectActivitiesController(subjectController);
+        ChangeNotifierProxyProvider<SettingController, SubjectController>(
+          create: (context) => SubjectController(
+            Provider.of<SettingController>(context, listen: false),
+          ),
+          update: (_, settingController, __) {
+            return SubjectController(settingController);
           },
         ),
-        ChangeNotifierProxyProvider<SubjectController, AllActivitiesController>(
-          create: (_) => AllActivitiesController(SubjectController()),
+        ChangeNotifierProxyProvider<SubjectController, ActivityController>(
+          create: (context) => ActivityController(
+            Provider.of<SubjectController>(context, listen: false).data,
+          ),
           update: (_, subjectController, __) {
-            return AllActivitiesController(subjectController);
+            return ActivityController(subjectController.data);
           },
         ),
         ChangeNotifierProvider<AuthenticationController>(
           create: (_) => AuthenticationController(),
-        )
+        ),
       ],
       child: AndroidSystemNavbarStyle(
         color: CustomColorScheme.background5,

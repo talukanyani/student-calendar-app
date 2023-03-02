@@ -1,65 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/themes/color_scheme.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/setting.dart';
+import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 
-class AppSettings extends StatelessWidget {
+class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Personalise')),
-      body: const Body(),
-    );
-  }
+  State<AppSettings> createState() => _AppSettingsState();
 }
 
-class Body extends StatefulWidget {
-  const Body({super.key});
-
-  @override
-  State<Body> createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
-  ThemeMode themeMode = ThemeMode.system;
-  String sortTablesBy = 'date_added';
-  String calendarWeek = 'mon';
-
-  RadioListTile themeOption({
+class _AppSettingsState extends State<AppSettings> {
+  RadioListTile _themeOption({
     required String title,
     required ThemeMode value,
+    required SettingController settingController,
   }) {
     return RadioListTile(
       value: value,
-      groupValue: themeMode,
-      onChanged: (value) => setState(() => themeMode = value!),
+      groupValue: settingController.themeMode,
+      onChanged: (value) => settingController.setTheme(value),
       visualDensity: const VisualDensity(vertical: -3),
       title: Text(title),
     );
   }
 
-  RadioListTile sortTablesOption({
+  RadioListTile _sortTablesOption({
     required String title,
-    required String value,
+    required TablesSortSetting value,
+    required SettingController settingController,
   }) {
     return RadioListTile(
       value: value,
-      groupValue: sortTablesBy,
-      onChanged: (value) => setState(() => sortTablesBy = value!),
+      groupValue: settingController.tablesSort,
+      onChanged: (value) => settingController.setTablesSort(value),
       visualDensity: const VisualDensity(vertical: -3),
       title: Text(title),
     );
   }
 
-  RadioListTile calendarWeekOption({
+  RadioListTile _calendarWeekOption({
     required String title,
-    required String value,
+    required int value,
+    required SettingController settingController,
   }) {
     return RadioListTile(
       value: value,
-      groupValue: calendarWeek,
-      onChanged: (value) => setState(() => calendarWeek = value!),
+      groupValue: settingController.weekStartDay,
+      onChanged: (value) => settingController.setWeekStart(value),
       visualDensity: const VisualDensity(vertical: -3),
       title: Text(title),
     );
@@ -67,45 +56,82 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      primary: false,
-      children: [
-        RectContainer(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HeadingText(text: 'Theme Mode'),
-              themeOption(title: 'Light', value: ThemeMode.light),
-              themeOption(title: 'Dark', value: ThemeMode.dark),
-              themeOption(title: 'System', value: ThemeMode.system),
-            ],
+    final settingProvider = Provider.of<SettingController>(context);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Personalise')),
+      body: ListView(
+        primary: false,
+        children: [
+          // RectContainer(
+          //   padding: const EdgeInsets.all(8),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       const HeadingText(text: 'Theme Mode'),
+          //       _themeOption(
+          //         title: 'Light',
+          //         value: ThemeMode.light,
+          //         settingController: settingProvider,
+          //       ),
+          //       _themeOption(
+          //         title: 'Dark',
+          //         value: ThemeMode.dark,
+          //         settingController: settingProvider,
+          //       ),
+          //       _themeOption(
+          //         title: 'System Default',
+          //         value: ThemeMode.system,
+          //         settingController: settingProvider,
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          RectContainer(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeadingText(text: 'Sort Tables'),
+                _sortTablesOption(
+                  title: 'Date Added',
+                  value: TablesSortSetting.dateAdded,
+                  settingController: settingProvider,
+                ),
+                _sortTablesOption(
+                  title: 'Name',
+                  value: TablesSortSetting.name,
+                  settingController: settingProvider,
+                ),
+              ],
+            ),
           ),
-        ),
-        RectContainer(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HeadingText(text: 'Tables Sort By'),
-              sortTablesOption(title: 'Date Added', value: 'date_added'),
-              sortTablesOption(title: 'Name', value: 'name'),
-            ],
+          RectContainer(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeadingText(text: 'Calendar Week Start Day'),
+                _calendarWeekOption(
+                  title: 'Monday',
+                  value: DateTime.monday,
+                  settingController: settingProvider,
+                ),
+                _calendarWeekOption(
+                  title: 'Sunday',
+                  value: DateTime.sunday,
+                  settingController: settingProvider,
+                ),
+                _calendarWeekOption(
+                  title: 'Saturday',
+                  value: DateTime.saturday,
+                  settingController: settingProvider,
+                ),
+              ],
+            ),
           ),
-        ),
-        RectContainer(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HeadingText(text: 'Calendar Week Start'),
-              calendarWeekOption(title: 'Monday', value: 'mon'),
-              calendarWeekOption(title: 'Sunday', value: 'sun'),
-              calendarWeekOption(title: 'Saturday', value: 'sat'),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

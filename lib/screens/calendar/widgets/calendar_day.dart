@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/all_activities.dart';
+import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import '../modals/day_box_activities.dart';
@@ -43,12 +43,12 @@ class _DayBoxState extends State<DayBox> {
 
   @override
   Widget build(BuildContext context) {
-    final activitiesProvider = Provider.of<AllActivitiesController>(
+    final activitiesProvider = Provider.of<ActivityController>(
       context,
       listen: false,
     );
 
-    final activities = activitiesProvider.getDayActivities(widget.date);
+    final activities = activitiesProvider.dayActivities(widget.date);
 
     return GestureDetector(
       onTap: () => Show.modal(
@@ -92,24 +92,6 @@ class _DayBoxState extends State<DayBox> {
             ),
           ),
           child: Text(widget.date.day.toString()),
-        ),
-      ),
-    );
-  }
-}
-
-class WeekDay extends StatelessWidget {
-  const WeekDay({super.key, required this.day});
-
-  final String day;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        day,
-        style: TextStyle(
-          color: Theme.of(context).textTheme.headline5?.color,
         ),
       ),
     );

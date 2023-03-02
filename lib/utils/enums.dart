@@ -14,3 +14,8 @@ enum SnackBarIcon {
   error,
   info,
 }
+
+enum TablesSortSetting {
+  name,
+  dateAdded,
+}

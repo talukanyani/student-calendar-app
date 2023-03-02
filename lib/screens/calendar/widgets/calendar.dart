@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/setting.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'calendar_day.dart';
+import 'week_day.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -19,36 +22,46 @@ class _CalendarState extends State<Calendar> {
   final double _gridSpacing = 8;
   final double _gridRatio = 0.8;
 
-  // if it is currently displayed month, get its dates using dates algorithim
-  // else get its dates using first or last date of currently diplayed month.
-  DateTime getDate(dayIndex, monthIndex) {
+  DateTime getDate(dayIndex, monthIndex, weekStartDay) {
     if (monthIndex > _displayedMonthIndex) {
-      return getNextMonthDates(dayIndex, monthIndex);
+      return getNextMonthDates(dayIndex, monthIndex, weekStartDay);
     } else if (monthIndex < _displayedMonthIndex) {
-      return getPrevMonthDates(dayIndex, monthIndex);
+      return getPrevMonthDates(dayIndex, monthIndex, weekStartDay);
     } else {
-      return getDisplayedMonthDates(dayIndex, monthIndex);
+      return getDisplayedMonthDates(dayIndex, monthIndex, weekStartDay);
     }
   }
 
-  DateTime getDisplayedMonthDates(int dayIndex, int monthIndex) {
-    var startDate = DateTime(
+  DateTime getDisplayedMonthDates(
+    int dayIndex,
+    int monthIndex,
+    int weekStartDay,
+  ) {
+    var displayedMonthFirstDate = DateTime(
       currDate.year,
       currDate.month + (monthIndex - beforeCurrMonthCount),
       1,
     );
 
-    // for start date to be Monday date
-    startDate = startDate.subtract(
-      Duration(days: (startDate.weekday - DateTime.monday)),
+    int difference() {
+      int difference = displayedMonthFirstDate.weekday - weekStartDay;
+      if (difference < 0) difference += 7;
+
+      return difference;
+    }
+
+    // startDate is the first date in the first week of the month
+    // it should be on mon/sun/sat depending on weekStartDay setting
+    var startDate = displayedMonthFirstDate.subtract(
+      Duration(days: difference()),
     );
 
     return startDate.add(Duration(days: dayIndex));
   }
 
-  DateTime getNextMonthDates(int dayIndex, int monthIndex) {
+  DateTime getNextMonthDates(int dayIndex, int monthIndex, int weekStartDay) {
     var displayedMonthLastDate =
-        getDisplayedMonthDates(41, _displayedMonthIndex);
+        getDisplayedMonthDates(41, _displayedMonthIndex, weekStartDay);
 
     var startDate = displayedMonthLastDate.add(
       Duration(days: 1 + (42 * (monthIndex - (_displayedMonthIndex + 1)))),
@@ -57,9 +70,9 @@ class _CalendarState extends State<Calendar> {
     return startDate.add(Duration(days: dayIndex));
   }
 
-  DateTime getPrevMonthDates(int dayIndex, int monthIndex) {
+  DateTime getPrevMonthDates(int dayIndex, int monthIndex, int weekStartDay) {
     var displayedMounthFirstDate =
-        getDisplayedMonthDates(0, _displayedMonthIndex);
+        getDisplayedMonthDates(0, _displayedMonthIndex, weekStartDay);
 
     var startDate = displayedMounthFirstDate.subtract(
       Duration(days: 42 + (42 * ((_displayedMonthIndex - 1) - monthIndex))),
@@ -68,26 +81,20 @@ class _CalendarState extends State<Calendar> {
     return startDate.add(Duration(days: dayIndex));
   }
 
-  DateTime displayedMonthDate() {
-    return getDate(7, _displayedMonthIndex);
+  DateTime displayedMonthDate(int weekStartDay) {
+    return getDate(7, _displayedMonthIndex, weekStartDay);
   }
 
-  String displayedMonthName() {
-    return getMonthFullName(displayedMonthDate().month - 1);
+  String displayedMonthName(int weekStartDay) {
+    return getMonthFullName(displayedMonthDate(weekStartDay).month - 1);
   }
 
-  String displayedMonthYear() {
-    int year = displayedMonthDate().year;
-
-    if (year == currDate.year) {
-      return '';
-    }
-
+  String displayedMonthYear(int weekStartDay) {
+    int year = displayedMonthDate(weekStartDay).year;
+    if (year == currDate.year) return '';
     return year.toString();
   }
 
-  // get month view ratio to available space using avilable space height
-  // and month view height
   double getViewFraction(constraints) {
     double pageViewHeight = constraints.maxHeight;
     double pageViewWidth = constraints.maxWidth;
@@ -105,6 +112,8 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
+    final weekStartDay = Provider.of<SettingController>(context).weekStartDay;
+
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
@@ -133,7 +142,7 @@ class _CalendarState extends State<Calendar> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              '${displayedMonthName()} ${displayedMonthYear()}',
+              '${displayedMonthName(weekStartDay)} ${displayedMonthYear(weekStartDay)}',
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
@@ -143,20 +152,17 @@ class _CalendarState extends State<Calendar> {
               border: Border.all(color: Theme.of(context).dividerColor),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: GridView.count(
+            child: GridView.builder(
               shrinkWrap: true,
-              childAspectRatio: 1.25,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 7,
-              children: const [
-                WeekDay(day: 'Mon'),
-                WeekDay(day: 'Tue'),
-                WeekDay(day: 'Wed'),
-                WeekDay(day: 'Thu'),
-                WeekDay(day: 'Fri'),
-                WeekDay(day: 'Sat'),
-                WeekDay(day: 'Sun'),
-              ],
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                childAspectRatio: 1.25,
+              ),
+              itemCount: 7,
+              itemBuilder: (context, index) {
+                return WeekDay(index: index);
+              },
             ),
           ),
           const SizedBox(height: 16),
@@ -188,10 +194,11 @@ class _CalendarState extends State<Calendar> {
                       itemCount: 42,
                       itemBuilder: (context, dayIndex) {
                         return DayBox(
-                          date: getDate(dayIndex, monthIndex),
+                          date: getDate(dayIndex, monthIndex, weekStartDay),
                           isInDisplayedMonth:
-                              getDate(dayIndex, monthIndex).month ==
-                                  displayedMonthDate().month,
+                              getDate(dayIndex, monthIndex, weekStartDay)
+                                      .month ==
+                                  displayedMonthDate(weekStartDay).month,
                         );
                       },
                     );
