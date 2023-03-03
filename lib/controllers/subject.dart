@@ -6,54 +6,67 @@ import 'setting.dart';
 
 class SubjectController extends ChangeNotifier {
   SubjectController(this.settingController) {
-    _updateData();
+    _updateWithCachedData();
+    _updateWithSyncedData();
   }
 
   final SettingController settingController;
 
   List<SubjectModel> data = [];
 
+  List<SubjectModel> cacheDb = [];
+
+  // if sync setting is off, syncDb() will be null
+  // therefore database won't be accesed
+  Database? syncDb() => settingController.isSync ? Database() : null;
+
   List<SubjectModel> get subjects {
     _sortData(by: settingController.tablesSort);
-    print('talu - listener Notified');
     return data;
   }
 
   void addSubject(int timeId, String name, String color) {
     if (data.length >= 20) return;
 
-    data.add(
+    cacheDb.add(
       SubjectModel(timeId: timeId, name: name, color: color, activities: []),
     );
 
-    notifyListeners();
+    _updateWithCachedData();
 
-    Database().addSubject(timeId, name, color);
+    syncDb()?.addSubject(timeId, name, color);
   }
 
   void removeSubject(int timeId) {
-    data.removeWhere((subject) => subject.timeId == timeId);
-    notifyListeners();
-    Database().deleteSubject(timeId);
+    cacheDb.removeWhere((subject) => subject.timeId == timeId);
+    _updateWithCachedData();
+    syncDb()?.deleteSubject(timeId);
   }
 
   void editSubject(int timeId, String newName, String newColor) {
-    SubjectModel oldSubject = data.firstWhere((subject) {
+    var oldSubject = cacheDb.firstWhere((subject) {
       return subject.timeId == timeId;
     });
 
     oldSubject.name = newName;
     oldSubject.color = newColor;
 
-    notifyListeners();
+    _updateWithCachedData();
 
-    Database().editSubject(timeId, newName, newColor);
+    syncDb()?.editSubject(timeId, newName, newColor);
   }
 
-  Future<void> _updateData() async {
-    final syncedData = await Database().getSyncedData();
-    data = syncedData;
+  void _updateWithCachedData() {
+    data = cacheDb;
     notifyListeners();
+  }
+
+  Future<void> _updateWithSyncedData() async {
+    final syncedData = await syncDb()?.getSyncedData();
+    if (syncedData != null) {
+      data = syncedData;
+      notifyListeners();
+    }
   }
 
   void _sortData({required TablesSortSetting by}) {

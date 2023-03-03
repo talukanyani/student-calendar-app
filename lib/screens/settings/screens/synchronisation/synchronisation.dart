@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/setting.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/rect_container.dart';
@@ -14,10 +16,10 @@ class SynchronisationSettings extends StatefulWidget {
 }
 
 class _SynchronisationSettingsState extends State<SynchronisationSettings> {
-  bool isSync = false;
-
   @override
   Widget build(BuildContext context) {
+    final settingController = Provider.of<SettingController>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Synchronisation')),
       body: ListView(
@@ -28,7 +30,7 @@ class _SynchronisationSettingsState extends State<SynchronisationSettings> {
               title: const Text('Synchronise'),
               subtitle: const Text('Turn synchronisation on/off'),
               trailing: Switch(
-                value: isSync,
+                value: settingController.isSync,
                 onChanged: (value) {
                   if (!value) {
                     Show.modal(
@@ -38,12 +40,12 @@ class _SynchronisationSettingsState extends State<SynchronisationSettings> {
                         content: const Text(
                           'Are you sure you want turn off synchronisation?',
                         ),
-                        action: () => setState(() => isSync = value),
+                        action: () => settingController.setSync(value),
                       ),
                     );
-                    return;
+                  } else {
+                    settingController.setSync(value);
                   }
-                  setState(() => isSync = value);
                 },
               ),
             ),

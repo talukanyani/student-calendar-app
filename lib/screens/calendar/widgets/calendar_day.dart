@@ -43,12 +43,8 @@ class _DayBoxState extends State<DayBox> {
 
   @override
   Widget build(BuildContext context) {
-    final activitiesProvider = Provider.of<ActivityController>(
-      context,
-      listen: false,
-    );
-
-    final activities = activitiesProvider.dayActivities(widget.date);
+    final activitiesController = Provider.of<ActivityController>(context);
+    final activities = activitiesController.dayActivities(widget.date);
 
     return GestureDetector(
       onTap: () => Show.modal(

@@ -128,4 +128,38 @@ class Database {
       });
     });
   }
+
+  void addAll(List<SubjectModel> data) {
+    for (var subject in data) {
+      subjectsRef.add({
+        'timeId': subject.timeId,
+        'name': subject.name,
+        'color': subject.color,
+      }).then((subjectDocRef) {
+        for (var activity in subject.activities) {
+          subjectDocRef.collection('activities').add({
+            'timeId': activity.timeId,
+            'activity': activity.activity,
+            'dateTime': activity.dateTime,
+          });
+        }
+      });
+    }
+  }
+
+  void deleteAll() {
+    subjectsRef.get().then((subjectsSnapshot) {
+      for (var subjectDoc in subjectsSnapshot.docs) {
+        var activitiesRef = subjectDoc.reference.collection('activities');
+
+        activitiesRef.get().then((activitiesSnapShot) {
+          for (var activityDoc in activitiesSnapShot.docs) {
+            activityDoc.reference.delete();
+          }
+        });
+
+        subjectDoc.reference.delete();
+      }
+    });
+  }
 }

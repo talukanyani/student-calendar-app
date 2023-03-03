@@ -27,7 +27,8 @@ class RowAddButton extends StatelessWidget {
         if (activitiesCount >= 50) {
           Show.snackBar(
             context,
-            text: 'You have reached maximum number of activities.',
+            text:
+                'You have reached maximum number of activities for $subjectName.',
             snackBarIcon: SnackBarIcon.info,
           );
         } else {

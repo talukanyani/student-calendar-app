@@ -38,10 +38,10 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<SubjectController, ActivityController>(
           create: (context) => ActivityController(
-            Provider.of<SubjectController>(context, listen: false).data,
+            Provider.of<SubjectController>(context, listen: false),
           ),
           update: (_, subjectController, __) {
-            return ActivityController(subjectController.data);
+            return ActivityController(subjectController);
           },
         ),
         ChangeNotifierProvider<AuthenticationController>(
