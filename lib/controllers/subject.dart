@@ -1,84 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/models/subject.dart';
-import 'package:sc_app/services/database.dart';
+import 'package:sc_app/services/cloud_database.dart';
+import 'package:sc_app/services/local_database.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'setting.dart';
 
 class SubjectController extends ChangeNotifier {
   SubjectController(this.settingController) {
-    _updateWithCachedData();
-    _updateWithSyncedData();
+    _displayCachedSubjects().then((_) {
+      _displaySyncedSubjects();
+    });
   }
 
   final SettingController settingController;
 
-  List<SubjectModel> data = [];
+  List<SubjectModel> displayedSubjets = [];
 
-  List<SubjectModel> cacheDb = [];
-
-  // if sync setting is off, syncDb() will be null
-  // therefore database won't be accesed
-  Database? syncDb() => settingController.isSync ? Database() : null;
+  LocalDatabase cache() => LocalDatabase();
+  CloudDatabase? sync() => settingController.isSync ? CloudDatabase() : null;
 
   List<SubjectModel> get subjects {
-    _sortData(by: settingController.tablesSort);
-    return data;
+    _sortSubjects(by: settingController.tablesSort);
+    return displayedSubjets;
   }
 
-  void addSubject(int timeId, String name, String color) {
-    if (data.length >= 20) return;
+  void addSubject(int id, String name, String color) {
+    if (displayedSubjets.length >= 20) return;
 
-    cacheDb.add(
-      SubjectModel(timeId: timeId, name: name, color: color, activities: []),
+    displayedSubjets.add(
+      SubjectModel(id: id, name: name, color: color, activities: []),
     );
 
-    _updateWithCachedData();
+    notifyListeners();
 
-    syncDb()?.addSubject(timeId, name, color);
+    cache().cacheSubjects(displayedSubjets);
+    sync()?.addSubject(id, name, color);
   }
 
-  void removeSubject(int timeId) {
-    cacheDb.removeWhere((subject) => subject.timeId == timeId);
-    _updateWithCachedData();
-    syncDb()?.deleteSubject(timeId);
+  void removeSubject(int id) {
+    displayedSubjets.removeWhere((subject) => subject.id == id);
+    notifyListeners();
+
+    cache().cacheSubjects(displayedSubjets);
+    sync()?.deleteSubject(id);
   }
 
-  void editSubject(int timeId, String newName, String newColor) {
-    var oldSubject = cacheDb.firstWhere((subject) {
-      return subject.timeId == timeId;
-    });
+  void editSubject(int id, String newName, String newColor) {
+    var oldSubject = displayedSubjets.firstWhere((subject) => subject.id == id);
 
     oldSubject.name = newName;
     oldSubject.color = newColor;
+    notifyListeners();
 
-    _updateWithCachedData();
-
-    syncDb()?.editSubject(timeId, newName, newColor);
+    cache().cacheSubjects(displayedSubjets);
+    sync()?.editSubject(id, newName, newColor);
   }
 
-  void _updateWithCachedData() {
-    data = cacheDb;
+  Future<void> _displayCachedSubjects() async {
+    var cachedSubjects = await cache().cachedSubjects;
+    displayedSubjets = cachedSubjects;
     notifyListeners();
   }
 
-  Future<void> _updateWithSyncedData() async {
-    final syncedData = await syncDb()?.getSyncedData();
-    if (syncedData != null) {
-      data = syncedData;
+  Future<void> _displaySyncedSubjects() async {
+    var syncedSubjects = await sync()?.syncedSubjects;
+
+    if (syncedSubjects != null) {
+      displayedSubjets = syncedSubjects;
       notifyListeners();
+      cache().cacheSubjects(syncedSubjects);
     }
   }
 
-  void _sortData({required TablesSortSetting by}) {
+  void _sortSubjects({required TablesSortSetting by}) {
     switch (by) {
       case TablesSortSetting.name:
-        data.sort((a, b) {
+        displayedSubjets.sort((a, b) {
           return a.name.compareTo(b.name);
         });
         break;
       default: // case TablesSortSetting.dateAdded:
-        data.sort((a, b) {
-          return a.timeId.compareTo(b.timeId);
+        displayedSubjets.sort((a, b) {
+          return a.id.compareTo(b.id);
         });
     }
   }

@@ -14,12 +14,12 @@ import '../widgets/label_text.dart';
 class RowEditForm extends StatefulWidget {
   const RowEditForm({
     super.key,
-    required this.subjectTimeId,
+    required this.subjectId,
     required this.subjectName,
     required this.activity,
   });
 
-  final int subjectTimeId;
+  final int subjectId;
   final String subjectName;
   final ActivityModel activity;
 
@@ -39,10 +39,10 @@ class _RowEditFormState extends State<RowEditForm> {
 
   Future<void> editActivity(BuildContext context) async {
     Provider.of<ActivityController>(context, listen: false).editActivity(
-      widget.subjectTimeId,
-      widget.activity.timeId,
-      _activityInputController.text.trim(),
-      DateTime(
+      subjectId: widget.subjectId,
+      activityId: widget.activity.id,
+      newActivity: _activityInputController.text.trim(),
+      newDateTime: DateTime(
         _selectedDate!.year,
         _selectedDate!.month,
         _selectedDate!.day,

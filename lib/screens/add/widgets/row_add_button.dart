@@ -35,7 +35,7 @@ class RowAddButton extends StatelessWidget {
           Show.modal(
             context,
             modal: RowAddForm(
-              subjectTimeId: subjectTimeId,
+              subjectId: subjectTimeId,
               subjectName: subjectName,
             ),
           );

@@ -13,7 +13,7 @@ import 'oval_text_container.dart';
 import 'popup_menu_item.dart';
 
 TableRow row({
-  required int subjectTimeId,
+  required int subjectId,
   required String subjectName,
   required ActivityModel activity,
   required ActivityController activityProvider,
@@ -64,7 +64,7 @@ TableRow row({
                     Show.modal(
                       context,
                       modal: RowEditForm(
-                        subjectTimeId: subjectTimeId,
+                        subjectId: subjectId,
                         subjectName: subjectName,
                         activity: activity,
                       ),
@@ -94,8 +94,8 @@ TableRow row({
                         actionName: 'Delete',
                         action: () {
                           activityProvider.removeActivity(
-                            subjectTimeId,
-                            activity.timeId,
+                            subjectId: subjectId,
+                            activityId: activity.id,
                           );
                           Show.snackBar(
                             context,

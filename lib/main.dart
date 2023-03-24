@@ -29,19 +29,17 @@ class App extends StatelessWidget {
           create: (_) => SettingController(),
         ),
         ChangeNotifierProxyProvider<SettingController, SubjectController>(
-          create: (context) => SubjectController(
-            Provider.of<SettingController>(context, listen: false),
-          ),
-          update: (_, settingController, __) {
-            return SubjectController(settingController);
+          create: (_) => SubjectController(SettingController()),
+          update: (_, settingController, subjectController) {
+            return subjectController ?? SubjectController(settingController);
           },
         ),
         ChangeNotifierProxyProvider<SubjectController, ActivityController>(
           create: (context) => ActivityController(
             Provider.of<SubjectController>(context, listen: false),
           ),
-          update: (_, subjectController, __) {
-            return ActivityController(subjectController);
+          update: (_, subjectController, activityController) {
+            return activityController ?? ActivityController(subjectController);
           },
         ),
         ChangeNotifierProvider<AuthenticationController>(

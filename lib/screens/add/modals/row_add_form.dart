@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/activity.dart';
+import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -12,11 +13,11 @@ import '../widgets/label_text.dart';
 class RowAddForm extends StatefulWidget {
   const RowAddForm({
     super.key,
-    required this.subjectTimeId,
+    required this.subjectId,
     required this.subjectName,
   });
 
-  final int subjectTimeId;
+  final int subjectId;
   final String subjectName;
 
   @override
@@ -35,15 +36,18 @@ class _RowAddFormState extends State<RowAddForm> {
 
   Future<void> addActivity(BuildContext context) async {
     Provider.of<ActivityController>(context, listen: false).addActivity(
-      widget.subjectTimeId,
-      DateTime.now().millisecondsSinceEpoch,
-      _activityInputController.text.trim(),
-      DateTime(
-        _selectedDate!.year,
-        _selectedDate!.month,
-        _selectedDate!.day,
-        _selectedTime!.hour,
-        _selectedTime!.minute,
+      ActivityModel(
+        id: DateTime.now().millisecondsSinceEpoch,
+        subjectId: widget.subjectId,
+        subjectName: widget.subjectName,
+        activity: _activityInputController.text.trim(),
+        dateTime: DateTime(
+          _selectedDate!.year,
+          _selectedDate!.month,
+          _selectedDate!.day,
+          _selectedTime!.hour,
+          _selectedTime!.minute,
+        ),
       ),
     );
   }

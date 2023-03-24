@@ -2,31 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
-import 'package:sc_app/services/database.dart';
+import 'package:sc_app/services/cloud_database.dart';
+import 'package:sc_app/services/local_database.dart';
 
 class ActivityController extends ChangeNotifier {
   ActivityController(this.subjectController);
 
   final SubjectController subjectController;
 
-  List<ActivityModel> _activitiesData(int subjectTimeId) {
-    var subject = subjectController.data.firstWhere((subject) {
-      return subject.timeId == subjectTimeId;
-    });
-    return subject.activities;
+  LocalDatabase _cache() => LocalDatabase();
+  CloudDatabase? _sync() =>
+      subjectController.settingController.isSync ? CloudDatabase() : null;
+
+  List<ActivityModel> _displayedActivities(int subjectId) {
+    return subjectController.displayedSubjets.firstWhere((subject) {
+      return subject.id == subjectId;
+    }).activities;
   }
 
-  List<ActivityModel> _activitiesCacheDb(int subjectTimeId) {
-    var subject = subjectController.cacheDb.firstWhere((subject) {
-      return subject.timeId == subjectTimeId;
-    });
-    return subject.activities;
-  }
-
-  Database? _syncDb() => subjectController.syncDb();
-
-  List<ActivityModel> subjectActivities(int subjectTimeId) {
-    var activities = _activitiesData(subjectTimeId);
+  List<ActivityModel> subjectActivities(int subjectId) {
+    var activities = _displayedActivities(subjectId);
     activities.sort((a, b) => a.dateTime.compareTo(b.dateTime));
     return activities;
   }
@@ -34,17 +29,9 @@ class ActivityController extends ChangeNotifier {
   List<ActivityModel> get allActivities {
     List<ActivityModel> activities = [];
 
-    for (var subject in subjectController.data) {
+    for (var subject in subjectController.displayedSubjets) {
       for (var activity in subject.activities) {
-        activities.add(
-          ActivityModel(
-            timeId: activity.timeId,
-            docId: activity.docId,
-            subjectName: subject.name,
-            activity: activity.activity,
-            dateTime: activity.dateTime,
-          ),
-        );
+        activities.add(activity);
       }
     }
 
@@ -61,72 +48,53 @@ class ActivityController extends ChangeNotifier {
     return dayActivities.toList();
   }
 
-  void addActivity(
-    int subjectTimeId,
-    int activityTimeId,
-    String activity,
-    DateTime dateTime,
-  ) {
-    var subject = subjectController.data.firstWhere((subject) {
-      return subject.timeId == subjectTimeId;
-    });
+  void addActivity(ActivityModel activity) {
+    if (_displayedActivities(activity.subjectId).length >= 50) return;
 
-    if (_activitiesData(subjectTimeId).length >= 50) return;
+    _displayedActivities(activity.subjectId).add(activity);
 
-    _activitiesCacheDb(subjectTimeId).add(
-      ActivityModel(
-        timeId: activityTimeId,
-        subjectName: subject.name,
-        activity: activity,
-        dateTime: dateTime,
-      ),
+    notifyListeners();
+
+    _cache().cacheSubjects(subjectController.displayedSubjets);
+    _sync()?.addActivity(
+      activity.subjectId,
+      activity.id,
+      activity.activity,
+      activity.dateTime,
     );
-
-    _updateWithCachedData(subjectTimeId);
-
-    _syncDb()?.addActivity(subjectTimeId, activityTimeId, activity, dateTime);
   }
 
-  void removeActivity(int subjectTimeId, int activityTimeId) {
-    var activity = _activitiesCacheDb(subjectTimeId).firstWhere((activity) {
-      return activity.timeId == activityTimeId;
+  void removeActivity({required int subjectId, required int activityId}) {
+    var activity = _displayedActivities(subjectId).firstWhere((activity) {
+      return activity.id == activityId;
     });
 
-    _activitiesCacheDb(subjectTimeId).remove(activity);
+    _displayedActivities(subjectId).remove(activity);
 
-    _updateWithCachedData(subjectTimeId);
-
-    _syncDb()?.deleteActivity(subjectTimeId, activityTimeId);
+    _cache().cacheSubjects(subjectController.displayedSubjets);
+    _sync()?.deleteActivity(subjectId, activityId);
   }
 
-  void editActivity(
-    int subjectTimeId,
-    int activityTimeId,
-    String newActivity,
-    DateTime newDateTime,
-  ) {
-    var oldActivity = _activitiesCacheDb(subjectTimeId).firstWhere((activity) {
-      return activity.timeId == activityTimeId;
+  void editActivity({
+    required int subjectId,
+    required int activityId,
+    required String newActivity,
+    required DateTime newDateTime,
+  }) {
+    var oldActivity = _displayedActivities(subjectId).firstWhere((activity) {
+      return activity.id == activityId;
     });
 
     oldActivity.activity = newActivity;
     oldActivity.dateTime = newDateTime;
+    notifyListeners();
 
-    _updateWithCachedData(subjectTimeId);
-
-    _syncDb()?.editActivity(
-      subjectTimeId,
-      activityTimeId,
+    _cache().cacheSubjects(subjectController.displayedSubjets);
+    _sync()?.editActivity(
+      subjectId,
+      activityId,
       newActivity,
       newDateTime,
     );
-  }
-
-  void _updateWithCachedData(int subjectTimeId) {
-    subjectController.data.firstWhere((subject) {
-      return subject.timeId == subjectTimeId;
-    }).activities = _activitiesCacheDb(subjectTimeId);
-
-    notifyListeners();
   }
 }

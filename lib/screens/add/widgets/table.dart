@@ -33,7 +33,7 @@ class SubjectTable extends StatelessWidget {
     );
     final activityController = Provider.of<ActivityController>(context);
 
-    final activities = activityController.subjectActivities(subject.timeId);
+    final activities = activityController.subjectActivities(subject.id);
 
     return RectContainer(
       padding: const EdgeInsets.all(8),
@@ -69,7 +69,7 @@ class SubjectTable extends StatelessWidget {
                           Show.modal(
                             context,
                             modal: TableEditForm(
-                              subjectId: subject.timeId,
+                              subjectId: subject.id,
                               subjectName: subject.name,
                               subjectColor: subject.color,
                             ),
@@ -96,7 +96,7 @@ class SubjectTable extends StatelessWidget {
                               ),
                               actionName: 'Delete',
                               action: () {
-                                subjectProvider.removeSubject(subject.timeId);
+                                subjectProvider.removeSubject(subject.id);
                                 Show.snackBar(
                                   context,
                                   text: 'One subject was deleted.',
@@ -137,7 +137,7 @@ class SubjectTable extends StatelessWidget {
               ...List.generate(
                 activities.length,
                 (index) => row(
-                  subjectTimeId: subject.timeId,
+                  subjectId: subject.id,
                   subjectName: subject.name,
                   activity: activities[index],
                   activityProvider: activityProvider,
@@ -147,7 +147,7 @@ class SubjectTable extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           RowAddButton(
-            subjectTimeId: subject.timeId,
+            subjectTimeId: subject.id,
             subjectName: subject.name,
           ),
         ],
