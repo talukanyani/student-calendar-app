@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/widgets/android_system_navbar.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../settings/screens/profile/not_logged_in/create_profile.dart';
 import '../settings/screens/profile/not_logged_in/login.dart';
+import '../home/home.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
+  void setIsFirstLaunch() {
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool('isFirstLaunch', false);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationController>(context);
+    var isLoggedIn = authProvider.currentUser != null;
+    if (isLoggedIn) {
+      setIsFirstLaunch();
+      return const HomeScreen();
+    }
+
     return AndroidSystemNavbarStyle(
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).colorScheme.background,
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(backgroundColor: Colors.transparent),
@@ -83,7 +100,15 @@ class WelcomeScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setIsFirstLaunch();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          },
                           child: const Text('Continue without a profile'),
                         ),
                       ),

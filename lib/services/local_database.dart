@@ -21,15 +21,6 @@ class LocalDatabase {
     return data;
   }
 
-  Future<Map<String, dynamic>> get cachedSettings async {
-    var file = await _settingsFile();
-    var body = await file.readAsString();
-
-    if (body.isEmpty) return {};
-
-    return jsonDecode(body);
-  }
-
   Future<void> cacheSubjects(List<SubjectModel> subjects) async {
     var file = await _subjectsFile();
     List<Map<String, dynamic>> subjectsMaps = [];
@@ -41,23 +32,26 @@ class LocalDatabase {
     file.writeAsString(jsonEncode(subjectsMaps));
   }
 
+  Future<Map<String, dynamic>> get cachedSettings async {
+    var file = await _settingsFile();
+    var body = await file.readAsString();
+
+    if (body.isEmpty) return {};
+
+    return jsonDecode(body);
+  }
+
   Future<void> cacheSettings(Map<String, dynamic> settingsMap) async {
     var file = await _settingsFile();
     file.writeAsString(jsonEncode(settingsMap));
   }
 
-  Future<File> _subjectsFile() async {
+  Future<File> _subjectsFile() => _file('subjects.json');
+  Future<File> _settingsFile() => _file('settings.json');
+
+  Future<File> _file(String filename) async {
     var directory = await getApplicationDocumentsDirectory();
-    var file = File('${directory.path}/subjects.json');
-
-    if (!file.existsSync()) await file.create();
-
-    return file;
-  }
-
-  Future<File> _settingsFile() async {
-    var directory = await getApplicationDocumentsDirectory();
-    var file = File('${directory.path}/settings.json');
+    var file = File('${directory.path}/$filename');
 
     if (!file.existsSync()) await file.create();
 
