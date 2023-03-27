@@ -6,6 +6,7 @@ import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/widgets/rect_container.dart';
@@ -48,7 +49,9 @@ class SubjectTable extends StatelessWidget {
                 child: OvalTextContainer(
                   text: Text(
                     subject.name,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: CustomColorScheme.grey4,
+                        ),
                   ),
                   color: tableColors[subject.color],
                 ),

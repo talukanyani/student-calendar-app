@@ -68,8 +68,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         default:
           authProvider.updateName(_nameInputController.text.trim());
           authProvider.sendVerificationEmail();
-          Navigator.pop(context);
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => const EmailVerificationScreen(),
             ),
@@ -95,7 +94,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         children: [
           Text(
             'Create a Profile',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
           ),
           const SizedBox(height: 32),
           Form(
@@ -120,7 +121,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       return null;
                     }
                   },
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: const InputDecoration(
                     hintText: 'Name',
                     counterText: '',
@@ -141,7 +142,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       return null;
                     }
                   },
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: InputDecoration(
                     hintText: 'Email',
                     errorText: _emailErrorMessage,
@@ -166,7 +167,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                     }
                   },
                   obscureText: _isPasswordHidden,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: InputDecoration(
                     hintText: 'Password',
                     errorText: _passwordErrorMessage,
@@ -207,14 +208,13 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ? const SizedBox()
               : Text(
                   _errorMessage ?? '',
-                  style: TextStyle(color: Theme.of(context).errorColor),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => const LoginScreen(),
                   ),
@@ -224,7 +224,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 padding: const EdgeInsets.all(8),
                 child: Text(
                   'Already have a profile?',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: CustomColorScheme.grey4,
                       ),
                 ),

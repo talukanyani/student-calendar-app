@@ -8,16 +8,16 @@ class TextContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).backgroundColor,
-            Theme.of(context).backgroundColor.withOpacity(0.75),
-            Theme.of(context).backgroundColor.withOpacity(0.50),
-            Theme.of(context).backgroundColor.withOpacity(0.25),
-            Theme.of(context).backgroundColor.withOpacity(0.00),
+            Theme.of(context).colorScheme.background,
+            Theme.of(context).colorScheme.background.withOpacity(0.75),
+            Theme.of(context).colorScheme.background.withOpacity(0.50),
+            Theme.of(context).colorScheme.background.withOpacity(0.25),
+            Theme.of(context).colorScheme.background.withOpacity(0.00),
           ],
         ),
       ),

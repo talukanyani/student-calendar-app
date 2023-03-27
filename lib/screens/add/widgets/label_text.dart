@@ -11,10 +11,9 @@ class LabelText extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4),
       child: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .bodyText1
-            ?.copyWith(color: CustomColorScheme.grey3),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: CustomColorScheme.grey3,
+            ),
       ),
     );
   }

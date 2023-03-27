@@ -86,7 +86,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               children: [
                 Text(
                   'Enter Old Password',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: CustomColorScheme.grey4,
                       ),
                 ),
@@ -103,7 +103,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     }
                   },
                   obscureText: _isOldPasswordHidden,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: InputDecoration(
                     hintText: 'Old Password',
                     errorText: _oldPasswordErrorMessage,
@@ -131,7 +131,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 const SizedBox(height: 16),
                 Text(
                   'Enter New Password',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: CustomColorScheme.grey4,
                       ),
                 ),
@@ -150,7 +150,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     }
                   },
                   obscureText: _isNewPasswordHidden,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: InputDecoration(
                     hintText: 'New Password',
                     errorText: _newPasswordErrorMessage,
@@ -191,7 +191,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           const SizedBox(height: 4),
           Text(
             _errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
       ),

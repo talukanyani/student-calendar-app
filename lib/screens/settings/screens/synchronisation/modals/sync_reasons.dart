@@ -11,7 +11,7 @@ class SyncReasons extends StatelessWidget {
       children: [
         Text(
           'Why you should turn on synchronisation?',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
         BulletList(texts: [
@@ -20,7 +20,7 @@ class SyncReasons extends StatelessWidget {
             children: [
               Text(
                 'Lost Device/App',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               const Text(
                 'If you lose/damage your device, you will be able to get back your data/activities when you log back in on this app using the other device.',
@@ -33,7 +33,7 @@ class SyncReasons extends StatelessWidget {
             children: [
               Text(
                 'Using Two or More Devices',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               const Text(
                 'If you are using this app on two or more devices and logged in using the same profile, you will access the same data/activities on both of your devices.',

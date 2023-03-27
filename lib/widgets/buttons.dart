@@ -23,7 +23,7 @@ class ForegroundFilledBtn extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         elevation: 0,
         backgroundColor: CustomColorScheme.foreground5,
-        foregroundColor: Theme.of(context).backgroundColor,
+        foregroundColor: Theme.of(context).colorScheme.background,
         shape: shape,
       ),
       child: child,

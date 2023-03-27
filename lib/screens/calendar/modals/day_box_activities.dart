@@ -40,7 +40,7 @@ class DayBoxActivitiesModal extends StatelessWidget {
               ),
               child: Text(
                 '$title, ${date.day} ${getMonthFullName(date.month - 1)}',
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
             const SizedBox(height: 8),

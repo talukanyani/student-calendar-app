@@ -6,6 +6,7 @@ import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/utils/table_colors.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
 import '../widgets/label_text.dart';
@@ -45,7 +46,9 @@ class _TableAddFormState extends State<TableAddForm> {
       children: [
         Text(
           'Add Subject Table',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: CustomColorScheme.grey4,
+              ),
         ),
         const SizedBox(height: 20),
         const LabelText(text: 'Title'),
@@ -58,7 +61,7 @@ class _TableAddFormState extends State<TableAddForm> {
             InputFormatter.noSpaceAtStart(),
             InputFormatter.noDoubleSpace(),
           ],
-          style: const TextStyle(fontSize: 20),
+          style: const TextStyle(letterSpacing: 1),
           decoration: const InputDecoration(
             hintText: 'Subject Name',
             counterText: '',

@@ -27,7 +27,7 @@ class Box extends StatelessWidget {
               border: Border.all(color: Theme.of(context).dividerColor),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(title, style: Theme.of(context).textTheme.headline5),
+            child: Text(title, style: Theme.of(context).textTheme.titleMedium),
           ),
           const SizedBox(height: 8),
           Expanded(child: child),

@@ -19,7 +19,7 @@ SnackBar mySnackBar(
       case SnackBarIcon.error:
         leading = Icon(
           Iconsax.close_circle,
-          color: Theme.of(context).errorColor,
+          color: Theme.of(context).colorScheme.background,
         );
         break;
       case SnackBarIcon.info:

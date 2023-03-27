@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
@@ -68,19 +67,19 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
         children: [
           Text(
             'Note that if you delete your profile:',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: 4),
           BulletList(
             texts: [
               Text(
                 'All your synchronised data/activities will be deleted.',
-                style: TextStyle(color: Theme.of(context).errorColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
               RichText(
                 text: TextSpan(
                   text: 'Your profile will be ',
-                  style: TextStyle(color: Theme.of(context).errorColor),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                   children: const <TextSpan>[
                     TextSpan(
                       text: 'permanantly deleted,',
@@ -97,7 +96,7 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
           const SizedBox(height: 32),
           Text(
             'Enter Your Password',
-            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: CustomColorScheme.grey4,
                 ),
           ),
@@ -116,7 +115,7 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
                 }
               },
               obscureText: _isPasswordHidden,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(letterSpacing: 1),
               decoration: InputDecoration(
                 hintText: 'Password',
                 errorText: passwordErrorMessage,
@@ -150,11 +149,12 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
                   modal: Alert(
                     title: Text(
                       'Delete Profile',
-                      style: TextStyle(color: Theme.of(context).errorColor),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                     titleIcon: Icon(
                       FluentIcons.warning_24_filled,
-                      color: Theme.of(context).errorColor,
+                      color: Theme.of(context).colorScheme.error,
                     ),
                     content: const Text(
                       'Are you sure you want to delete this profile.\nYou won\'t be able to revert this action.',
@@ -170,7 +170,7 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
           const SizedBox(height: 4),
           Text(
             errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
       ),

@@ -61,7 +61,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
         children: [
           Text(
             'Enter New Name',
-            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: CustomColorScheme.grey4,
                 ),
           ),
@@ -86,7 +86,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                   return null;
                 }
               },
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(letterSpacing: 1),
               decoration: const InputDecoration(
                 hintText: 'Name',
                 counterText: '',
@@ -106,7 +106,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
           const SizedBox(height: 4),
           Text(
             errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
       ),

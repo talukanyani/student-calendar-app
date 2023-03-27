@@ -113,16 +113,11 @@ class ProfileTile extends StatelessWidget {
               ),
               Text(
                 'Profile',
-                style: Theme.of(context).textTheme.headline6?.copyWith(
-                      color: CustomColorScheme.grey4,
-                    ),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               Text(
                 'Manage your profile',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    ?.copyWith(fontSize: 16),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),

@@ -53,7 +53,6 @@ class ActivitiesList extends StatelessWidget {
           ),
           title: Text(
             '${activities[index].subjectName} ${activities[index].activity}',
-            style: const TextStyle(fontSize: 15),
           ),
         );
       },

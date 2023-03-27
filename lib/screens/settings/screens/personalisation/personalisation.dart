@@ -92,15 +92,15 @@ class _AppSettingsState extends State<AppSettings> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const HeadingText(text: 'Sort Tables'),
-                _sortTablesOption(
-                  title: 'Date Added',
-                  value: TablesSortSetting.dateAdded,
-                  settingController: settingProvider,
-                ),
+                const HeadingText(text: 'Sort Tables By'),
                 _sortTablesOption(
                   title: 'Name',
                   value: TablesSortSetting.name,
+                  settingController: settingProvider,
+                ),
+                _sortTablesOption(
+                  title: 'Date Added',
+                  value: TablesSortSetting.dateAdded,
                   settingController: settingProvider,
                 ),
               ],
@@ -147,7 +147,7 @@ class HeadingText extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(context).primaryColor,
             ),
       ),

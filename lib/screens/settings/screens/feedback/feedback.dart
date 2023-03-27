@@ -19,7 +19,7 @@ class FeedbackScreen extends StatelessWidget {
         children: [
           Text(
             'Enjoying this app?',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
           FeedbackButton(
@@ -36,7 +36,7 @@ class FeedbackScreen extends StatelessWidget {
           const SizedBox(height: 32),
           Text(
             'Something not working?',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
           FeedbackButton(
@@ -51,15 +51,15 @@ class FeedbackScreen extends StatelessWidget {
           const SizedBox(height: 32),
           Text(
             'Not satisfying?',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
           FeedbackButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  return const SuggestionScreen();
-                }),
+                MaterialPageRoute(
+                  builder: (context) => const SuggestionScreen(),
+                ),
               );
             },
             text: 'Send a suggestion',

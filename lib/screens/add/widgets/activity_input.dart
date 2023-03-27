@@ -28,7 +28,7 @@ class ActivityInput extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: Material(
             elevation: 4,
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).colorScheme.background,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
@@ -57,7 +57,7 @@ class ActivityInput extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         option,
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(letterSpacing: 1),
                       ),
                     ),
                   );
@@ -78,7 +78,7 @@ class ActivityInput extends StatelessWidget {
             InputFormatter.noSpaceAtStart(),
             InputFormatter.noDoubleSpace(),
           ],
-          style: const TextStyle(fontSize: 20),
+          style: const TextStyle(letterSpacing: 1),
           decoration: const InputDecoration(
             hintText: 'Activity Name',
             counterText: '',

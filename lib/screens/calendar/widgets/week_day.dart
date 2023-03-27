@@ -32,12 +32,7 @@ class WeekDay extends StatelessWidget {
     final weekStartDay = Provider.of<SettingController>(context).weekStartDay;
 
     return Center(
-      child: Text(
-        getWeekDayName(getWeekNameIndex(weekStartDay)),
-        style: TextStyle(
-          color: Theme.of(context).textTheme.headline5?.color,
-        ),
-      ),
+      child: Text(getWeekDayName(getWeekNameIndex(weekStartDay))),
     );
   }
 }

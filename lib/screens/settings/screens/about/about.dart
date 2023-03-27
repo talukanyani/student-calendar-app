@@ -5,6 +5,8 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var largeBodyText = Theme.of(context).textTheme.titleSmall;
+
     return Scaffold(
       appBar: AppBar(title: const Text('About')),
       body: ListView(
@@ -13,33 +15,39 @@ class AboutScreen extends StatelessWidget {
         children: [
           Text(
             'Student Calendar By Tmlab',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-          const Text('Version 1.0.0'),
+          Text('Version 1.0.0', style: largeBodyText),
           const SizedBox(height: 32),
           Text(
             '\u00A9 ${DateTime.now().year} Tmlab. All rights are reserved.',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: largeBodyText,
           ),
           const SizedBox(height: 8),
           GestureDetector(
             onTap: () {},
-            child: const Text(
-              'Terms of use',
-              style: TextStyle(
-                fontSize: 16,
-                decoration: TextDecoration.underline,
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                'Terms of use',
+                style: largeBodyText?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           GestureDetector(
             onTap: () {},
-            child: const Text(
-              'Privacy Police',
-              style: TextStyle(
-                fontSize: 16,
-                decoration: TextDecoration.underline,
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                'Privacy Police',
+                style: largeBodyText?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
           ),

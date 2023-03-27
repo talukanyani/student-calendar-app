@@ -6,7 +6,7 @@ class Show {
   static modal(
     BuildContext context, {
     required Widget modal,
-    double opacity = 0.25,
+    double opacity = 0.15,
   }) {
     showDialog(
       context: context,
@@ -20,7 +20,7 @@ class Show {
     showDialog(
       context: context,
       builder: (context) => const Center(child: CircularProgressIndicator()),
-      barrierColor: Theme.of(context).backgroundColor.withOpacity(0.75),
+      barrierColor: Theme.of(context).colorScheme.background.withOpacity(0.75),
     );
   }
 

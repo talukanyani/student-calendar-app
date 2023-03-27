@@ -26,6 +26,8 @@ class WelcomeScreen extends StatelessWidget {
       return const HomeScreen();
     }
 
+    var bodySmallText = Theme.of(context).textTheme.bodySmall;
+
     return AndroidSystemNavbarStyle(
       color: Theme.of(context).colorScheme.background,
       child: Scaffold(
@@ -53,7 +55,9 @@ class WelcomeScreen extends StatelessWidget {
                   const Spacer(flex: 2),
                   Text(
                     'Get Started!',
-                    style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                   ),
                   Wrap(
                     spacing: -8,
@@ -122,30 +126,28 @@ class WelcomeScreen extends StatelessWidget {
                       spacing: 4,
                       alignment: WrapAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'By using this app, you agree to our',
-                          style: TextStyle(fontSize: 12),
+                          style: bodySmallText,
                         ),
                         GestureDetector(
                           onTap: () {},
-                          child: const Text(
+                          child: Text(
                             'Terms Of Use',
-                            style: TextStyle(
-                              fontSize: 12,
+                            style: bodySmallText?.copyWith(
                               decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
-                        const Text(
-                          'and',
-                          style: TextStyle(fontSize: 12),
+                        Text(
+                          'and have read our',
+                          style: bodySmallText,
                         ),
                         GestureDetector(
                           onTap: () {},
-                          child: const Text(
-                            'Privacy Police',
-                            style: TextStyle(
-                              fontSize: 12,
+                          child: Text(
+                            'Privacy Police.',
+                            style: bodySmallText?.copyWith(
                               decoration: TextDecoration.underline,
                             ),
                           ),

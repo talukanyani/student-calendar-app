@@ -95,7 +95,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       children: [
         Text(
           'Verification email was sent to $email. Make use of that email to verify your email address.',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 32),
         Column(
@@ -104,17 +104,14 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             const SizedBox(height: 16),
             Text(
               'Waiting for verification...',
-              style: TextStyle(color: Theme.of(context).primaryColor),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ],
         ),
         const SizedBox(height: 64),
         Column(
           children: [
-            Text(
-              'If you did not receive verification email, $text.',
-              style: const TextStyle(fontSize: 14),
-            ),
+            Text('If you did not receive verification email, $text.'),
             ForegroundBorderBtn(
               onPressed: resendCountdown == 0 ? onResendPressed : null,
               child: const Text('Resend'),
@@ -138,7 +135,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             const SizedBox(height: 16),
             Text(
               'Email Was Successfully Verified',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ],
         ),
@@ -167,7 +164,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
         children: [
           Text(
             'Email Verification',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 48),
           isVerified ? verifiedBody(context) : verifyBody(context),

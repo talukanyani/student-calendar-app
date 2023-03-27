@@ -20,7 +20,7 @@ class HelpScreen extends StatelessWidget {
             textCapitalization: TextCapitalization.sentences,
             maxLines: 5,
             maxLength: 500,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(letterSpacing: 1),
             decoration: const InputDecoration(
               hintText: 'Ask for a solution here..',
             ),

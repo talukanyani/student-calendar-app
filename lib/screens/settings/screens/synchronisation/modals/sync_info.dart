@@ -11,7 +11,7 @@ class SyncInformaition extends StatelessWidget {
       children: [
         Text(
           'If synchronisation is turned on:',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         const BulletList(
           texts: [
@@ -23,7 +23,7 @@ class SyncInformaition extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'If synchronisation is turned off:',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         const BulletList(
           texts: [

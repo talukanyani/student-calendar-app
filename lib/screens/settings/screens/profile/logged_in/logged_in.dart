@@ -68,20 +68,18 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
                   children: [
                     Text(
                       name,
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     Text(
                       email,
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            color: CustomColorScheme.grey4,
-                          ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 )
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Align(
             alignment: Alignment.center,
             child: OutlinedButton(
@@ -95,18 +93,13 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
                   ),
                 );
               },
-              style: OutlinedButton.styleFrom(
-                backgroundColor: CustomColorScheme.background5,
-                foregroundColor: Theme.of(context).colorScheme.onBackground,
-                fixedSize: const Size(128, 32),
-              ),
               child: const Text('Log Out'),
             ),
           ),
           SizedBox(height: errorMessage == null ? 0 : 4),
           Text(
             errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
           const SizedBox(height: 12),
           isVerified
@@ -121,11 +114,9 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
                       onPressed: () {
                         authProvider.sendVerificationEmail();
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const EmailVerificationScreen();
-                            },
-                          ),
+                          MaterialPageRoute(builder: (context) {
+                            return const EmailVerificationScreen();
+                          }),
                         );
                       },
                       child: const Text('Verify Email'),
@@ -139,7 +130,7 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Manage Profile',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
                 const Divider(height: 0),
@@ -177,18 +168,13 @@ class Tile extends StatelessWidget {
       type: MaterialType.transparency,
       child: ListTile(
         onTap: () {
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => page),
           );
         },
         title: Text(
           title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: CustomColorScheme.grey4,
-          ),
+          style: Theme.of(context).textTheme.titleSmall,
         ),
         trailing: const Icon(FluentIcons.ios_arrow_rtl_24_filled),
         visualDensity: const VisualDensity(vertical: -1),

@@ -63,8 +63,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
           break;
         default:
           authProvider.sendVerificationEmail();
-          Navigator.pop(context);
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => const EmailVerificationScreen(),
             ),
@@ -88,7 +87,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
               children: [
                 Text(
                   'Enter Your Password',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: CustomColorScheme.grey4,
                       ),
                 ),
@@ -105,7 +104,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                     }
                   },
                   obscureText: _isPasswordHidden,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: InputDecoration(
                     hintText: 'Password',
                     errorText: _passwordErrorMessage,
@@ -131,7 +130,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                 const SizedBox(height: 16),
                 Text(
                   'Enter New Email',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: CustomColorScheme.grey4,
                       ),
                 ),
@@ -150,7 +149,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                       return null;
                     }
                   },
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(letterSpacing: 1),
                   decoration: InputDecoration(
                     hintText: 'Email',
                     errorText: _emailErrorMessage,
@@ -176,7 +175,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
           const SizedBox(height: 4),
           Text(
             _errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
       ),

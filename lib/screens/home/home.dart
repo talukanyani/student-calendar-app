@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/activity.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/primary_top_bar.dart';
 import 'package:sc_app/widgets/bottom_bar.dart';
@@ -68,28 +69,29 @@ class Body extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Good day,',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w300,
+                          color: CustomColorScheme.grey4,
+                        ),
                   ),
                   Text(
-                    '${getWeekDayFullName(today.weekday - 1)}, ${today.day} ${getMonthFullName(today.month - 1)}',
-                    style: const TextStyle(fontSize: 20),
+                    '${getWeekDayFullName(today.weekday - 1)}, '
+                    '${today.day} '
+                    '${getMonthFullName(today.month - 1)}',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w300,
+                        ),
                   ),
                 ],
               ),
             ),
             const Spacer(flex: 3),
-            const TextContainer(
+            TextContainer(
               child: Text(
                 'Your next 7 days',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
             SizedBox(

@@ -132,7 +132,6 @@ class InfoAlert extends StatelessWidget {
         ),
         content: content,
         contentTextStyle: TextStyle(
-          fontSize: 15,
           color: Theme.of(context).colorScheme.onBackground,
         ),
         actions: [

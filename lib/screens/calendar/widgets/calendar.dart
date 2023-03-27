@@ -138,12 +138,12 @@ class _CalendarState extends State<Calendar> {
               vertical: 10,
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor.withOpacity(0.3),
+              color: Theme.of(context).colorScheme.background.withOpacity(0.3),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               '${displayedMonthName(weekStartDay)} ${displayedMonthYear(weekStartDay)}',
-              style: const TextStyle(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           const SizedBox(height: 16),

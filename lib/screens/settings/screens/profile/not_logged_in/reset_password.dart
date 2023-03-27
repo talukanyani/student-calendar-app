@@ -74,7 +74,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         children: [
           Text(
             'Reset Password',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
           ),
           const SizedBox(height: 32),
           Form(
@@ -93,7 +95,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   return null;
                 }
               },
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(letterSpacing: 1),
               decoration: const InputDecoration(
                 hintText: 'Email',
                 counterText: '',
@@ -116,7 +118,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           const SizedBox(height: 8),
           Text(
             _errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).errorColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
       ),
