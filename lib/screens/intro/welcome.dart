@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/widgets/text_hyperlink.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
@@ -123,34 +124,29 @@ class WelcomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: Wrap(
-                      spacing: 4,
+                      spacing: 3,
                       alignment: WrapAlignment.center,
                       children: [
                         Text(
                           'By using this app, you agree to our',
                           style: bodySmallText,
                         ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            'Terms Of Use',
-                            style: bodySmallText?.copyWith(
-                              decoration: TextDecoration.underline,
-                            ),
+                        TextHyperlink(
+                          text: 'Terms of use',
+                          textStyle: bodySmallText?.copyWith(
+                            decoration: TextDecoration.underline,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
+                          url: 'https://tmlab.tech/terms',
                         ),
-                        Text(
-                          'and have read our',
-                          style: bodySmallText,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            'Privacy Police.',
-                            style: bodySmallText?.copyWith(
-                              decoration: TextDecoration.underline,
-                            ),
+                        Text('and', style: bodySmallText),
+                        TextHyperlink(
+                          text: 'Privacy Policy',
+                          textStyle: bodySmallText?.copyWith(
+                            decoration: TextDecoration.underline,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
+                          url: 'https://tmlab.tech/privacy',
                         ),
                       ],
                     ),
