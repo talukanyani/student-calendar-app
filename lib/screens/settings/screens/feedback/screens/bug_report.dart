@@ -8,27 +8,27 @@ import '../modals/login_alert.dart';
 import '../modals/verify_alert.dart';
 import 'send_response.dart';
 
-class SuggestionScreen extends StatefulWidget {
-  const SuggestionScreen({super.key});
+class BugReportScreen extends StatefulWidget {
+  const BugReportScreen({super.key});
 
   @override
-  State<SuggestionScreen> createState() => _SuggestionScreenState();
+  State<BugReportScreen> createState() => _BugReportScreenState();
 }
 
-class _SuggestionScreenState extends State<SuggestionScreen> {
+class _BugReportScreenState extends State<BugReportScreen> {
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _send(BuildContext context) {
-    CloudDatabase().sendSuggestion(
+    CloudDatabase().sendBugReport(
       _inputController.text.trim(),
     );
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
       return const SendResponseScreen(
-        sendName: 'suggestion',
+        sendName: 'bug report',
         message: Text(
-          'Thank you so much for your suggestion. '
-          'Your suggestion helps us improve.',
+          'Thank you so much for your bug report. '
+          'We will fix this problem as soon as possible.',
         ),
       );
     }));
@@ -47,7 +47,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
     var isEmailVerified = user?.emailVerified ?? false;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Send Suggestion')),
+      appBar: AppBar(title: const Text('Report Bug')),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(16),
@@ -62,16 +62,16 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
               maxLength: 500,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Write you suggestion';
+                  return 'Explain the problem.';
                 } else if (value.length < 30) {
-                  return 'Further expalain your suggestion.';
+                  return 'Explain the problem further.';
                 } else {
                   return null;
                 }
               },
               style: const TextStyle(letterSpacing: 1),
               decoration: const InputDecoration(
-                hintText: 'Write your suggestion here..',
+                hintText: 'Explain what went wrong..',
               ),
             ),
           ),
@@ -82,7 +82,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 if (!isLoggedIn) {
                   Show.modal(
                     context,
-                    modal: const LoginAlert(sendName: 'suggestion'),
+                    modal: const LoginAlert(sendName: 'bug report'),
                   );
                   return;
                 }
@@ -90,11 +90,10 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 if (!isEmailVerified) {
                   Show.modal(
                     context,
-                    modal: const VerifyAlert(sendName: 'suggestion'),
+                    modal: const VerifyAlert(sendName: 'bug report'),
                   );
                   return;
                 }
-
                 _send(context);
               }
             },

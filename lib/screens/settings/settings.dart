@@ -5,7 +5,6 @@ import 'package:sc_app/widgets/rect_container.dart';
 import 'screens/profile/profile.dart';
 import 'screens/synchronisation/synchronisation.dart';
 import 'screens/personalisation/personalisation.dart';
-import 'screens/help/help.dart';
 import 'screens/feedback/feedback.dart';
 import 'screens/about/about.dart';
 
@@ -31,12 +30,6 @@ class SettingsScreen extends StatelessWidget {
             subtitle: 'Personalise this app',
             icon: FluentIcons.settings_32_filled,
             page: AppSettings(),
-          ),
-          // Divider(),
-          Tile(
-            title: 'Help',
-            icon: FluentIcons.chat_help_24_filled,
-            page: HelpScreen(),
           ),
           Tile(
             title: 'Feedback',

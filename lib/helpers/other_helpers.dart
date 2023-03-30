@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 class Helpers {
   // if number is single digit add one zero before it
   static String padTwoNums(int n) => (n < 10 ? '0' : '') + n.toString();
@@ -11,5 +13,10 @@ class Helpers {
     } else {
       return false;
     }
+  }
+
+  static Future<void> lauchLink(String url) async {
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
   }
 }

@@ -13,11 +13,9 @@ class SubjectController extends ChangeNotifier {
   }
 
   final SettingController settingController;
+  bool get _isSync => settingController.isSync;
 
   List<SubjectModel> displayedSubjets = [];
-
-  LocalDatabase cache() => LocalDatabase();
-  CloudDatabase? sync() => settingController.isSync ? CloudDatabase() : null;
 
   List<SubjectModel> get subjects {
     _sortSubjects(by: settingController.tablesSort);
@@ -33,16 +31,16 @@ class SubjectController extends ChangeNotifier {
 
     notifyListeners();
 
-    cache().cacheSubjects(displayedSubjets);
-    sync()?.addSubject(id, name, color);
+    LocalDatabase().cacheSubjects(displayedSubjets);
+    if (_isSync) CloudDatabase().addSubject(id, name, color);
   }
 
   void removeSubject(int id) {
     displayedSubjets.removeWhere((subject) => subject.id == id);
     notifyListeners();
 
-    cache().cacheSubjects(displayedSubjets);
-    sync()?.deleteSubject(id);
+    LocalDatabase().cacheSubjects(displayedSubjets);
+    if (_isSync) CloudDatabase().deleteSubject(id);
   }
 
   void editSubject(int id, String newName, String newColor) {
@@ -52,24 +50,32 @@ class SubjectController extends ChangeNotifier {
     oldSubject.color = newColor;
     notifyListeners();
 
-    cache().cacheSubjects(displayedSubjets);
-    sync()?.editSubject(id, newName, newColor);
+    LocalDatabase().cacheSubjects(displayedSubjets);
+    if (_isSync) {
+      CloudDatabase().editSubject(id, newName, newColor);
+    }
   }
 
   Future<void> _displayCachedSubjects() async {
-    var cachedSubjects = await cache().cachedSubjects;
+    var cachedSubjects = await LocalDatabase().cachedSubjects;
     displayedSubjets = cachedSubjects;
     notifyListeners();
   }
 
   Future<void> _displaySyncedSubjects() async {
-    var syncedSubjects = await sync()?.syncedSubjects;
+    if (!_isSync) return;
 
-    if (syncedSubjects != null) {
-      displayedSubjets = syncedSubjects;
-      notifyListeners();
-      cache().cacheSubjects(syncedSubjects);
+    var syncedSubjects = await CloudDatabase().syncedSubjects;
+
+    if (syncedSubjects.isEmpty) {
+      CloudDatabase().addMultipleSubjets(displayedSubjets);
+      return;
     }
+
+    displayedSubjets = syncedSubjects;
+    notifyListeners();
+
+    LocalDatabase().cacheSubjects(syncedSubjects);
   }
 
   void _sortSubjects({required TablesSortSetting by}) {

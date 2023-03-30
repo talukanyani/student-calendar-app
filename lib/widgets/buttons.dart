@@ -142,3 +142,30 @@ class GreyFilledBtn extends StatelessWidget {
     );
   }
 }
+
+class InlineBtn extends StatelessWidget {
+  const InlineBtn({
+    super.key,
+    required this.onPressed,
+    required this.label,
+    this.textStyle,
+  });
+
+  final void Function()? onPressed;
+  final String label;
+  final TextStyle? textStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        minimumSize: const Size(0, 0),
+        visualDensity: VisualDensity.compact,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(label, style: textStyle),
+    );
+  }
+}

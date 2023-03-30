@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/utils/enums.dart';
-import 'package:sc_app/services/authentication.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/services/local_database.dart';
 
@@ -14,7 +13,7 @@ class SettingController extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
   TablesSortSetting _tablesSort = TablesSortSetting.name;
   int _weekStartDay = DateTime.monday;
-  bool _isSync = Auth().currentUser != null;
+  bool _isSync = false;
 
   ThemeMode get themeMode => _themeMode;
   TablesSortSetting get tablesSort => _tablesSort;
@@ -71,16 +70,17 @@ class SettingController extends ChangeNotifier {
   }
 
   void _syncSettings() {
-    CloudDatabase? sync = _isSync ? CloudDatabase() : null;
-    sync?.syncSettings({
+    if (!_isSync) return;
+
+    CloudDatabase().syncSettings({
       'tablesSort': _tablesSort.index,
       'weekStartDay': _weekStartDay,
-      'isSync': true,
     });
   }
 
   Future<void> _useChachedSettings() async {
     var cachedSettings = await LocalDatabase().cachedSettings;
+
     if (cachedSettings.isEmpty) return;
 
     _themeMode = ThemeMode.values[cachedSettings['themeMode']];
@@ -92,22 +92,25 @@ class SettingController extends ChangeNotifier {
   }
 
   Future<void> _useSyncedSettings() async {
+    if (!_isSync) return;
+
     var syncedSettings = await CloudDatabase().syncedSettings;
-    if (syncedSettings.isEmpty) return;
 
-    if (syncedSettings['isSync']) {
-      _tablesSort = TablesSortSetting.values[syncedSettings['tablesSort']];
-      _weekStartDay = syncedSettings['weekStartDay'];
-      _isSync = true;
-
-      notifyListeners();
-
-      LocalDatabase().cacheSettings({
-        'themeMode': _themeMode.index,
-        'tablesSort': syncedSettings['tablesSort'],
-        'weekStartDay': syncedSettings['weekStartDay'],
-        'isSync': true,
-      });
+    if (syncedSettings.isEmpty) {
+      _syncSettings();
+      return;
     }
+
+    _tablesSort = TablesSortSetting.values[syncedSettings['tablesSort']];
+    _weekStartDay = syncedSettings['weekStartDay'];
+
+    notifyListeners();
+
+    LocalDatabase().cacheSettings({
+      'themeMode': _themeMode.index,
+      'tablesSort': syncedSettings['tablesSort'],
+      'weekStartDay': syncedSettings['weekStartDay'],
+      'isSync': _isSync,
+    });
   }
 }

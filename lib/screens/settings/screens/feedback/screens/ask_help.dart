@@ -8,27 +8,27 @@ import '../modals/login_alert.dart';
 import '../modals/verify_alert.dart';
 import 'send_response.dart';
 
-class SuggestionScreen extends StatefulWidget {
-  const SuggestionScreen({super.key});
+class AskHelpScreen extends StatefulWidget {
+  const AskHelpScreen({super.key});
 
   @override
-  State<SuggestionScreen> createState() => _SuggestionScreenState();
+  State<AskHelpScreen> createState() => _AskHelpScreenState();
 }
 
-class _SuggestionScreenState extends State<SuggestionScreen> {
+class _AskHelpScreenState extends State<AskHelpScreen> {
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _send(BuildContext context) {
-    CloudDatabase().sendSuggestion(
+    CloudDatabase().sendHelp(
       _inputController.text.trim(),
     );
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
       return const SendResponseScreen(
-        sendName: 'suggestion',
+        sendName: 'help',
         message: Text(
-          'Thank you so much for your suggestion. '
-          'Your suggestion helps us improve.',
+          'We will respond to your help by '
+          'emailing you using your profile\'s email address.',
         ),
       );
     }));
@@ -47,7 +47,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
     var isEmailVerified = user?.emailVerified ?? false;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Send Suggestion')),
+      appBar: AppBar(title: const Text('Help')),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(16),
@@ -62,16 +62,16 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
               maxLength: 500,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Write you suggestion';
+                  return 'Explain your problem.';
                 } else if (value.length < 30) {
-                  return 'Further expalain your suggestion.';
+                  return 'Explain your problem further.';
                 } else {
                   return null;
                 }
               },
               style: const TextStyle(letterSpacing: 1),
               decoration: const InputDecoration(
-                hintText: 'Write your suggestion here..',
+                hintText: 'Ask for a solution here..',
               ),
             ),
           ),
@@ -82,7 +82,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 if (!isLoggedIn) {
                   Show.modal(
                     context,
-                    modal: const LoginAlert(sendName: 'suggestion'),
+                    modal: const LoginAlert(sendName: 'help'),
                   );
                   return;
                 }
@@ -90,7 +90,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 if (!isEmailVerified) {
                   Show.modal(
                     context,
-                    modal: const VerifyAlert(sendName: 'suggestion'),
+                    modal: const VerifyAlert(sendName: 'help'),
                   );
                   return;
                 }

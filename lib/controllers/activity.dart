@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/models/activity.dart';
+import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/services/local_database.dart';
@@ -9,13 +10,12 @@ class ActivityController extends ChangeNotifier {
   ActivityController(this.subjectController);
 
   final SubjectController subjectController;
-
-  LocalDatabase _cache() => LocalDatabase();
-  CloudDatabase? _sync() =>
-      subjectController.settingController.isSync ? CloudDatabase() : null;
+  List<SubjectModel> get _displayedSubjects =>
+      subjectController.displayedSubjets;
+  bool get _isSync => subjectController.settingController.isSync;
 
   List<ActivityModel> _displayedActivities(int subjectId) {
-    return subjectController.displayedSubjets.firstWhere((subject) {
+    return _displayedSubjects.firstWhere((subject) {
       return subject.id == subjectId;
     }).activities;
   }
@@ -29,7 +29,7 @@ class ActivityController extends ChangeNotifier {
   List<ActivityModel> get allActivities {
     List<ActivityModel> activities = [];
 
-    for (var subject in subjectController.displayedSubjets) {
+    for (var subject in _displayedSubjects) {
       for (var activity in subject.activities) {
         activities.add(activity);
       }
@@ -55,13 +55,16 @@ class ActivityController extends ChangeNotifier {
 
     notifyListeners();
 
-    _cache().cacheSubjects(subjectController.displayedSubjets);
-    _sync()?.addActivity(
-      activity.subjectId,
-      activity.id,
-      activity.activity,
-      activity.dateTime,
-    );
+    LocalDatabase().cacheSubjects(_displayedSubjects);
+
+    if (_isSync) {
+      CloudDatabase().addActivity(
+        activity.subjectId,
+        activity.id,
+        activity.activity,
+        activity.dateTime,
+      );
+    }
   }
 
   void removeActivity({required int subjectId, required int activityId}) {
@@ -71,8 +74,8 @@ class ActivityController extends ChangeNotifier {
 
     _displayedActivities(subjectId).remove(activity);
 
-    _cache().cacheSubjects(subjectController.displayedSubjets);
-    _sync()?.deleteActivity(subjectId, activityId);
+    LocalDatabase().cacheSubjects(_displayedSubjects);
+    if (_isSync) CloudDatabase().deleteActivity(subjectId, activityId);
   }
 
   void editActivity({
@@ -89,12 +92,15 @@ class ActivityController extends ChangeNotifier {
     oldActivity.dateTime = newDateTime;
     notifyListeners();
 
-    _cache().cacheSubjects(subjectController.displayedSubjets);
-    _sync()?.editActivity(
-      subjectId,
-      activityId,
-      newActivity,
-      newDateTime,
-    );
+    LocalDatabase().cacheSubjects(_displayedSubjects);
+
+    if (_isSync) {
+      CloudDatabase().editActivity(
+        subjectId,
+        activityId,
+        newActivity,
+        newDateTime,
+      );
+    }
   }
 }

@@ -32,9 +32,7 @@ class InputValidator {
   }
 
   static bool isStrongPassword(String value) {
-    final regex = RegExp(
-      r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,64}$",
-    );
+    final regex = RegExp(r"^(?=.*[A-z])(?=.*\d)(?=.*[\W]).{8,64}$");
     return regex.hasMatch(value);
   }
 }

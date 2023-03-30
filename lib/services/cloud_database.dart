@@ -1,10 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/models/activity.dart';
+import 'authentication.dart';
 
 class CloudDatabase {
-  final _subjectsCollection = FirebaseFirestore.instance.collection('subjects');
-  final _settingsCollection = FirebaseFirestore.instance.collection('settings');
+  CloudDatabase() {
+    Auth().userChanges.listen((user) {
+      _user = user;
+    });
+  }
+
+  static User? _user = Auth().currentUser;
+
+  static final _db = FirebaseFirestore.instance;
+  static final _userDb = _db.collection('users').doc(_user?.uid ?? 'none');
+
+  final _subjectsCollection = _userDb.collection('subjects');
+  final _settingsCollection = _userDb.collection('settings');
+  final _helpsCollection = _db.collection('helps');
+  final _bugReportsCollection = _db.collection('bug_reports');
+  final _suggestionsCollection = _db.collection('suggestions');
 
   Query<Map<String, dynamic>> _subjectQuery(int id) {
     return _subjectsCollection.where('id', isEqualTo: id);
@@ -181,6 +197,33 @@ class CloudDatabase {
   void unSyncSettings() {
     _settingsCollection.get().then((snapshot) {
       snapshot.docs.first.reference.delete();
+    });
+  }
+
+  void sendHelp(String text) {
+    _helpsCollection.add({
+      'userId': _user?.uid,
+      'userName': _user?.displayName,
+      'userEmail': _user?.email,
+      'message': text,
+    });
+  }
+
+  void sendBugReport(String text) {
+    _bugReportsCollection.add({
+      'userId': _user?.uid,
+      'userName': _user?.displayName,
+      'userEmail': _user?.email,
+      'message': text,
+    });
+  }
+
+  void sendSuggestion(String text) {
+    _suggestionsCollection.add({
+      'userId': _user?.uid,
+      'userName': _user?.displayName,
+      'userEmail': _user?.email,
+      'message': text,
     });
   }
 }

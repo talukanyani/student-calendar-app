@@ -1,9 +1,8 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-
 import 'package:sc_app/themes/color_scheme.dart';
-
-import 'screens/bug.dart';
+import 'screens/ask_help.dart';
+import 'screens/bug_report.dart';
 import 'screens/suggestion.dart';
 
 class FeedbackScreen extends StatelessWidget {
@@ -24,14 +23,29 @@ class FeedbackScreen extends StatelessWidget {
           const SizedBox(height: 8),
           FeedbackButton(
             onPressed: () {},
-            text:
-                'Rate it on ${Platform.isAndroid ? 'Play Store' : 'App Store'}',
+            text: 'Rate it on '
+                '${Platform.isAndroid ? 'Play Store' : 'App Store'}',
             icon: Icons.star,
           ),
           FeedbackButton(
             onPressed: () {},
             text: 'Share with friends',
             icon: Icons.share,
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'Need a help?',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 8),
+          FeedbackButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const AskHelpScreen()),
+              );
+            },
+            text: 'Ask for help',
+            icon: Icons.help,
           ),
           const SizedBox(height: 32),
           Text(
@@ -42,7 +56,9 @@ class FeedbackScreen extends StatelessWidget {
           FeedbackButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const BugScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const BugReportScreen(),
+                ),
               );
             },
             text: 'Rebort a bug',
@@ -50,7 +66,7 @@ class FeedbackScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            'Not satisfying?',
+            'Have a suggestion?',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),

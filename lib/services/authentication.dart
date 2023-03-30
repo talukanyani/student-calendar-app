@@ -6,6 +6,7 @@ class Auth {
   final _currentUser = _auth.currentUser;
 
   User? get currentUser => _currentUser;
+  Stream<User?> get userChanges => _auth.userChanges();
 
   Future<AuthStatus> createProfile(String email, String password) async {
     try {

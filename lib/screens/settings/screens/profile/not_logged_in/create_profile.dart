@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -107,6 +106,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   controller: _nameInputController,
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
+                  textInputAction: TextInputAction.next,
                   maxLength: 15,
                   inputFormatters: [
                     InputFormatter.noSpaceAtStart(),
@@ -131,6 +131,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 TextFormField(
                   controller: _emailInputController,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   maxLength: 50,
                   inputFormatters: [InputFormatter.noSpace()],
                   validator: (value) {
@@ -210,26 +211,23 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   _errorMessage ?? '',
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  'Already have a profile?',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
-                ),
-              ),
-            ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 4,
+            alignment: WrapAlignment.end,
+            children: [
+              const Text('Already have a profile?'),
+              InlineBtn(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                },
+                label: 'Log In',
+              )
+            ],
           ),
         ],
       ),

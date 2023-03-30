@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -92,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _emailInputController,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   maxLength: 50,
                   inputFormatters: [InputFormatter.noSpace()],
                   validator: (value) {
@@ -152,29 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 4),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ResetPasswordScreen(),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  'Forgot password?',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           ForegroundFilledBtn(
             onPressed: () {
               setState(() => _errorMessage = null);
@@ -191,26 +169,41 @@ class _LoginScreenState extends State<LoginScreen> {
                   _errorMessage ?? '',
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const CreateProfileScreen(),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  'Don\'t have a profile?',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
-                ),
-              ),
-            ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 4,
+            alignment: WrapAlignment.end,
+            children: [
+              const Text('Forgot password?'),
+              InlineBtn(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ResetPasswordScreen(),
+                    ),
+                  );
+                },
+                label: 'Reset Password',
+              )
+            ],
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 4,
+            alignment: WrapAlignment.end,
+            children: [
+              const Text('Don\'t have a profile?'),
+              InlineBtn(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const CreateProfileScreen(),
+                    ),
+                  );
+                },
+                label: 'Create Profile',
+              )
+            ],
           ),
         ],
       ),

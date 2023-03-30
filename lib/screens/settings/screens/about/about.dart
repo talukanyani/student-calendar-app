@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/widgets/text_hyperlink.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/widgets/buttons.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -28,17 +29,25 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              TextHyperlink(
-                text: 'Terms of use',
-                textStyle: TextStyle(decoration: TextDecoration.underline),
-                url: 'https://tmlab.tech/terms',
+            children: [
+              InlineBtn(
+                onPressed: () => Helpers.lauchLink(
+                  'https://tmlab.tech/terms',
+                ),
+                label: 'Terms of Use',
+                textStyle: const TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
               ),
-              SizedBox(height: 8),
-              TextHyperlink(
-                text: 'Privacy Policy',
-                textStyle: TextStyle(decoration: TextDecoration.underline),
-                url: 'https://tmlab.tech/privacy',
+              const SizedBox(height: 8),
+              InlineBtn(
+                onPressed: () => Helpers.lauchLink(
+                  'https://tmlab.tech/privacy',
+                ),
+                label: 'Privacy Policy',
+                textStyle: const TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ],
           )

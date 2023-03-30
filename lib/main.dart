@@ -32,7 +32,9 @@ class App extends StatelessWidget {
           create: (_) => SettingController(),
         ),
         ChangeNotifierProxyProvider<SettingController, SubjectController>(
-          create: (_) => SubjectController(SettingController()),
+          create: (context) => SubjectController(
+            Provider.of<SettingController>(context, listen: false),
+          ),
           update: (_, settingController, subjectController) {
             return subjectController ?? SubjectController(settingController);
           },

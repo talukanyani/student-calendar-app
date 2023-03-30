@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/widgets/text_hyperlink.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
+import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/widgets/android_system_navbar.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../settings/screens/profile/not_logged_in/create_profile.dart';
@@ -96,7 +96,7 @@ class WelcomeScreen extends StatelessWidget {
                               }),
                             );
                           },
-                          child: const Text('Create a Profile'),
+                          child: const Text('Create Profile'),
                         ),
                       ),
                     ],
@@ -106,15 +106,15 @@ class WelcomeScreen extends StatelessWidget {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            setIsFirstLaunch();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const HomeScreen(),
                               ),
                             );
+                            setIsFirstLaunch();
                           },
-                          child: const Text('Continue without a profile'),
+                          child: const Text('Continue Without Profile'),
                         ),
                       ),
                     ],
@@ -124,29 +124,32 @@ class WelcomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: Wrap(
-                      spacing: 3,
                       alignment: WrapAlignment.center,
                       children: [
                         Text(
                           'By using this app, you agree to our',
                           style: bodySmallText,
                         ),
-                        TextHyperlink(
-                          text: 'Terms of use',
+                        InlineBtn(
+                          onPressed: () => Helpers.lauchLink(
+                            'https://tmlab.tech/terms',
+                          ),
+                          label: 'Terms of Use',
                           textStyle: bodySmallText?.copyWith(
                             decoration: TextDecoration.underline,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          url: 'https://tmlab.tech/terms',
                         ),
                         Text('and', style: bodySmallText),
-                        TextHyperlink(
-                          text: 'Privacy Policy',
+                        InlineBtn(
+                          onPressed: () => Helpers.lauchLink(
+                            'https://tmlab.tech/privacy',
+                          ),
+                          label: 'Privacy Policy',
                           textStyle: bodySmallText?.copyWith(
                             decoration: TextDecoration.underline,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          url: 'https://tmlab.tech/privacy',
                         ),
                       ],
                     ),
