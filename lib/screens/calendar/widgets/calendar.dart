@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/setting.dart';
-import 'package:sc_app/utils/calendar_names.dart';
-import 'calendar_day.dart';
-import 'week_day.dart';
+import 'displayed_month_name.dart';
+import 'calendar_week_days.dart';
+import 'calendar_month.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -16,13 +16,10 @@ class _CalendarState extends State<Calendar> {
   int _displayedMonthIndex = _currMonthIndex;
 
   static DateTime currDate = DateTime.now();
-  static int beforeCurrMonthCount = (currDate.month - 1) + 12;
-  static final int _currMonthIndex = beforeCurrMonthCount;
+  static int previousMonthCount = (currDate.month - 1) + 12;
+  static final int _currMonthIndex = previousMonthCount;
 
-  final double _gridSpacing = 8;
-  final double _gridRatio = 0.8;
-
-  DateTime getDate(dayIndex, monthIndex, weekStartDay) {
+  DateTime getDate(int dayIndex, int monthIndex, int weekStartDay) {
     if (monthIndex > _displayedMonthIndex) {
       return getNextMonthDates(dayIndex, monthIndex, weekStartDay);
     } else if (monthIndex < _displayedMonthIndex) {
@@ -39,7 +36,7 @@ class _CalendarState extends State<Calendar> {
   ) {
     var displayedMonthFirstDate = DateTime(
       currDate.year,
-      currDate.month + (monthIndex - beforeCurrMonthCount),
+      currDate.month + (monthIndex - previousMonthCount),
       1,
     );
 
@@ -85,15 +82,7 @@ class _CalendarState extends State<Calendar> {
     return getDate(7, _displayedMonthIndex, weekStartDay);
   }
 
-  String displayedMonthName(int weekStartDay) {
-    return getMonthFullName(displayedMonthDate(weekStartDay).month - 1);
-  }
-
-  String displayedMonthYear(int weekStartDay) {
-    int year = displayedMonthDate(weekStartDay).year;
-    if (year == currDate.year) return '';
-    return year.toString();
-  }
+  final double _gridRatio = 0.8;
 
   double getViewFraction(constraints) {
     double pageViewHeight = constraints.maxHeight;
@@ -132,39 +121,9 @@ class _CalendarState extends State<Calendar> {
       ),
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              '${displayedMonthName(weekStartDay)} ${displayedMonthYear(weekStartDay)}',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
+          DisplayedMonthName(monthDate: displayedMonthDate(weekStartDay)),
           const SizedBox(height: 16),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).dividerColor),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                childAspectRatio: 1.25,
-              ),
-              itemCount: 7,
-              itemBuilder: (context, index) {
-                return WeekDay(index: index);
-              },
-            ),
-          ),
+          const CalendarWeekDays(),
           const SizedBox(height: 16),
           Expanded(
             child: LayoutBuilder(
@@ -182,25 +141,12 @@ class _CalendarState extends State<Calendar> {
                   },
                   itemCount: 48,
                   itemBuilder: (context, monthIndex) {
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7,
-                        crossAxisSpacing: _gridSpacing,
-                        mainAxisSpacing: _gridSpacing,
-                        childAspectRatio: _gridRatio,
-                      ),
-                      itemCount: 42,
-                      itemBuilder: (context, dayIndex) {
-                        return DayBox(
-                          date: getDate(dayIndex, monthIndex, weekStartDay),
-                          isInDisplayedMonth:
-                              getDate(dayIndex, monthIndex, weekStartDay)
-                                      .month ==
-                                  displayedMonthDate(weekStartDay).month,
-                        );
+                    return CalendarMonth(
+                      dayDate: (dayIndex) {
+                        return getDate(dayIndex, monthIndex, weekStartDay);
                       },
+                      displayedMonth: displayedMonthDate(weekStartDay).month,
+                      gridRatio: _gridRatio,
                     );
                   },
                 );

@@ -80,21 +80,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   Widget verifyBody(BuildContext context) {
     final authProvider =
         Provider.of<AuthenticationController>(context, listen: false);
-    final email =
-        authProvider.currentUser?.email ?? 'email address you have used';
-
-    String text =
-        resendCountdown == 0 ? 'resend' : 'You can resend in $resendCountdown';
-
-    onResendPressed() {
-      authProvider.sendVerificationEmail();
-      startResendTimer();
-    }
+    final email = authProvider.currentUser?.email ?? 'your email address';
 
     return Column(
       children: [
         Text(
-          'Verification email was sent to $email. Make use of that email to verify your email address.',
+          'Verify that you have access to $email.',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 32),
@@ -108,15 +99,27 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 64),
-        Column(
-          children: [
-            Text('If you did not receive verification email, $text.'),
-            ForegroundBorderBtn(
-              onPressed: resendCountdown == 0 ? onResendPressed : null,
-              child: const Text('Resend'),
-            ),
-          ],
+        const SizedBox(height: 48),
+        RichText(
+          text: TextSpan(
+              text: 'Verification email was sent to $email. '
+                  'If you did not receive this email, ',
+              style: Theme.of(context).textTheme.bodyMedium,
+              children: [
+                resendCountdown == 0
+                    ? WidgetSpan(
+                        child: InlineBtn(
+                          label: 'resend',
+                          onPressed: () {
+                            authProvider.sendVerificationEmail();
+                            startResendTimer();
+                          },
+                        ),
+                      )
+                    : TextSpan(
+                        text: 'you can resend in $resendCountdown seconds.',
+                      ),
+              ]),
         ),
       ],
     );
@@ -139,7 +142,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 64),
+        const SizedBox(height: 48),
         Row(
           children: [
             Expanded(
@@ -166,7 +169,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             'Email Verification',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          const SizedBox(height: 48),
+          const SizedBox(height: 40),
           isVerified ? verifiedBody(context) : verifyBody(context),
         ],
       ),

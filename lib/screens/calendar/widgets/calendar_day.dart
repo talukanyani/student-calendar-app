@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
-import '../modals/day_box_activities.dart';
+import '../modals/day_activities.dart';
 
-class DayBox extends StatefulWidget {
-  const DayBox({
+class CalendarDay extends StatefulWidget {
+  const CalendarDay({
     super.key,
     required this.date,
     this.isInDisplayedMonth = true,
@@ -16,10 +16,10 @@ class DayBox extends StatefulWidget {
   final bool isInDisplayedMonth;
 
   @override
-  State<DayBox> createState() => _DayBoxState();
+  State<CalendarDay> createState() => _CalendarDayState();
 }
 
-class _DayBoxState extends State<DayBox> {
+class _CalendarDayState extends State<CalendarDay> {
   bool buttonSplash = false;
 
   bool get isToday => Helpers.isSameDay(widget.date, DateTime.now());
@@ -49,7 +49,7 @@ class _DayBoxState extends State<DayBox> {
     return GestureDetector(
       onTap: () => Show.modal(
         context,
-        modal: DayBoxActivitiesModal(
+        modal: DayActivitiesModal(
           date: widget.date,
           activities: activities,
         ),

@@ -4,49 +4,27 @@ import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
-import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/alerts.dart';
-import 'package:sc_app/widgets/rect_container.dart';
 import 'change_name.dart';
 import 'change_email.dart';
 import 'change_password.dart';
 import 'delete_profile.dart';
 import 'email_verification.dart';
 
-class LoggedInScreen extends StatefulWidget {
+class LoggedInScreen extends StatelessWidget {
   const LoggedInScreen({super.key});
 
   @override
-  State<LoggedInScreen> createState() => _LoggedInScreenState();
-}
-
-class _LoggedInScreenState extends State<LoggedInScreen> {
-  String? errorMessage;
-
-  void logout(BuildContext context) {
-    final authProvider =
-        Provider.of<AuthenticationController>(context, listen: false);
-
-    Show.loading(context);
-
-    authProvider.logout().then((status) {
-      Hide.loading(context);
-
-      if (status == AuthStatus.unknownError) {
-        setState(() {
-          errorMessage = 'There was an error while logging you out.';
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthenticationController>(context);
-    final user = authProvider.currentUser;
-    String email = user?.email ?? '';
-    String name = user?.displayName ?? 'Profile';
-    bool isVerified = user?.emailVerified ?? false;
+    final authController = Provider.of<AuthenticationController>(context);
+    final authProvider = Provider.of<AuthenticationController>(
+      context,
+      listen: false,
+    );
+
+    var email = authController.currentUser?.email ?? '';
+    var name = authController.currentUser?.displayName ?? 'Profile';
+    var isVerified = authController.currentUser?.emailVerified ?? false;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
@@ -54,130 +32,91 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
         primary: false,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+            padding: const EdgeInsets.all(8),
+            child: Column(
               children: [
                 Icon(
                   FluentIcons.person_circle_32_filled,
                   size: 64,
                   color: CustomColorScheme.grey3,
                 ),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    Text(
-                      email,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                )
+                Text(
+                  name,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Text(
+                  email,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ],
             ),
           ),
           const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.center,
-            child: OutlinedButton(
-              onPressed: () {
-                Show.modal(
-                  context,
-                  modal: ConfirmationAlert(
-                    title: const Text('Log Out?'),
-                    content: const Text('Are you sure you want to log out?'),
-                    action: () => logout(context),
-                  ),
-                );
-              },
-              child: const Text('Log Out'),
+          ListTile(
+            title: const Text('Edit name'),
+            leading: const Icon(Icons.edit),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ChangeNameScreen(),
+              ),
             ),
           ),
-          SizedBox(height: errorMessage == null ? 0 : 4),
-          Text(
-            errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ListTile(
+            title: const Text('Change Email'),
+            leading: const Icon(Icons.email),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ChangeEmailScreen(),
+              ),
+            ),
           ),
-          const SizedBox(height: 12),
+          ListTile(
+            title: const Text('Change Password'),
+            leading: const Icon(Icons.password),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ChangePasswordScreen(),
+              ),
+            ),
+          ),
+          ListTile(
+            title: const Text('Delete Profile'),
+            leading: const Icon(Icons.delete),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const DeleteProfileScreen(),
+              ),
+            ),
+          ),
           isVerified
-              ? const SizedBox(height: 0)
-              : RectContainer(
-                  child: ListTile(
-                    horizontalTitleGap: 0,
-                    title: const Text('Your profile is not complete!'),
-                    subtitle:
-                        const Text('Email for this profile is not verified.'),
-                    trailing: TextButton(
-                      onPressed: () {
-                        authProvider.sendVerificationEmail();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) {
-                            return const EmailVerificationScreen();
-                          }),
-                        );
-                      },
-                      child: const Text('Verify Email'),
-                    ),
-                  ),
+              ? const SizedBox()
+              : ListTile(
+                  onTap: () {
+                    authProvider.sendVerificationEmail();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const EmailVerificationScreen();
+                      }),
+                    );
+                  },
+                  title: const Text('Verify Email'),
+                  subtitle:
+                      const Text('Email for this profile is not verified.'),
+                  leading: const Icon(Icons.domain_verification),
                 ),
-          SizedBox(height: isVerified ? 0 : 16),
-          RectContainer(
-            child: Column(
-              children: [
-                const SizedBox(height: 8),
-                Text(
-                  'Manage Profile',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                const Divider(height: 0),
-                const Tile(title: 'Edit Name', page: ChangeNameScreen()),
-                const Divider(height: 0),
-                const Tile(title: 'Change Email', page: ChangeEmailScreen()),
-                const Divider(height: 0),
-                const Tile(
-                  title: 'Change Password',
-                  page: ChangePasswordScreen(),
-                ),
-                const Divider(height: 0),
-                const Tile(
-                  title: 'Delete Profile',
-                  page: DeleteProfileScreen(),
-                ),
-              ],
+          ListTile(
+            onTap: () => Show.modal(
+              context,
+              modal: ConfirmationAlert(
+                title: const Text('Log Out?'),
+                content: const Text('Are you sure you want to log out?'),
+                action: () => authProvider.logout(),
+              ),
             ),
+            title: const Text('Log Out'),
+            leading: const Icon(Icons.logout),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class Tile extends StatelessWidget {
-  const Tile({super.key, required this.title, required this.page});
-
-  final String title;
-  final Widget page;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: ListTile(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => page),
-          );
-        },
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        trailing: const Icon(FluentIcons.ios_arrow_rtl_24_filled),
-        visualDensity: const VisualDensity(vertical: -1),
       ),
     );
   }

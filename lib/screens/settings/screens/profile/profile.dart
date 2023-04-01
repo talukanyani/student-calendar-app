@@ -4,8 +4,8 @@ import 'package:sc_app/controllers/authentication.dart';
 import 'logged_in/logged_in.dart';
 import 'not_logged_in/not_logged_in.dart';
 
-class ProfileSettings extends StatelessWidget {
-  const ProfileSettings({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

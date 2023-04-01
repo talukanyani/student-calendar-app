@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/widgets/buttons.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'create_profile.dart';
 import 'login.dart';
 
@@ -12,29 +13,45 @@ class NotLoggedInScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
         primary: false,
-        padding: const EdgeInsets.all(16),
         children: [
-          ForegroundFilledBtn(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  return const LoginScreen();
-                }),
-              );
-            },
-            child: const Text('Login'),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Icon(
+                  FluentIcons.person_circle_32_regular,
+                  size: 64,
+                  color: CustomColorScheme.grey3,
+                ),
+                Text(
+                  'No Profile',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ],
+            ),
           ),
-          ForegroundBorderBtn(
-            onPressed: () {
+          const SizedBox(height: 8),
+          ListTile(
+            onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) {
-                    return const CreateProfileScreen();
-                  },
+                  builder: (context) => const LoginScreen(),
                 ),
               );
             },
-            child: const Text('Create New Profile'),
+            title: const Text('Log In'),
+            leading: const Icon(Icons.login),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const CreateProfileScreen(),
+                ),
+              );
+            },
+            title: const Text('Create Profile'),
+            leading: const Icon(Icons.person_add_outlined),
           ),
         ],
       ),

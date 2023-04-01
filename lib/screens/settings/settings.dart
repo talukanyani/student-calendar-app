@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:sc_app/themes/color_scheme.dart';
-import 'package:sc_app/widgets/rect_container.dart';
 import 'screens/profile/profile.dart';
-import 'screens/synchronisation/synchronisation.dart';
-import 'screens/personalisation/personalisation.dart';
+import 'screens/data_sync/data_sync.dart';
+import 'screens/preferences/preferences.dart';
 import 'screens/feedback/feedback.dart';
 import 'screens/about/about.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
+
+  Widget _tile({
+    required String title,
+    String? subtitle,
+    required IconData icon,
+    required void Function() onTap,
+  }) {
+    return ListTile(
+      onTap: onTap,
+      title: Text(title),
+      subtitle: subtitle == null ? null : Text(subtitle),
+      leading: Column(
+        children: [
+          const Spacer(),
+          Icon(icon, size: subtitle == null ? 24 : 32),
+          const Spacer(),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,104 +35,56 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         primary: false,
-        children: const [
-          ProfileTile(),
-          Tile(
-            title: 'Synchronisation Settings',
-            subtitle: 'Synchronise your data',
+        children: [
+          _tile(
+            title: 'Profile',
+            subtitle: 'Manage your profile',
+            icon: FluentIcons.person_circle_32_filled,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ProfileScreen(),
+              ),
+            ),
+          ),
+          _tile(
+            title: 'Data Sync',
+            subtitle: 'Auto sync/back up your data',
             icon: FluentIcons.cloud_32_filled,
-            page: SynchronisationSettings(),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const DataSyncScreen(),
+              ),
+            ),
           ),
-          Tile(
-            title: 'App Settings',
-            subtitle: 'Personalise this app',
+          _tile(
+            title: 'Preferences',
+            subtitle: 'Personalize this app',
             icon: FluentIcons.settings_32_filled,
-            page: AppSettings(),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const PreferencesScreen(),
+              ),
+            ),
           ),
-          Tile(
+          _tile(
             title: 'Feedback',
             icon: FluentIcons.person_feedback_24_filled,
-            page: FeedbackScreen(),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const FeedbackScreen(),
+              ),
+            ),
           ),
-          Tile(
+          _tile(
             title: 'About',
             icon: FluentIcons.info_24_filled,
-            page: AboutScreen(),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const AboutScreen(),
+              ),
+            ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class Tile extends StatelessWidget {
-  const Tile({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.page,
-    this.subtitle,
-  });
-
-  final String title;
-  final String? subtitle;
-  final IconData icon;
-  final Widget page;
-
-  @override
-  Widget build(BuildContext context) {
-    return RectContainer(
-      child: ListTile(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => page),
-        ),
-        title: Text(title),
-        subtitle: subtitle == null ? null : Text(subtitle!),
-        leading: Column(
-          children: [
-            const Spacer(),
-            Icon(
-              icon,
-              size: subtitle == null ? 24 : 32,
-            ),
-            const Spacer(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileTile extends StatelessWidget {
-  const ProfileTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return RectContainer(
-      child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ProfileSettings()),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Icon(
-                FluentIcons.person_circle_32_filled,
-                size: 48,
-                color: CustomColorScheme.grey3,
-              ),
-              Text(
-                'Profile',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Text(
-                'Manage your profile',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

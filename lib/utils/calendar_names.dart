@@ -40,8 +40,8 @@ List<String> _weekDayFullNames = [
   'Sunday',
 ];
 
-String getMonthName(index) => _threeLettersMonthNames[index];
-String getMonthFullName(index) => _fullMonthNames[index];
+String getMonthName(int index) => _threeLettersMonthNames[index];
+String getMonthFullName(int index) => _fullMonthNames[index];
 
-String getWeekDayName(index) => _weekDayNames[index];
-String getWeekDayFullName(index) => _weekDayFullNames[index];
+String getWeekDayName(int index) => _weekDayNames[index];
+String getWeekDayFullName(int index) => _weekDayFullNames[index];

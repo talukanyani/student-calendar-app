@@ -21,6 +21,10 @@ ThemeData lightTheme() {
     dividerColor: grey160,
     focusColor: brownLight,
     indicatorColor: brownDark,
+    dialogBackgroundColor: white255,
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()},
+    ),
     appBarTheme: topBarTheme(white240, grey80),
     bottomNavigationBarTheme: bottomBarTheme(white235, grey80),
     bottomSheetTheme: bottomSheetTheme(white235),

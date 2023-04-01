@@ -5,8 +5,8 @@ import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/activities_list.dart';
 import 'package:sc_app/widgets/modal.dart';
 
-class DayBoxActivitiesModal extends StatelessWidget {
-  const DayBoxActivitiesModal({
+class DayActivitiesModal extends StatelessWidget {
+  const DayActivitiesModal({
     super.key,
     required this.date,
     required this.activities,
