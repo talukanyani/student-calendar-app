@@ -6,6 +6,7 @@ import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 
 class ChangeNameScreen extends StatefulWidget {
   const ChangeNameScreen({super.key});
@@ -16,18 +17,18 @@ class ChangeNameScreen extends StatefulWidget {
 
 class _ChangeNameScreenState extends State<ChangeNameScreen> {
   String? errorMessage;
+  bool _isLoading = false;
 
   final inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _changeName(BuildContext context) {
-    final authProvider =
-        Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
 
-    Show.loading(context);
+    setState(() => _isLoading = true);
 
     authProvider.updateName(inputController.text.trim()).then((status) {
-      Hide.loading(context);
+      setState(() => _isLoading = false);
 
       switch (status) {
         case AuthStatus.networkError:
@@ -53,6 +54,12 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Loading(
+        text: 'Please wait while we change your user name',
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Edit Name')),
       body: ListView(

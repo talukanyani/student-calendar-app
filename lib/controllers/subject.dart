@@ -8,85 +8,92 @@ import 'setting.dart';
 class SubjectController extends ChangeNotifier {
   SubjectController(this.settingController) {
     _displayCachedSubjects().then((_) {
-      _displaySyncedSubjects();
+      displaySyncedSubjects();
     });
   }
 
   final SettingController settingController;
-  bool get _isSync => settingController.isSync;
 
-  List<SubjectModel> displayedSubjets = [];
+  bool get _isSync => settingController.isActivitiesSync;
+  String? get _userId => settingController.authController.currentUser?.uid;
+
+  List<SubjectModel> displayedSubjects = [];
 
   List<SubjectModel> get subjects {
-    _sortSubjects(by: settingController.tablesSort);
-    return displayedSubjets;
+    _sortSubjects();
+    return displayedSubjects;
   }
 
-  void addSubject(int id, String name, String color) {
-    if (displayedSubjets.length >= 20) return;
+  void addSubject(SubjectModel subject) {
+    if (displayedSubjects.length >= 20) return;
 
-    displayedSubjets.add(
-      SubjectModel(id: id, name: name, color: color, activities: []),
-    );
-
+    displayedSubjects.add(subject);
     notifyListeners();
 
-    LocalDatabase().cacheSubjects(displayedSubjets);
-    if (_isSync) CloudDatabase().addSubject(id, name, color);
+    LocalDb().cacheSubjects(displayedSubjects);
+    if (_isSync) CloudDb().addSubject(subject, userId: _userId);
   }
 
-  void removeSubject(int id) {
-    displayedSubjets.removeWhere((subject) => subject.id == id);
-    notifyListeners();
-
-    LocalDatabase().cacheSubjects(displayedSubjets);
-    if (_isSync) CloudDatabase().deleteSubject(id);
-  }
-
-  void editSubject(int id, String newName, String newColor) {
-    var oldSubject = displayedSubjets.firstWhere((subject) => subject.id == id);
+  void editSubject(
+      {required int id, required String newName, required String newColor}) {
+    var oldSubject = displayedSubjects.firstWhere((subject) {
+      return subject.id == id;
+    });
 
     oldSubject.name = newName;
     oldSubject.color = newColor;
     notifyListeners();
 
-    LocalDatabase().cacheSubjects(displayedSubjets);
+    LocalDb().cacheSubjects(displayedSubjects);
     if (_isSync) {
-      CloudDatabase().editSubject(id, newName, newColor);
+      CloudDb().editSubject(
+        userId: _userId,
+        subjectId: id,
+        newName: newName,
+        newColor: newColor,
+      );
     }
+  }
+
+  void deleteSubject(int id) {
+    displayedSubjects.removeWhere((subject) => subject.id == id);
+    notifyListeners();
+
+    LocalDb().cacheSubjects(displayedSubjects);
+    if (_isSync) CloudDb().deleteSubject(id, userId: _userId);
   }
 
   Future<void> _displayCachedSubjects() async {
-    var cachedSubjects = await LocalDatabase().cachedSubjects;
-    displayedSubjets = cachedSubjects;
+    var cachedSubjects = await LocalDb().cachedSubjects;
+    displayedSubjects = cachedSubjects;
     notifyListeners();
   }
 
-  Future<void> _displaySyncedSubjects() async {
+  Future<void> displaySyncedSubjects() async {
     if (!_isSync) return;
 
-    var syncedSubjects = await CloudDatabase().syncedSubjects;
+    var syncedSubjects = await CloudDb().getSyncedSubjects(_userId);
 
     if (syncedSubjects.isEmpty) {
-      CloudDatabase().addMultipleSubjets(displayedSubjets);
+      CloudDb().addMultipleSubjets(displayedSubjects, userId: _userId);
       return;
     }
 
-    displayedSubjets = syncedSubjects;
+    displayedSubjects = syncedSubjects;
     notifyListeners();
 
-    LocalDatabase().cacheSubjects(syncedSubjects);
+    LocalDb().cacheSubjects(syncedSubjects);
   }
 
-  void _sortSubjects({required TablesSortSetting by}) {
-    switch (by) {
+  void _sortSubjects() {
+    switch (settingController.tablesSort) {
       case TablesSortSetting.name:
-        displayedSubjets.sort((a, b) {
+        displayedSubjects.sort((a, b) {
           return a.name.compareTo(b.name);
         });
         break;
       default: // case TablesSortSetting.dateAdded:
-        displayedSubjets.sort((a, b) {
+        displayedSubjects.sort((a, b) {
           return a.id.compareTo(b.id);
         });
     }

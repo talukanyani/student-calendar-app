@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sc_app/services/authentication.dart';
+import 'package:sc_app/services/cloud_database.dart';
 import '../utils/enums.dart';
 
-class AuthenticationController extends ChangeNotifier {
+class AuthController extends ChangeNotifier {
   User? get currentUser => Auth().currentUser;
 
-  Future<AuthStatus> createProfile(String email, String password) {
-    return Auth().createProfile(email, password).then((status) {
-      notifyListeners();
-      return status;
-    });
+  Future<AuthStatus> createProfile({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    var createProfile = await Auth().createProfile(email, password);
+
+    if (createProfile != AuthStatus.done) return createProfile;
+
+    notifyListeners();
+
+    updateName(name);
+
+    return createProfile;
   }
 
-  Future<AuthStatus> login(String email, String password) {
-    return Auth().login(email, password).then((status) {
-      notifyListeners();
-      return status;
-    });
+  Future<List> login({required String email, required String password}) async {
+    var login = await Auth().login(email, password);
+
+    if (login != AuthStatus.done) return [login];
+
+    notifyListeners();
+
+    var syncedSubjects = await CloudDb().getSyncedSubjects(currentUser?.uid);
+    var isSync = syncedSubjects.isNotEmpty;
+
+    return [login, isSync];
   }
 
   Future<AuthStatus> logout() {
@@ -40,20 +56,24 @@ class AuthenticationController extends ChangeNotifier {
     });
   }
 
-  Future<AuthStatus> changeEmail(String password, String newEmail) {
+  Future<AuthStatus> changeEmail(
+      {required String password, required String newEmail}) {
     return Auth().changeEmail(password, newEmail).then((status) {
       notifyListeners();
       return status;
     });
   }
 
-  Future<AuthStatus> changePassword(String oldPassword, String newPassword) {
+  Future<AuthStatus> changePassword(
+      {required String oldPassword, required String newPassword}) {
     return Auth().changePassword(oldPassword, newPassword).then((status) {
       return status;
     });
   }
 
-  Future<AuthStatus> deleteProfile(String password) {
+  Future<AuthStatus> deleteProfile(String password) async {
+    await CloudDb().deleteAllSujects(currentUser?.uid);
+
     return Auth().deleteProfile(password).then((status) {
       notifyListeners();
       return status;

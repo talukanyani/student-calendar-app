@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
+import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
@@ -12,16 +13,9 @@ import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
 class TableEditForm extends StatefulWidget {
-  const TableEditForm({
-    super.key,
-    required this.subjectId,
-    required this.subjectName,
-    required this.subjectColor,
-  });
+  const TableEditForm({super.key, required this.subject});
 
-  final int subjectId;
-  final String subjectName;
-  final String subjectColor;
+  final SubjectModel subject;
 
   @override
   State<TableEditForm> createState() => _TableEditFormState();
@@ -36,16 +30,16 @@ class _TableEditFormState extends State<TableEditForm> {
 
   void _editSubject(BuildContext context) {
     Provider.of<SubjectController>(context, listen: false).editSubject(
-      widget.subjectId,
-      _titleInputController.text.trim(),
-      _selectedColor,
+      id: widget.subject.id,
+      newName: _titleInputController.text.trim(),
+      newColor: _selectedColor,
     );
   }
 
   @override
   void initState() {
-    _titleInputController.text = widget.subjectName;
-    setState(() => _selectedColor = widget.subjectColor);
+    _titleInputController.text = widget.subject.name;
+    setState(() => _selectedColor = widget.subject.color);
     super.initState();
   }
 
@@ -60,7 +54,7 @@ class _TableEditFormState extends State<TableEditForm> {
     return Modal(
       children: [
         Text(
-          'Edit Subject Table',
+          'Edit a Subject',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: CustomColorScheme.grey4,
               ),
@@ -126,8 +120,9 @@ class _TableEditFormState extends State<TableEditForm> {
                       text: 'Please enter a title.',
                       snackBarIcon: SnackBarIcon.error,
                     );
-                  } else if (_titleInputController.text == widget.subjectName &&
-                      _selectedColor == widget.subjectColor) {
+                  } else if (_titleInputController.text ==
+                          widget.subject.name &&
+                      _selectedColor == widget.subject.name) {
                     Show.snackBar(
                       context,
                       text: 'You did not change anything :)',

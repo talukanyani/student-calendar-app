@@ -15,7 +15,10 @@ class TablesSortSettingModal extends StatelessWidget {
       return RadioListTile(
         value: value,
         groupValue: settingController.tablesSort,
-        onChanged: (value) => settingController.setTablesSort(value),
+        onChanged: (value) {
+          settingController.setTablesSort(value);
+          Navigator.pop(context);
+        },
         visualDensity: const VisualDensity(vertical: -3),
         title: Text(value.title),
       );

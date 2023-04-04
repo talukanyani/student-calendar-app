@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
+import 'package:sc_app/controllers/setting.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import 'change_name.dart';
 import 'change_email.dart';
 import 'change_password.dart';
 import 'delete_profile.dart';
-import 'email_verification.dart';
 
 class LoggedInScreen extends StatelessWidget {
   const LoggedInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authController = Provider.of<AuthenticationController>(context);
-    final authProvider = Provider.of<AuthenticationController>(
-      context,
-      listen: false,
-    );
+    final authController = Provider.of<AuthController>(context);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
+    final settingProvider =
+        Provider.of<SettingController>(context, listen: false);
 
     var email = authController.currentUser?.email ?? '';
     var name = authController.currentUser?.displayName ?? 'Profile';
-    var isVerified = authController.currentUser?.emailVerified ?? false;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
@@ -88,29 +86,16 @@ class LoggedInScreen extends StatelessWidget {
               ),
             ),
           ),
-          isVerified
-              ? const SizedBox()
-              : ListTile(
-                  onTap: () {
-                    authProvider.sendVerificationEmail();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return const EmailVerificationScreen();
-                      }),
-                    );
-                  },
-                  title: const Text('Verify Email'),
-                  subtitle:
-                      const Text('Email for this profile is not verified.'),
-                  leading: const Icon(Icons.domain_verification),
-                ),
           ListTile(
             onTap: () => Show.modal(
               context,
               modal: ConfirmationAlert(
                 title: const Text('Log Out?'),
                 content: const Text('Are you sure you want to log out?'),
-                action: () => authProvider.logout(),
+                action: () {
+                  settingProvider.setActivitiesSync(false, updateData: false);
+                  authProvider.logout();
+                },
               ),
             ),
             title: const Text('Log Out'),

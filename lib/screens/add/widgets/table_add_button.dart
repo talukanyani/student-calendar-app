@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/subject.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import '../modals/table_add_form.dart';
 
 class TableAddButton extends StatelessWidget {
-  const TableAddButton({super.key});
+  const TableAddButton({super.key, required this.subjectsCount});
+
+  final int subjectsCount;
 
   @override
   Widget build(BuildContext context) {
-    final subjectProvider =
-        Provider.of<SubjectController>(context, listen: false);
-
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.all(8),
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 16),
       child: OutlinedButton(
         onPressed: () {
-          if (subjectProvider.subjects.length >= 20) {
+          if (subjectsCount >= 20) {
             Show.snackBar(
               context,
               text: 'You have reached maximum number of subjects.',
@@ -31,8 +28,13 @@ class TableAddButton extends StatelessWidget {
         },
         style: OutlinedButton.styleFrom(
           foregroundColor: Theme.of(context).colorScheme.onBackground,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: BorderSide(color: Theme.of(context).colorScheme.onBackground),
+          minimumSize: const Size(0, 0),
         ),
-        child: const Text('ADD SUBJECT'),
+        child: const Icon(Iconsax.add),
       ),
     );
   }

@@ -16,14 +16,6 @@ class Show {
     );
   }
 
-  static loading(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-      barrierColor: Theme.of(context).colorScheme.background.withOpacity(0.75),
-    );
-  }
-
   static snackBar(
     BuildContext context, {
     required String text,
@@ -43,7 +35,6 @@ class Show {
 
 class Hide {
   static modal(BuildContext context) => Navigator.pop(context);
-  static loading(BuildContext context) => Navigator.pop(context);
   static snackBar(BuildContext context) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }

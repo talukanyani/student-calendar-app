@@ -1,116 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/utils/enums.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/services/local_database.dart';
+import 'package:sc_app/utils/enums.dart';
+import 'authentication.dart';
 
 class SettingController extends ChangeNotifier {
-  SettingController() {
-    _useChachedSettings().then((_) {
-      _useSyncedSettings();
-    });
+  SettingController(this.authController) {
+    _useChachedSettings();
   }
+
+  final AuthController authController;
+
+  bool get _isAuthed => authController.currentUser != null;
+  String? get _userId => authController.currentUser?.uid;
 
   ThemeMode _themeMode = ThemeMode.system;
   TablesSortSetting _tablesSort = TablesSortSetting.name;
   int _weekStartDay = DateTime.monday;
-  bool _isSync = false;
+  bool _isActivitiesSync = false;
 
   ThemeMode get themeMode => _themeMode;
   TablesSortSetting get tablesSort => _tablesSort;
   int get weekStartDay => _weekStartDay;
-  bool get isSync => _isSync;
+  bool get isActivitiesSync => _isActivitiesSync && _isAuthed;
 
   void setTheme(ThemeMode value) {
     _themeMode = value;
     notifyListeners();
 
-    _cacheSettings();
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setInt('themeMode', value.index);
+    });
   }
 
   void setTablesSort(TablesSortSetting value) {
     _tablesSort = value;
     notifyListeners();
 
-    _cacheSettings();
-    _syncSettings();
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setInt('tablesSort', value.index);
+    });
   }
 
   void setWeekStart(int value) {
     _weekStartDay = value;
     notifyListeners();
 
-    _cacheSettings();
-    _syncSettings();
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setInt('weekStartDay', value);
+    });
   }
 
-  Future<void> setSync(bool value) async {
-    _isSync = value;
+  Future<void> setActivitiesSync(bool value, {bool updateData = true}) async {
+    _isActivitiesSync = value;
     notifyListeners();
 
-    _cacheSettings();
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool('isSync', value);
+    });
 
-    if (value) {
-      CloudDatabase().addMultipleSubjets(
-        await LocalDatabase().cachedSubjects,
+    if (value && updateData) {
+      CloudDb().addMultipleSubjets(
+        await LocalDb().cachedSubjects,
+        userId: _userId,
       );
-      _syncSettings();
-    } else {
-      CloudDatabase().deleteAllSujects();
-      CloudDatabase().unSyncSettings();
     }
-  }
 
-  void _cacheSettings() {
-    LocalDatabase().cacheSettings({
-      'themeMode': _themeMode.index,
-      'tablesSort': _tablesSort.index,
-      'weekStartDay': _weekStartDay,
-      'isSync': _isSync,
-    });
-  }
-
-  void _syncSettings() {
-    if (!_isSync) return;
-
-    CloudDatabase().syncSettings({
-      'tablesSort': _tablesSort.index,
-      'weekStartDay': _weekStartDay,
-    });
+    if (!value && updateData) {
+      CloudDb().deleteAllSujects(_userId);
+    }
   }
 
   Future<void> _useChachedSettings() async {
-    var cachedSettings = await LocalDatabase().cachedSettings;
+    var prefs = await SharedPreferences.getInstance();
 
-    if (cachedSettings.isEmpty) return;
-
-    _themeMode = ThemeMode.values[cachedSettings['themeMode']];
-    _tablesSort = TablesSortSetting.values[cachedSettings['tablesSort']];
-    _weekStartDay = cachedSettings['weekStartDay'];
-    _isSync = cachedSettings['isSync'];
-
-    notifyListeners();
-  }
-
-  Future<void> _useSyncedSettings() async {
-    if (!_isSync) return;
-
-    var syncedSettings = await CloudDatabase().syncedSettings;
-
-    if (syncedSettings.isEmpty) {
-      _syncSettings();
-      return;
-    }
-
-    _tablesSort = TablesSortSetting.values[syncedSettings['tablesSort']];
-    _weekStartDay = syncedSettings['weekStartDay'];
+    _themeMode =
+        ThemeMode.values[prefs.getInt('themeMode') ?? _themeMode.index];
+    _tablesSort = TablesSortSetting
+        .values[prefs.getInt('tablesSort') ?? _themeMode.index];
+    _weekStartDay = prefs.getInt('weekStartDay') ?? _weekStartDay;
+    _isActivitiesSync = prefs.getBool('isSync') ?? _isActivitiesSync;
 
     notifyListeners();
-
-    LocalDatabase().cacheSettings({
-      'themeMode': _themeMode.index,
-      'tablesSort': syncedSettings['tablesSort'],
-      'weekStartDay': syncedSettings['weekStartDay'],
-      'isSync': _isSync,
-    });
   }
 }

@@ -20,7 +20,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthenticationController>(context);
+    final authProvider = Provider.of<AuthController>(context);
     var isLoggedIn = authProvider.currentUser != null;
     if (isLoggedIn) {
       setIsFirstLaunch();

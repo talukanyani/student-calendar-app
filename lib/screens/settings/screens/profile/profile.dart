@@ -9,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthenticationController>(context).currentUser;
+    final user = Provider.of<AuthController>(context).currentUser;
     bool isLoggedIn = user != null;
 
     if (isLoggedIn) {

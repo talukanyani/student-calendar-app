@@ -9,6 +9,7 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/bullet_list.dart';
+import 'package:sc_app/widgets/loading.dart';
 
 class DeleteProfileScreen extends StatefulWidget {
   const DeleteProfileScreen({super.key});
@@ -20,20 +21,19 @@ class DeleteProfileScreen extends StatefulWidget {
 class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
   String? errorMessage;
   String? passwordErrorMessage;
-
   bool _isPasswordHidden = true;
+  bool _isLoading = false;
 
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _deleteProfile(BuildContext context) {
-    final authProvider =
-        Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
 
-    Show.loading(context);
+    setState(() => _isLoading = true);
 
     authProvider.deleteProfile(_inputController.text).then((status) {
-      Hide.loading(context);
+      setState(() => _isLoading = false);
 
       switch (status) {
         case AuthStatus.wrongPassword:
@@ -59,6 +59,12 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Loading(
+        text: 'Please wait while we delete your profile...',
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Delete Profile')),
       body: ListView(
@@ -73,20 +79,17 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
           BulletList(
             texts: [
               Text(
-                'All your synchronised data/activities will be deleted.',
+                'All your synced data/activities will be permanantly deleted.',
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
               RichText(
                 text: TextSpan(
-                  text: 'Your profile will be ',
+                  text: 'Your profile will be permanantly deleted, and ',
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
-                  children: const <TextSpan>[
+                  children: const [
                     TextSpan(
-                      text: 'permanantly deleted,',
+                      text: 'you won\'t be able to revert this action.',
                       style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    TextSpan(
-                      text: ' and you won\'t be able to revert this action.',
                     ),
                   ],
                 ),
@@ -149,15 +152,17 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
                   modal: Alert(
                     title: Text(
                       'Delete Profile',
-                      style:
-                          TextStyle(color: Theme.of(context).colorScheme.error),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                     titleIcon: Icon(
                       FluentIcons.warning_24_filled,
                       color: Theme.of(context).colorScheme.error,
                     ),
                     content: const Text(
-                      'Are you sure you want to delete this profile.\nYou won\'t be able to revert this action.',
+                      'Are you sure you want to delete this profile.'
+                      '\nYou won\'t be able to revert this action.',
                     ),
                     actionName: 'Delete',
                     action: () => _deleteProfile(context),
@@ -165,7 +170,7 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
                 );
               }
             },
-            child: const Text('Permanantly Delete'),
+            child: const Text('Delete'),
           ),
           const SizedBox(height: 4),
           Text(

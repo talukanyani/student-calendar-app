@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/controllers/setting.dart';
+import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 import 'create_profile.dart';
 import 'reset_password.dart';
 
@@ -20,8 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _errorMessage;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
-
   bool _isPasswordHidden = true;
+  bool _isLoading = false;
 
   final _emailInputController = TextEditingController();
   final _passwordInputController = TextEditingController();
@@ -29,12 +31,24 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void _login(BuildContext context) {
-    Show.loading(context);
+    var authProvider = Provider.of<AuthController>(context, listen: false);
+    var settingProvider =
+        Provider.of<SettingController>(context, listen: false);
+    var subjectProvider =
+        Provider.of<SubjectController>(context, listen: false);
 
-    Provider.of<AuthenticationController>(context, listen: false)
-        .login(_emailInputController.text, _passwordInputController.text)
-        .then((status) {
-      Hide.loading(context);
+    setState(() => _isLoading = true);
+
+    authProvider
+        .login(
+      email: _emailInputController.text,
+      password: _passwordInputController.text,
+    )
+        .then((values) {
+      setState(() => _isLoading = false);
+
+      AuthStatus status = values[0];
+      bool? isSync = values[1];
 
       switch (status) {
         case AuthStatus.profileNotFound:
@@ -58,7 +72,19 @@ class _LoginScreenState extends State<LoginScreen> {
           });
           break;
         default:
-          Navigator.pop(context);
+          if (isSync ?? false) {
+            settingProvider.setActivitiesSync(true, updateData: false);
+            setState(() => _isLoading = true);
+            Future.delayed(
+              const Duration(seconds: 5),
+              () => subjectProvider.displaySyncedSubjects(),
+            ).then((_) {
+              setState(() => _isLoading = false);
+              Navigator.pop(context);
+            });
+          } else {
+            Navigator.pop(context);
+          }
       }
     });
   }
@@ -72,6 +98,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Loading(
+        text: 'Please wait while we log you in...',
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: ListView(
@@ -154,13 +186,17 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           const SizedBox(height: 16),
           ForegroundFilledBtn(
-            onPressed: () {
-              setState(() => _errorMessage = null);
-              if (_formKey.currentState!.validate()) {
-                _login(context);
-              }
-            },
-            child: const Text('Log In'),
+            onPressed: _isLoading
+                ? null
+                : () {
+                    setState(() => _errorMessage = null);
+                    if (_formKey.currentState!.validate()) {
+                      _login(context);
+                    }
+                  },
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Log In'),
           ),
           const SizedBox(height: 8),
           _errorMessage == null

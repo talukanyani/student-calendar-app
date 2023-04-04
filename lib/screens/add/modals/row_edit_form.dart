@@ -13,15 +13,8 @@ import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
 class RowEditForm extends StatefulWidget {
-  const RowEditForm({
-    super.key,
-    required this.subjectId,
-    required this.subjectName,
-    required this.activity,
-  });
+  const RowEditForm({super.key, required this.activity});
 
-  final int subjectId;
-  final String subjectName;
   final ActivityModel activity;
 
   @override
@@ -40,7 +33,7 @@ class _RowEditFormState extends State<RowEditForm> {
 
   Future<void> editActivity(BuildContext context) async {
     Provider.of<ActivityController>(context, listen: false).editActivity(
-      subjectId: widget.subjectId,
+      subjectId: widget.activity.subjectId,
       activityId: widget.activity.id,
       newActivity: _activityInputController.text.trim(),
       newDateTime: DateTime(
@@ -90,7 +83,7 @@ class _RowEditFormState extends State<RowEditForm> {
     return Modal(
       children: [
         Text(
-          'Edit ${widget.subjectName} Activity',
+          'Edit an Activity for ${widget.activity.subjectName}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: CustomColorScheme.grey4,
               ),
@@ -224,8 +217,8 @@ class _RowEditFormState extends State<RowEditForm> {
                   }).then((_) {
                     Show.snackBar(
                       context,
-                      text:
-                          'One of ${widget.subjectName} activities was edited.',
+                      text: 'One of ${widget.activity.subjectName} '
+                          'activities was edited.',
                       snackBarIcon: SnackBarIcon.done,
                     );
                   });

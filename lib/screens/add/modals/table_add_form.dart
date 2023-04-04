@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/subject.dart';
+import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
@@ -28,9 +29,12 @@ class _TableAddFormState extends State<TableAddForm> {
 
   void _addSubject(BuildContext context) {
     Provider.of<SubjectController>(context, listen: false).addSubject(
-      DateTime.now().millisecondsSinceEpoch,
-      _titleInputController.text.trim(),
-      _selectedColor,
+      SubjectModel(
+        id: DateTime.now().millisecondsSinceEpoch,
+        name: _titleInputController.text.trim(),
+        color: _selectedColor,
+        activities: [],
+      ),
     );
   }
 
@@ -45,7 +49,7 @@ class _TableAddFormState extends State<TableAddForm> {
     return Modal(
       children: [
         Text(
-          'Add Subject Table',
+          'Add a Subject',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: CustomColorScheme.grey4,
               ),

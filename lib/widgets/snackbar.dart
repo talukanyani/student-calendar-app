@@ -37,7 +37,7 @@ SnackBar mySnackBar(
       children: [
         getLeading(),
         SizedBox(width: snackBarIcon == SnackBarIcon.none ? 0 : 16),
-        Text(text),
+        Expanded(child: Text(text)),
       ],
     ),
     action: action,

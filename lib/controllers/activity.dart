@@ -10,9 +10,16 @@ class ActivityController extends ChangeNotifier {
   ActivityController(this.subjectController);
 
   final SubjectController subjectController;
-  List<SubjectModel> get _displayedSubjects =>
-      subjectController.displayedSubjets;
-  bool get _isSync => subjectController.settingController.isSync;
+
+  List<SubjectModel> get _displayedSubjects {
+    return subjectController.displayedSubjects;
+  }
+
+  bool get _isSync => subjectController.settingController.isActivitiesSync;
+  String? get _userId {
+    var authController = subjectController.settingController.authController;
+    return authController.currentUser?.uid;
+  }
 
   List<ActivityModel> _displayedActivities(int subjectId) {
     return _displayedSubjects.firstWhere((subject) {
@@ -49,33 +56,13 @@ class ActivityController extends ChangeNotifier {
   }
 
   void addActivity(ActivityModel activity) {
-    if (_displayedActivities(activity.subjectId).length >= 50) return;
+    if (_displayedActivities(activity.subjectId).length >= 100) return;
 
     _displayedActivities(activity.subjectId).add(activity);
-
     notifyListeners();
 
-    LocalDatabase().cacheSubjects(_displayedSubjects);
-
-    if (_isSync) {
-      CloudDatabase().addActivity(
-        activity.subjectId,
-        activity.id,
-        activity.activity,
-        activity.dateTime,
-      );
-    }
-  }
-
-  void removeActivity({required int subjectId, required int activityId}) {
-    var activity = _displayedActivities(subjectId).firstWhere((activity) {
-      return activity.id == activityId;
-    });
-
-    _displayedActivities(subjectId).remove(activity);
-
-    LocalDatabase().cacheSubjects(_displayedSubjects);
-    if (_isSync) CloudDatabase().deleteActivity(subjectId, activityId);
+    LocalDb().cacheSubjects(_displayedSubjects);
+    if (_isSync) CloudDb().addActivity(activity, userId: _userId);
   }
 
   void editActivity({
@@ -92,14 +79,30 @@ class ActivityController extends ChangeNotifier {
     oldActivity.dateTime = newDateTime;
     notifyListeners();
 
-    LocalDatabase().cacheSubjects(_displayedSubjects);
-
+    LocalDb().cacheSubjects(_displayedSubjects);
     if (_isSync) {
-      CloudDatabase().editActivity(
-        subjectId,
-        activityId,
-        newActivity,
-        newDateTime,
+      CloudDb().editActivity(
+        userId: _userId,
+        subjectId: subjectId,
+        activityId: activityId,
+        newActivity: newActivity,
+        newDate: newDateTime,
+      );
+    }
+  }
+
+  void deleteActivity({required int activityId, required int subjectId}) {
+    _displayedActivities(subjectId).removeWhere((activity) {
+      return activity.id == activityId;
+    });
+    notifyListeners();
+
+    LocalDb().cacheSubjects(_displayedSubjects);
+    if (_isSync) {
+      CloudDb().deleteActivity(
+        userId: _userId,
+        activityId: activityId,
+        subjectId: subjectId,
       );
     }
   }

@@ -3,10 +3,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 
 import 'email_verification.dart';
 
@@ -21,8 +21,8 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
   String? _errorMessage;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
-
   bool _isPasswordHidden = true;
+  bool _isLoading = false;
 
   final _passwordInputController = TextEditingController();
   final _emailInputController = TextEditingController();
@@ -30,15 +30,17 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void _changeEmail(BuildContext context) {
-    final authProvider =
-        Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
 
-    Show.loading(context);
+    setState(() => _isLoading = true);
 
     authProvider
-        .changeEmail(_passwordInputController.text, _emailInputController.text)
+        .changeEmail(
+      password: _passwordInputController.text,
+      newEmail: _emailInputController.text,
+    )
         .then((status) {
-      Hide.loading(context);
+      setState(() => _isLoading = false);
 
       switch (status) {
         case AuthStatus.emailInUse:
@@ -74,6 +76,12 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Loading(
+        text: 'Please wait while we change your email...',
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Change Email')),
       body: ListView(

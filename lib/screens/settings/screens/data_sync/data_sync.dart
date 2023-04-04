@@ -4,7 +4,6 @@ import 'package:sc_app/controllers/setting.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
-import 'modals/verify_alert.dart';
 import 'modals/login_alert.dart';
 
 class DataSyncScreen extends StatefulWidget {
@@ -15,33 +14,20 @@ class DataSyncScreen extends StatefulWidget {
 }
 
 class _DataSyncScreenState extends State<DataSyncScreen> {
-  void _onTurnOn(BuildContext context) {
-    final settingProvider = Provider.of<SettingController>(
-      context,
-      listen: false,
-    );
-    final authProvider = Provider.of<AuthenticationController>(
-      context,
-      listen: false,
-    );
+  void _onActivitiesSyncTurnOn(BuildContext context) {
+    final settingProvider =
+        Provider.of<SettingController>(context, listen: false);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
 
-    var isLoggedIn = authProvider.currentUser != null;
-    var isEmailVerified = authProvider.currentUser?.emailVerified ?? false;
-
-    if (!isLoggedIn) {
+    if (authProvider.currentUser == null) {
       Show.modal(context, modal: const LoginAlert());
       return;
     }
 
-    if (!isEmailVerified) {
-      Show.modal(context, modal: const VerifyAlert());
-      return;
-    }
-
-    settingProvider.setSync(true);
+    settingProvider.setActivitiesSync(true);
   }
 
-  void _onTurnOff(BuildContext context) {
+  void _onActivitiesSyncTurnOff(BuildContext context) {
     final settingProvider = Provider.of<SettingController>(
       context,
       listen: false,
@@ -52,9 +38,9 @@ class _DataSyncScreenState extends State<DataSyncScreen> {
       modal: ConfirmationAlert(
         title: const Text('Turn Off?'),
         content: const Text(
-          'Are you sure you want turn off synchronisation?',
+          'Are you sure you want turn off activities sync?',
         ),
-        action: () => settingProvider.setSync(false),
+        action: () => settingProvider.setActivitiesSync(false),
       ),
     );
   }
@@ -69,18 +55,17 @@ class _DataSyncScreenState extends State<DataSyncScreen> {
         primary: false,
         children: [
           SwitchListTile(
-            value: settingController.isSync,
+            value: settingController.isActivitiesSync,
             onChanged: (value) {
               if (value) {
-                _onTurnOn(context);
+                _onActivitiesSyncTurnOn(context);
               } else {
-                _onTurnOff(context);
+                _onActivitiesSyncTurnOff(context);
               }
             },
-            title: const Text('Data Sync'),
+            title: const Text('Activities Sync'),
             subtitle: const Text(
-              'Automatically back up or sync your '
-              'app data (activities and preferences).',
+              'Automatically sync or back up your subjects and activities.',
             ),
           ),
         ],

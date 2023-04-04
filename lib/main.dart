@@ -28,27 +28,32 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<SettingController>(
-          create: (_) => SettingController(),
+        ChangeNotifierProvider<AuthController>(
+          create: (context) => AuthController(),
+        ),
+        ChangeNotifierProxyProvider<AuthController, SettingController>(
+          create: (context) => SettingController(
+            Provider.of<AuthController>(context, listen: false),
+          ),
+          update: (context, value, previous) {
+            return previous ?? SettingController(value);
+          },
         ),
         ChangeNotifierProxyProvider<SettingController, SubjectController>(
           create: (context) => SubjectController(
             Provider.of<SettingController>(context, listen: false),
           ),
-          update: (_, settingController, subjectController) {
-            return subjectController ?? SubjectController(settingController);
+          update: (context, value, previous) {
+            return previous ?? SubjectController(value);
           },
         ),
         ChangeNotifierProxyProvider<SubjectController, ActivityController>(
           create: (context) => ActivityController(
             Provider.of<SubjectController>(context, listen: false),
           ),
-          update: (_, subjectController, activityController) {
-            return activityController ?? ActivityController(subjectController);
+          update: (context, value, previous) {
+            return previous ?? ActivityController(value);
           },
-        ),
-        ChangeNotifierProvider<AuthenticationController>(
-          create: (_) => AuthenticationController(),
         ),
       ],
       child: AndroidSystemNavbarStyle(

@@ -24,14 +24,6 @@ class SubjectTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subjectProvider = Provider.of<SubjectController>(
-      context,
-      listen: false,
-    );
-    final activityProvider = Provider.of<ActivityController>(
-      context,
-      listen: false,
-    );
     final activityController = Provider.of<ActivityController>(context);
 
     final activities = activityController.subjectActivities(subject.id);
@@ -39,87 +31,19 @@ class SubjectTable extends StatelessWidget {
     return RectContainer(
       padding: const EdgeInsets.all(8),
       child: Column(
-        children: <Widget>[
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Transform(
-                transform: Matrix4.rotationZ(-0.05),
-                child: OvalTextContainer(
-                  text: Text(
-                    subject.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: CustomColorScheme.grey4,
-                        ),
-                  ),
-                  color: tableColors[subject.color],
-                ),
-              ),
-              Material(
-                type: MaterialType.transparency,
-                child: PopupMenuButton(
-                  position: PopupMenuPosition.under,
-                  icon: const Icon(Iconsax.more_circle),
-                  itemBuilder: (context) => <PopupMenuItem>[
-                    popupMenuItem(
-                      itemName: 'Edit',
-                      itemIcon: Iconsax.edit,
-                      onTap: () {
-                        Navigator.pop(context);
-                        Future.delayed(
-                          const Duration(seconds: 1),
-                          Show.modal(
-                            context,
-                            modal: TableEditForm(
-                              subjectId: subject.id,
-                              subjectName: subject.name,
-                              subjectColor: subject.color,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    popupMenuItem(
-                      itemName: 'Delete',
-                      itemIcon: Iconsax.trash,
-                      onTap: () {
-                        Navigator.pop(context);
-                        Future.delayed(
-                          const Duration(seconds: 1),
-                          Show.modal(
-                            context,
-                            modal: Alert(
-                              title: const Text('Delete Permanently'),
-                              titleIcon: const Icon(
-                                FluentIcons.delete_24_filled,
-                              ),
-                              content: Text(
-                                '${subject.name} and its activities will be permanently deleted.',
-                              ),
-                              actionName: 'Delete',
-                              action: () {
-                                subjectProvider.removeSubject(subject.id);
-                                Show.snackBar(
-                                  context,
-                                  text: 'One subject was deleted.',
-                                  snackBarIcon: SnackBarIcon.done,
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
+            children: [
+              Title(subject: subject),
+              MoreTableActionsButton(subject: subject),
             ],
           ),
           const SizedBox(height: 16),
           Table(
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: const <int, TableColumnWidth>{
+            columnWidths: const {
               0: FlexColumnWidth(3),
               1: FlexColumnWidth(2),
               2: FlexColumnWidth(1.5),
@@ -128,30 +52,102 @@ class SubjectTable extends StatelessWidget {
             border: TableBorder(
               horizontalInside: BorderSide(
                 color: Theme.of(context).dividerColor,
-                width: 1,
               ),
               bottom: BorderSide(
                 color: Theme.of(context).dividerColor,
-                width: 1,
               ),
             ),
             children: [
               headerRow(),
               ...List.generate(
                 activities.length,
-                (index) => row(
-                  subjectId: subject.id,
-                  subjectName: subject.name,
-                  activity: activities[index],
-                  activityProvider: activityProvider,
-                ),
+                (index) => row(activity: activities[index]),
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          RowAddButton(
-            subjectTimeId: subject.id,
-            subjectName: subject.name,
+          RowAddButton(subject: subject),
+        ],
+      ),
+    );
+  }
+}
+
+class Title extends StatelessWidget {
+  const Title({super.key, required this.subject});
+
+  final SubjectModel subject;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform(
+      transform: Matrix4.rotationZ(-0.05),
+      child: OvalTextContainer(
+        text: Text(
+          subject.name,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: CustomColorScheme.grey4,
+              ),
+        ),
+        color: tableColors[subject.color],
+      ),
+    );
+  }
+}
+
+class MoreTableActionsButton extends StatelessWidget {
+  const MoreTableActionsButton({super.key, required this.subject});
+
+  final SubjectModel subject;
+
+  @override
+  Widget build(BuildContext context) {
+    final subjectProvider = Provider.of<SubjectController>(
+      context,
+      listen: false,
+    );
+
+    return Material(
+      type: MaterialType.transparency,
+      child: PopupMenuButton(
+        position: PopupMenuPosition.under,
+        icon: const Icon(Iconsax.more_circle),
+        itemBuilder: (context) => <PopupMenuItem>[
+          popupMenuItem(
+            itemName: 'Edit',
+            itemIcon: Iconsax.edit,
+            onTap: () {
+              Navigator.pop(context);
+              Show.modal(
+                context,
+                modal: TableEditForm(subject: subject),
+              );
+            },
+          ),
+          popupMenuItem(
+            itemName: 'Delete',
+            itemIcon: Iconsax.trash,
+            onTap: () {
+              Navigator.pop(context);
+              Show.modal(
+                context,
+                modal: Alert(
+                  title: const Text('Delete Permanently'),
+                  titleIcon: const Icon(FluentIcons.delete_24_filled),
+                  content: Text(
+                    '${subject.name} and its activities will be permanently deleted.',
+                  ),
+                  actionName: 'Delete',
+                  action: () {
+                    subjectProvider.deleteSubject(subject.id);
+                    Show.snackBar(
+                      context,
+                      text: 'One subject was deleted.',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

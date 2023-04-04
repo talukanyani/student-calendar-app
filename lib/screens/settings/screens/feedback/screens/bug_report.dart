@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 import '../modals/login_alert.dart';
-import '../modals/verify_alert.dart';
 import 'send_response.dart';
 
 class BugReportScreen extends StatefulWidget {
@@ -16,22 +17,29 @@ class BugReportScreen extends StatefulWidget {
 }
 
 class _BugReportScreenState extends State<BugReportScreen> {
+  bool _isLoading = false;
+
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context) {
-    CloudDatabase().sendBugReport(
-      _inputController.text.trim(),
-    );
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-      return const SendResponseScreen(
-        sendName: 'bug report',
-        message: Text(
-          'Thank you so much for your bug report. '
-          'We will fix this problem as soon as possible.',
-        ),
+  void _send(BuildContext context, User user) {
+    setState(() => _isLoading = true);
+
+    CloudDb().sendBugReport(_inputController.text.trim(), user: user).then((_) {
+      setState(() => _isLoading = false);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return const SendResponseScreen(
+            sendName: 'bug report',
+            message: Text(
+              'Thank you so much for your bug report. '
+              'We will fix this problem as soon as possible.',
+            ),
+          );
+        }),
       );
-    }));
+    });
   }
 
   @override
@@ -42,9 +50,9 @@ class _BugReportScreenState extends State<BugReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthenticationController>(context).currentUser;
-    var isLoggedIn = user != null;
-    var isEmailVerified = user?.emailVerified ?? false;
+    final user = Provider.of<AuthController>(context).currentUser;
+
+    if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
       appBar: AppBar(title: const Text('Report Bug')),
@@ -78,24 +86,16 @@ class _BugReportScreenState extends State<BugReportScreen> {
           const SizedBox(height: 8),
           ForegroundFilledBtn(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                if (!isLoggedIn) {
-                  Show.modal(
-                    context,
-                    modal: const LoginAlert(sendName: 'bug report'),
-                  );
-                  return;
-                }
-
-                if (!isEmailVerified) {
-                  Show.modal(
-                    context,
-                    modal: const VerifyAlert(sendName: 'bug report'),
-                  );
-                  return;
-                }
-                _send(context);
+              if (!_formKey.currentState!.validate()) return;
+              if (user == null) {
+                Show.modal(
+                  context,
+                  modal: const LoginAlert(sendName: 'bug report'),
+                );
+                return;
               }
+
+              _send(context, user);
             },
             child: const Text('Send'),
           ),

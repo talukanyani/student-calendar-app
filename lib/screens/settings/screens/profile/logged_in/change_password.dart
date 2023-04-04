@@ -7,6 +7,7 @@ import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -19,9 +20,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   String? _errorMessage;
   String? _oldPasswordErrorMessage;
   String? _newPasswordErrorMessage;
-
   bool _isOldPasswordHidden = true;
   bool _isNewPasswordHidden = true;
+  bool _isLoading = false;
 
   final _oldPasswordInputController = TextEditingController();
   final _newPasswordInputController = TextEditingController();
@@ -29,15 +30,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void _changePassword(BuildContext context) {
-    Show.loading(context);
+    setState(() => _isLoading = true);
 
-    Provider.of<AuthenticationController>(context, listen: false)
+    Provider.of<AuthController>(context, listen: false)
         .changePassword(
-      _oldPasswordInputController.text,
-      _newPasswordInputController.text,
+      oldPassword: _oldPasswordInputController.text,
+      newPassword: _newPasswordInputController.text,
     )
         .then((status) {
-      Hide.loading(context);
+      setState(() => _isLoading = false);
 
       switch (status) {
         case AuthStatus.weakPassword:
@@ -73,6 +74,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Loading(
+        text: 'Please wait while we change your password...',
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Change Password')),
       body: ListView(
@@ -186,7 +193,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 _changePassword(context);
               }
             },
-            child: const Text('Change Password'),
+            child: const Text('Change'),
           ),
           const SizedBox(height: 4),
           Text(

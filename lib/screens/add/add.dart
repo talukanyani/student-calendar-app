@@ -26,12 +26,16 @@ class Tables extends StatelessWidget {
   Widget build(BuildContext context) {
     final subjectController = Provider.of<SubjectController>(context);
     final subjects = subjectController.subjects;
+    var subjectsCount = subjects.length;
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
-      itemCount: subjects.length + 1,
+      itemCount: subjectsCount + 1,
       itemBuilder: (context, index) {
-        if (index == subjects.length) return const TableAddButton();
+        if (index == subjectsCount) {
+          return TableAddButton(subjectsCount: subjectsCount);
+        }
+
         return SubjectTable(subject: subjects[index]);
       },
     );

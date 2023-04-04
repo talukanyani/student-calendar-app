@@ -6,6 +6,7 @@ import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/alerts.dart';
+import 'package:sc_app/widgets/loading.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -16,17 +17,18 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   String? _errorMessage;
+  bool _isLoading = false;
 
   final _emailInputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _resetPassword(BuildContext context) {
-    Show.loading(context);
+    setState(() => _isLoading = true);
 
-    Provider.of<AuthenticationController>(context, listen: false)
+    Provider.of<AuthController>(context, listen: false)
         .resetPassword(_emailInputController.text)
         .then((status) {
-      Hide.loading(context);
+      setState(() => _isLoading = false);
 
       switch (status) {
         case AuthStatus.profileNotFound:
@@ -51,7 +53,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             modal: const InfoAlert(
               title: Text('Email Sent'),
               content: Text(
-                'Email with password reset link was sent. Go to change password on that link then come back here to log in with new password.\n\nIf you didn\'t recieve the email you may try again.',
+                'Email with password reset link was sent. '
+                'Go to change password on that link then '
+                'come back here to log in with new password.'
+                '\n\nIf you didn\'t recieve the email you may try again.',
               ),
             ),
           );
@@ -67,6 +72,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) return const Loading();
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: ListView(
@@ -107,13 +114,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
           const SizedBox(height: 8),
           ForegroundFilledBtn(
-            onPressed: () {
-              setState(() => _errorMessage = null);
-              if (_formKey.currentState!.validate()) {
-                _resetPassword(context);
-              }
-            },
-            child: const Text('Reset'),
+            onPressed: _isLoading
+                ? null
+                : () {
+                    setState(() => _errorMessage = null);
+                    if (_formKey.currentState!.validate()) {
+                      _resetPassword(context);
+                    }
+                  },
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Reset'),
           ),
           const SizedBox(height: 8),
           Text(

@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/models/activity.dart';
+import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/themes/color_scheme.dart';
@@ -12,14 +13,9 @@ import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
 class RowAddForm extends StatefulWidget {
-  const RowAddForm({
-    super.key,
-    required this.subjectId,
-    required this.subjectName,
-  });
+  const RowAddForm({super.key, required this.subject});
 
-  final int subjectId;
-  final String subjectName;
+  final SubjectModel subject;
 
   @override
   State<RowAddForm> createState() => _RowAddFormState();
@@ -39,8 +35,8 @@ class _RowAddFormState extends State<RowAddForm> {
     Provider.of<ActivityController>(context, listen: false).addActivity(
       ActivityModel(
         id: DateTime.now().millisecondsSinceEpoch,
-        subjectId: widget.subjectId,
-        subjectName: widget.subjectName,
+        subjectId: widget.subject.id,
+        subjectName: widget.subject.name,
         activity: _activityInputController.text.trim(),
         dateTime: DateTime(
           _selectedDate!.year,
@@ -66,7 +62,7 @@ class _RowAddFormState extends State<RowAddForm> {
     return Modal(
       children: [
         Text(
-          'Add ${widget.subjectName} Activity',
+          'Add an Activity for ${widget.subject.name}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: CustomColorScheme.grey4,
               ),
@@ -180,7 +176,8 @@ class _RowAddFormState extends State<RowAddForm> {
                     }).then((_) {
                       Show.snackBar(
                         context,
-                        text: 'One activity was added to ${widget.subjectName}',
+                        text:
+                            'One activity for ${widget.subject.name} was added',
                         snackBarIcon: SnackBarIcon.done,
                       );
                     });

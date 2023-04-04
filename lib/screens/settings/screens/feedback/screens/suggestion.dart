@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 import '../modals/login_alert.dart';
-import '../modals/verify_alert.dart';
 import 'send_response.dart';
 
 class SuggestionScreen extends StatefulWidget {
@@ -16,22 +17,31 @@ class SuggestionScreen extends StatefulWidget {
 }
 
 class _SuggestionScreenState extends State<SuggestionScreen> {
+  bool _isLoading = false;
+
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context) {
-    CloudDatabase().sendSuggestion(
-      _inputController.text.trim(),
-    );
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-      return const SendResponseScreen(
-        sendName: 'suggestion',
-        message: Text(
-          'Thank you so much for your suggestion. '
-          'Your suggestion helps us improve.',
-        ),
+  void _send(BuildContext context, User user) {
+    setState(() => _isLoading = true);
+
+    CloudDb()
+        .sendSuggestion(_inputController.text.trim(), user: user)
+        .then((_) {
+      setState(() => _isLoading = false);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return const SendResponseScreen(
+            sendName: 'suggestion',
+            message: Text(
+              'Thank you so much for your suggestion. '
+              'Your suggestion helps us improve.',
+            ),
+          );
+        }),
       );
-    }));
+    });
   }
 
   @override
@@ -42,9 +52,9 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthenticationController>(context).currentUser;
-    var isLoggedIn = user != null;
-    var isEmailVerified = user?.emailVerified ?? false;
+    final user = Provider.of<AuthController>(context).currentUser;
+
+    if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
       appBar: AppBar(title: const Text('Send Suggestion')),
@@ -62,7 +72,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
               maxLength: 500,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Write you suggestion';
+                  return 'Write your suggestion';
                 } else if (value.length < 30) {
                   return 'Further expalain your suggestion.';
                 } else {
@@ -78,25 +88,16 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           const SizedBox(height: 8),
           ForegroundFilledBtn(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                if (!isLoggedIn) {
-                  Show.modal(
-                    context,
-                    modal: const LoginAlert(sendName: 'suggestion'),
-                  );
-                  return;
-                }
-
-                if (!isEmailVerified) {
-                  Show.modal(
-                    context,
-                    modal: const VerifyAlert(sendName: 'suggestion'),
-                  );
-                  return;
-                }
-
-                _send(context);
+              if (!_formKey.currentState!.validate()) return;
+              if (user == null) {
+                Show.modal(
+                  context,
+                  modal: const LoginAlert(sendName: 'suggestion'),
+                );
+                return;
               }
+
+              _send(context, user);
             },
             child: const Text('Send'),
           ),

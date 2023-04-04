@@ -15,7 +15,10 @@ class ThemeModeSettingModal extends StatelessWidget {
       return RadioListTile(
         value: value,
         groupValue: settingController.themeMode,
-        onChanged: (value) => settingController.setTheme(value),
+        onChanged: (value) {
+          settingController.setTheme(value);
+          Navigator.pop(context);
+        },
         visualDensity: const VisualDensity(vertical: -3),
         title: Text(value.title),
       );

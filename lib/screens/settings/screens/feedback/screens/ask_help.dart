@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 import '../modals/login_alert.dart';
-import '../modals/verify_alert.dart';
 import 'send_response.dart';
 
 class AskHelpScreen extends StatefulWidget {
@@ -16,22 +17,29 @@ class AskHelpScreen extends StatefulWidget {
 }
 
 class _AskHelpScreenState extends State<AskHelpScreen> {
+  bool _isLoading = false;
+
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context) {
-    CloudDatabase().sendHelp(
-      _inputController.text.trim(),
-    );
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-      return const SendResponseScreen(
-        sendName: 'help',
-        message: Text(
-          'We will respond to your help by '
-          'emailing you using your profile\'s email address.',
-        ),
+  void _send(BuildContext context, User user) {
+    setState(() => _isLoading = true);
+
+    CloudDb().sendHelp(_inputController.text.trim(), user: user).then((_) {
+      setState(() => _isLoading = false);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return const SendResponseScreen(
+            sendName: 'help',
+            message: Text(
+              'We will respond to your help by '
+              'emailing you using your profile\'s email address.',
+            ),
+          );
+        }),
       );
-    }));
+    });
   }
 
   @override
@@ -42,9 +50,9 @@ class _AskHelpScreenState extends State<AskHelpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthenticationController>(context).currentUser;
-    var isLoggedIn = user != null;
-    var isEmailVerified = user?.emailVerified ?? false;
+    final user = Provider.of<AuthController>(context).currentUser;
+
+    if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
       appBar: AppBar(title: const Text('Help')),
@@ -78,25 +86,16 @@ class _AskHelpScreenState extends State<AskHelpScreen> {
           const SizedBox(height: 8),
           ForegroundFilledBtn(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                if (!isLoggedIn) {
-                  Show.modal(
-                    context,
-                    modal: const LoginAlert(sendName: 'help'),
-                  );
-                  return;
-                }
-
-                if (!isEmailVerified) {
-                  Show.modal(
-                    context,
-                    modal: const VerifyAlert(sendName: 'help'),
-                  );
-                  return;
-                }
-
-                _send(context);
+              if (!_formKey.currentState!.validate()) return;
+              if (user == null) {
+                Show.modal(
+                  context,
+                  modal: const LoginAlert(sendName: 'help'),
+                );
+                return;
               }
+
+              _send(context, user);
             },
             child: const Text('Send'),
           ),

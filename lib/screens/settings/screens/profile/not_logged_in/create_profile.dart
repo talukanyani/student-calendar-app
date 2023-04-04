@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
+import 'package:sc_app/widgets/loading.dart';
 import '../logged_in/email_verification.dart';
 import 'login.dart';
 
@@ -20,8 +20,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   String? _errorMessage;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
-
   bool _isPasswordHidden = true;
+  bool _isLoading = false;
 
   final _nameInputController = TextEditingController();
   final _emailInputController = TextEditingController();
@@ -30,18 +30,18 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void _createProfile(BuildContext context) {
-    final authProvider =
-        Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
 
-    Show.loading(context);
+    setState(() => _isLoading = true);
 
     authProvider
         .createProfile(
-      _emailInputController.text,
-      _passwordInputController.text,
+      name: _nameInputController.text.trim(),
+      email: _emailInputController.text,
+      password: _passwordInputController.text,
     )
         .then((value) {
-      Hide.loading(context);
+      setState(() => _isLoading = false);
 
       switch (value) {
         case AuthStatus.emailInUse:
@@ -65,7 +65,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           });
           break;
         default:
-          authProvider.updateName(_nameInputController.text.trim());
           authProvider.sendVerificationEmail();
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
@@ -86,6 +85,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Loading(
+        text: 'Please wait while we create your profile...',
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: ListView(
@@ -202,7 +207,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 _createProfile(context);
               }
             },
-            child: const Text('Create a profile'),
+            child: const Text('Create Profile'),
           ),
           const SizedBox(height: 8),
           _errorMessage == null

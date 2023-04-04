@@ -15,7 +15,10 @@ class CalendarWeekStartSettingModal extends StatelessWidget {
       return RadioListTile(
         value: value,
         groupValue: settingController.weekStartDay,
-        onChanged: (value) => settingController.setWeekStart(value),
+        onChanged: (value) {
+          settingController.setWeekStart(value);
+          Navigator.pop(context);
+        },
         visualDensity: const VisualDensity(vertical: -3),
         title: Text(getWeekDayFullName(value - 1)),
       );

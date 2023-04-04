@@ -38,7 +38,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       Duration.zero,
       () {
         final authProvider =
-            Provider.of<AuthenticationController>(context, listen: false);
+            Provider.of<AuthController>(context, listen: false);
         int counter = 0;
 
         checkVerificationTimer = Timer.periodic(
@@ -78,8 +78,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
 
   Widget verifyBody(BuildContext context) {
-    final authProvider =
-        Provider.of<AuthenticationController>(context, listen: false);
+    final authProvider = Provider.of<AuthController>(context, listen: false);
     final email = authProvider.currentUser?.email ?? 'your email address';
 
     return Column(
