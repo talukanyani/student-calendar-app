@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -9,23 +8,25 @@ import 'package:sc_app/widgets/loading.dart';
 import '../modals/login_alert.dart';
 import 'send_response.dart';
 
-class AskHelpScreen extends StatefulWidget {
+class AskHelpScreen extends ConsumerStatefulWidget {
   const AskHelpScreen({super.key});
 
   @override
-  State<AskHelpScreen> createState() => _AskHelpScreenState();
+  ConsumerState<AskHelpScreen> createState() => _AskHelpScreenState();
 }
 
-class _AskHelpScreenState extends State<AskHelpScreen> {
+class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
   bool _isLoading = false;
 
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context, User user) {
+  void _send(BuildContext context) {
     setState(() => _isLoading = true);
 
-    CloudDb().sendHelp(_inputController.text.trim(), user: user).then((_) {
+    CloudDb()
+        .sendHelp(_inputController.text.trim(), user: ref.watch(authProvider))
+        .then((_) {
       setState(() => _isLoading = false);
 
       Navigator.of(context).pushReplacement(
@@ -50,8 +51,6 @@ class _AskHelpScreenState extends State<AskHelpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthController>(context).currentUser;
-
     if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
@@ -87,7 +86,7 @@ class _AskHelpScreenState extends State<AskHelpScreen> {
           ForegroundFilledBtn(
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
-              if (user == null) {
+              if (!ref.watch(isLoggedInProvider)) {
                 Show.modal(
                   context,
                   modal: const LoginAlert(sendName: 'help'),
@@ -95,7 +94,7 @@ class _AskHelpScreenState extends State<AskHelpScreen> {
                 return;
               }
 
-              _send(context, user);
+              _send(context);
             },
             child: const Text('Send'),
           ),

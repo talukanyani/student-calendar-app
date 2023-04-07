@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/controllers/setting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
@@ -11,19 +11,11 @@ import 'change_email.dart';
 import 'change_password.dart';
 import 'delete_profile.dart';
 
-class LoggedInScreen extends StatelessWidget {
+class LoggedInScreen extends ConsumerWidget {
   const LoggedInScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final authController = Provider.of<AuthController>(context);
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-    final settingProvider =
-        Provider.of<SettingController>(context, listen: false);
-
-    var email = authController.currentUser?.email ?? '';
-    var name = authController.currentUser?.displayName ?? 'Profile';
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
@@ -39,11 +31,11 @@ class LoggedInScreen extends StatelessWidget {
                   color: CustomColorScheme.grey3,
                 ),
                 Text(
-                  name,
+                  ref.watch(userNameProvider) ?? 'Profile',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  email,
+                  ref.watch(userEmailProvider) ?? '',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
@@ -93,8 +85,7 @@ class LoggedInScreen extends StatelessWidget {
                 title: const Text('Log Out?'),
                 content: const Text('Are you sure you want to log out?'),
                 action: () {
-                  settingProvider.setActivitiesSync(false, updateData: false);
-                  authProvider.logout();
+                  ref.read(authProvider.notifier).logout();
                 },
               ),
             ),

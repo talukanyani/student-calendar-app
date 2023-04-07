@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
-import 'package:sc_app/controllers/setting.dart';
-import 'package:sc_app/controllers/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
 import 'create_profile.dart';
 import 'reset_password.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String? _errorMessage;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
@@ -30,25 +28,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _login(BuildContext context) {
-    var authProvider = Provider.of<AuthController>(context, listen: false);
-    var settingProvider =
-        Provider.of<SettingController>(context, listen: false);
-    var subjectProvider =
-        Provider.of<SubjectController>(context, listen: false);
-
+  void _login({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    authProvider
+    ref
+        .read(authProvider.notifier)
         .login(
-      email: _emailInputController.text,
-      password: _passwordInputController.text,
-    )
-        .then((values) {
+          email: _emailInputController.text,
+          password: _passwordInputController.text,
+        )
+        .then((status) {
       setState(() => _isLoading = false);
-
-      AuthStatus status = values[0];
-      bool? isSync = values[1];
 
       switch (status) {
         case AuthStatus.profileNotFound:
@@ -72,19 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           });
           break;
         default:
-          if (isSync ?? false) {
-            settingProvider.setActivitiesSync(true, updateData: false);
-            setState(() => _isLoading = true);
-            Future.delayed(
-              const Duration(seconds: 5),
-              () => subjectProvider.displaySyncedSubjects(),
-            ).then((_) {
-              setState(() => _isLoading = false);
-              Navigator.pop(context);
-            });
-          } else {
-            Navigator.pop(context);
-          }
+          onDone();
       }
     });
   }
@@ -186,17 +164,13 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           const SizedBox(height: 16),
           ForegroundFilledBtn(
-            onPressed: _isLoading
-                ? null
-                : () {
-                    setState(() => _errorMessage = null);
-                    if (_formKey.currentState!.validate()) {
-                      _login(context);
-                    }
-                  },
-            child: _isLoading
-                ? const CircularProgressIndicator()
-                : const Text('Log In'),
+            onPressed: () {
+              setState(() => _errorMessage = null);
+              if (_formKey.currentState!.validate()) {
+                _login(onDone: () => Navigator.pop(context));
+              }
+            },
+            child: const Text('Log In'),
           ),
           const SizedBox(height: 8),
           _errorMessage == null

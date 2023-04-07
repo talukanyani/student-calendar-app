@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/setting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 
-class CalendarWeekDays extends StatelessWidget {
+class CalendarWeekDays extends ConsumerWidget {
   const CalendarWeekDays({super.key});
 
   int getWeekNameIndex(int index, int weekStartDay) {
@@ -26,8 +26,8 @@ class CalendarWeekDays extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final weekStartDay = Provider.of<SettingController>(context).weekStartDay;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weekStartDay = ref.watch(weekStartProvider);
 
     return Container(
       decoration: BoxDecoration(

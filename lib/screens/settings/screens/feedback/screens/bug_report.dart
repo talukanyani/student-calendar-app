@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -9,23 +8,26 @@ import 'package:sc_app/widgets/loading.dart';
 import '../modals/login_alert.dart';
 import 'send_response.dart';
 
-class BugReportScreen extends StatefulWidget {
+class BugReportScreen extends ConsumerStatefulWidget {
   const BugReportScreen({super.key});
 
   @override
-  State<BugReportScreen> createState() => _BugReportScreenState();
+  ConsumerState<BugReportScreen> createState() => _BugReportScreenState();
 }
 
-class _BugReportScreenState extends State<BugReportScreen> {
+class _BugReportScreenState extends ConsumerState<BugReportScreen> {
   bool _isLoading = false;
 
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context, User user) {
+  void _send(BuildContext context) {
     setState(() => _isLoading = true);
 
-    CloudDb().sendBugReport(_inputController.text.trim(), user: user).then((_) {
+    CloudDb()
+        .sendBugReport(_inputController.text.trim(),
+            user: ref.watch(authProvider))
+        .then((_) {
       setState(() => _isLoading = false);
 
       Navigator.of(context).pushReplacement(
@@ -50,8 +52,6 @@ class _BugReportScreenState extends State<BugReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthController>(context).currentUser;
-
     if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
@@ -87,7 +87,7 @@ class _BugReportScreenState extends State<BugReportScreen> {
           ForegroundFilledBtn(
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
-              if (user == null) {
+              if (!ref.watch(isLoggedInProvider)) {
                 Show.modal(
                   context,
                   modal: const LoginAlert(sendName: 'bug report'),
@@ -95,7 +95,7 @@ class _BugReportScreenState extends State<BugReportScreen> {
                 return;
               }
 
-              _send(context, user);
+              _send(context);
             },
             child: const Text('Send'),
           ),

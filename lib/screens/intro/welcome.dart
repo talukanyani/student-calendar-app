@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/widgets/android_system_navbar.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -9,7 +9,7 @@ import '../settings/screens/profile/not_logged_in/create_profile.dart';
 import '../settings/screens/profile/not_logged_in/login.dart';
 import '../home/home.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
 
   void setIsFirstLaunch() {
@@ -19,10 +19,8 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthController>(context);
-    var isLoggedIn = authProvider.currentUser != null;
-    if (isLoggedIn) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(isLoggedInProvider)) {
       setIsFirstLaunch();
       return const HomeScreen();
     }
@@ -106,13 +104,13 @@ class WelcomeScreen extends StatelessWidget {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
+                            setIsFirstLaunch();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const HomeScreen(),
                               ),
                             );
-                            setIsFirstLaunch();
                           },
                           child: const Text('Continue Without Profile'),
                         ),

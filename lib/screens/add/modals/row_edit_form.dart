@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -12,58 +12,57 @@ import 'package:sc_app/widgets/modal.dart';
 import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
-class RowEditForm extends StatefulWidget {
+class RowEditForm extends ConsumerStatefulWidget {
   const RowEditForm({super.key, required this.activity});
 
-  final ActivityModel activity;
+  final Activity activity;
 
   @override
-  State<RowEditForm> createState() => _RowEditFormState();
+  ConsumerState<RowEditForm> createState() => _RowEditFormState();
 }
 
-class _RowEditFormState extends State<RowEditForm> {
+class _RowEditFormState extends ConsumerState<RowEditForm> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  static final DateTime currDate = DateTime.now();
+  final _titleInputController = TextEditingController();
+  final _dateInputController = TextEditingController();
+  final _timeInputController = TextEditingController();
 
-  static final _activityInputController = TextEditingController();
-  static final _dateInputController = TextEditingController();
-  static final _timeInputController = TextEditingController();
-
-  Future<void> editActivity(BuildContext context) async {
-    Provider.of<ActivityController>(context, listen: false).editActivity(
-      subjectId: widget.activity.subjectId,
-      activityId: widget.activity.id,
-      newActivity: _activityInputController.text.trim(),
-      newDateTime: DateTime(
+  String get _titleInput => _titleInputController.text.trim();
+  DateTime get _selectedDateAndTime => DateTime(
         _selectedDate!.year,
         _selectedDate!.month,
         _selectedDate!.day,
         _selectedTime!.hour,
         _selectedTime!.minute,
-      ),
-    );
+      );
+
+  void _editActivity() {
+    ref.read(dataProvider.notifier).editActivity(
+          subjectId: widget.activity.subjectId,
+          activityId: widget.activity.id,
+          newTitle: _titleInput,
+          newDate: _selectedDateAndTime,
+        );
   }
 
-  DateTime activityDate() => widget.activity.dateTime;
+  String get _oldActivityTitle => widget.activity.title;
+  DateTime get _oldActivityDate => widget.activity.date;
 
   @override
   void initState() {
-    _activityInputController.text = widget.activity.activity;
-
+    _titleInputController.text = _oldActivityTitle;
     _dateInputController.text =
-        activityDate().toLocal().toString().split(' ')[0];
-    setState(() {
-      _selectedDate = activityDate();
-    });
-
+        _oldActivityDate.toLocal().toString().split(' ')[0];
     _timeInputController.text =
-        '${Helpers.padTwoNums(activityDate().hour)}:${Helpers.padTwoNums(activityDate().minute)}';
+        '${Helpers.padTwoNums(_oldActivityDate.hour)}:${Helpers.padTwoNums(_oldActivityDate.minute)}';
+
+    setState(() => _selectedDate = _oldActivityDate);
     setState(() {
       _selectedTime = TimeOfDay(
-        hour: activityDate().hour,
-        minute: activityDate().minute,
+        hour: _oldActivityDate.hour,
+        minute: _oldActivityDate.minute,
       );
     });
 
@@ -72,7 +71,7 @@ class _RowEditFormState extends State<RowEditForm> {
 
   @override
   void dispose() {
-    _activityInputController.clear();
+    _titleInputController.clear();
     _dateInputController.clear();
     _timeInputController.clear();
     super.dispose();
@@ -90,7 +89,7 @@ class _RowEditFormState extends State<RowEditForm> {
         ),
         const SizedBox(height: 20),
         const LabelText(text: 'Title'),
-        ActivityInput(inputController: _activityInputController),
+        ActivityInput(inputController: _titleInputController),
         const SizedBox(height: 16),
         Row(
           children: [
@@ -103,9 +102,9 @@ class _RowEditFormState extends State<RowEditForm> {
                   TextField(
                     onTap: () => showDatePicker(
                       context: context,
-                      initialDate: _selectedDate ?? currDate,
-                      firstDate: DateTime(currDate.year - 1),
-                      lastDate: DateTime(currDate.year + 1, 12, 31),
+                      initialDate: _selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(DateTime.now().year),
+                      lastDate: DateTime(DateTime.now().year + 1, 12, 31),
                     ).then((pickedDate) {
                       if (pickedDate != null) {
                         _dateInputController.text =
@@ -183,7 +182,7 @@ class _RowEditFormState extends State<RowEditForm> {
               width: 96,
               child: PrimaryBorderBtn(
                 onPressed: () {
-                  if (_activityInputController.text.isEmpty ||
+                  if (_titleInput.isEmpty ||
                       _selectedDate == null ||
                       _selectedTime == null) {
                     Show.snackBar(
@@ -194,16 +193,8 @@ class _RowEditFormState extends State<RowEditForm> {
                     return;
                   }
 
-                  if (widget.activity.activity ==
-                          _activityInputController.text &&
-                      activityDate() ==
-                          DateTime(
-                            _selectedDate!.year,
-                            _selectedDate!.month,
-                            _selectedDate!.day,
-                            _selectedTime!.hour,
-                            _selectedTime!.minute,
-                          )) {
+                  if (_titleInput == _oldActivityTitle &&
+                      _selectedDateAndTime == _oldActivityDate) {
                     Show.snackBar(
                       context,
                       text: 'You did not change anything :)',
@@ -212,16 +203,14 @@ class _RowEditFormState extends State<RowEditForm> {
                     return;
                   }
 
-                  editActivity(context).then((_) {
-                    Navigator.pop(context);
-                  }).then((_) {
-                    Show.snackBar(
-                      context,
-                      text: 'One of ${widget.activity.subjectName} '
-                          'activities was edited.',
-                      snackBarIcon: SnackBarIcon.done,
-                    );
-                  });
+                  _editActivity();
+                  Navigator.pop(context);
+                  Show.snackBar(
+                    context,
+                    text: 'One of ${widget.activity.subjectName} '
+                        'activities was edited.',
+                    snackBarIcon: SnackBarIcon.done,
+                  );
                 },
                 child: const Text('Save'),
               ),

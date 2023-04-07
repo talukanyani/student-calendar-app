@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -12,46 +12,44 @@ import 'package:sc_app/widgets/modal.dart';
 import '../widgets/activity_input.dart';
 import '../widgets/label_text.dart';
 
-class RowAddForm extends StatefulWidget {
+class RowAddForm extends ConsumerStatefulWidget {
   const RowAddForm({super.key, required this.subject});
 
-  final SubjectModel subject;
+  final Subject subject;
 
   @override
-  State<RowAddForm> createState() => _RowAddFormState();
+  ConsumerState<RowAddForm> createState() => _RowAddFormState();
 }
 
-class _RowAddFormState extends State<RowAddForm> {
+class _RowAddFormState extends ConsumerState<RowAddForm> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  static final DateTime currDate = DateTime.now();
+  final _titleInputController = TextEditingController();
+  final _dateInputController = TextEditingController();
+  final _timeInputController = TextEditingController();
 
-  static final _activityInputController = TextEditingController();
-  static final _dateInputController = TextEditingController();
-  static final _timeInputController = TextEditingController();
-
-  Future<void> addActivity(BuildContext context) async {
-    Provider.of<ActivityController>(context, listen: false).addActivity(
-      ActivityModel(
-        id: DateTime.now().millisecondsSinceEpoch,
-        subjectId: widget.subject.id,
-        subjectName: widget.subject.name,
-        activity: _activityInputController.text.trim(),
-        dateTime: DateTime(
-          _selectedDate!.year,
-          _selectedDate!.month,
-          _selectedDate!.day,
-          _selectedTime!.hour,
-          _selectedTime!.minute,
-        ),
-      ),
-    );
+  void _addActivity() {
+    ref.read(dataProvider.notifier).addActivity(
+          Activity(
+            id: DateTime.now().millisecondsSinceEpoch,
+            subjectId: widget.subject.id,
+            subjectName: widget.subject.name,
+            title: _titleInputController.text.trim(),
+            date: DateTime(
+              _selectedDate!.year,
+              _selectedDate!.month,
+              _selectedDate!.day,
+              _selectedTime!.hour,
+              _selectedTime!.minute,
+            ),
+          ),
+        );
   }
 
   @override
   void dispose() {
-    _activityInputController.clear();
+    _titleInputController.clear();
     _dateInputController.clear();
     _timeInputController.clear();
     super.dispose();
@@ -69,7 +67,7 @@ class _RowAddFormState extends State<RowAddForm> {
         ),
         const SizedBox(height: 20),
         const LabelText(text: 'Title'),
-        ActivityInput(inputController: _activityInputController),
+        ActivityInput(inputController: _titleInputController),
         const SizedBox(height: 16),
         Row(
           children: [
@@ -82,9 +80,9 @@ class _RowAddFormState extends State<RowAddForm> {
                   TextField(
                     onTap: () => showDatePicker(
                       context: context,
-                      initialDate: _selectedDate ?? currDate,
-                      firstDate: DateTime(currDate.year - 1),
-                      lastDate: DateTime(currDate.year + 1, 12, 31),
+                      initialDate: _selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(DateTime.now().year),
+                      lastDate: DateTime(DateTime.now().year + 1, 12, 31),
                     ).then((pickedDate) {
                       if (pickedDate != null) {
                         _dateInputController.text =
@@ -162,7 +160,7 @@ class _RowAddFormState extends State<RowAddForm> {
               width: 96,
               child: PrimaryBorderBtn(
                 onPressed: () {
-                  if (_activityInputController.text.isEmpty ||
+                  if (_titleInputController.text.isEmpty ||
                       _selectedDate == null ||
                       _selectedTime == null) {
                     Show.snackBar(
@@ -171,16 +169,14 @@ class _RowAddFormState extends State<RowAddForm> {
                       snackBarIcon: SnackBarIcon.error,
                     );
                   } else {
-                    addActivity(context).then((_) {
-                      Navigator.pop(context);
-                    }).then((_) {
-                      Show.snackBar(
-                        context,
-                        text:
-                            'One activity for ${widget.subject.name} was added',
-                        snackBarIcon: SnackBarIcon.done,
-                      );
-                    });
+                    _addActivity();
+                    Navigator.pop(context);
+                    Show.snackBar(
+                      context,
+                      text: 'One activity for ${widget.subject.name} '
+                          'was added',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
                   }
                 },
                 child: const Text('Add'),

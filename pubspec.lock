@@ -73,14 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      sha256: e35129dc44c9118cee2a5603506d823bab99c68393879edb440e0090d07586be
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -105,30 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
-  firebase_analytics:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics
-      sha256: "2daceef653b9c2f3399a1f977e06cd14b895569e379f08339706f53a84c9cb5e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.1.0"
-  firebase_analytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_analytics_platform_interface
-      sha256: "370fd678c4a1521da84759bf3969796796b4a7837f51db4d7104a1f1c77b12de"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.17"
-  firebase_analytics_web:
-    dependency: transitive
-    description:
-      name: firebase_analytics_web
-      sha256: "39c68ad46c0d02819a772606bd1392e984f767a2f4ea5203b5bcadc7c56c8a1d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.1+8"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -198,6 +166,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_riverpod:
+    dependency: "direct main"
+    description:
+      name: flutter_riverpod
+      sha256: "7ccf1f98a906a91b1f4e95dea81b4b571d95049a59c54b79d57a2954b0285afe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -272,14 +248,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -360,14 +328,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
-  provider:
-    dependency: "direct main"
+  riverpod:
+    dependency: transitive
     description:
-      name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
+      name: riverpod
+      sha256: fc63714de93a4660142d280e13f058137ba586510c825dce3b7c7d4c4714b585
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.5"
+    version: "2.3.3"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -445,6 +413,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  state_notifier:
+    dependency: transitive
+    description:
+      name: state_notifier
+      sha256: "8fe42610f179b843b12371e40db58c9444f8757f8b69d181c97e50787caed289"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2+1"
   stream_channel:
     dependency: transitive
     description:

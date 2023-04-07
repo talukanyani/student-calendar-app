@@ -1,44 +1,55 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/services/authentication.dart';
 import 'package:sc_app/services/cloud_database.dart';
-import '../utils/enums.dart';
+import 'package:sc_app/utils/enums.dart';
 
-class AuthController extends ChangeNotifier {
-  User? get currentUser => Auth().currentUser;
+class AuthController extends StateNotifier<User?> {
+  AuthController(this.ref) : super(Auth().currentUser);
+
+  final Ref ref;
 
   Future<AuthStatus> createProfile({
     required String name,
     required String email,
     required String password,
-  }) async {
-    var createProfile = await Auth().createProfile(email, password);
+  }) {
+    return Auth().createProfile(email, password).then((status) {
+      if (status != AuthStatus.done) return status;
 
-    if (createProfile != AuthStatus.done) return createProfile;
+      state = Auth().currentUser;
 
-    notifyListeners();
+      updateName(name);
 
-    updateName(name);
-
-    return createProfile;
+      return status;
+    });
   }
 
-  Future<List> login({required String email, required String password}) async {
-    var login = await Auth().login(email, password);
+  Future<AuthStatus> login({required String email, required String password}) {
+    return Auth().login(email, password).then((status) async {
+      if (status != AuthStatus.done) return status;
 
-    if (login != AuthStatus.done) return [login];
+      state = Auth().currentUser;
 
-    notifyListeners();
+      var syncedData = await CloudDb().getSyncedData(Auth().currentUser?.uid);
+      var isSync = syncedData.isNotEmpty;
 
-    var syncedSubjects = await CloudDb().getSyncedSubjects(currentUser?.uid);
-    var isSync = syncedSubjects.isNotEmpty;
+      if (isSync) {
+        ref.read(dataSyncProvider.notifier).set(true, updateData: false);
+        ref.read(dataProvider.notifier).updateWithSynceddata();
+      }
 
-    return [login, isSync];
+      return status;
+    });
   }
 
   Future<AuthStatus> logout() {
+    ref.read(dataSyncProvider.notifier).set(false, updateData: false);
+
     return Auth().logout().then((status) {
-      notifyListeners();
+      if (status == AuthStatus.done) state = Auth().currentUser;
       return status;
     });
   }
@@ -51,43 +62,46 @@ class AuthController extends ChangeNotifier {
 
   Future<AuthStatus> updateName(String displayName) {
     return Auth().updateName(displayName).then((status) {
-      notifyListeners();
+      if (status == AuthStatus.done) state = Auth().currentUser;
       return status;
     });
   }
 
-  Future<AuthStatus> changeEmail(
-      {required String password, required String newEmail}) {
+  Future<AuthStatus> changeEmail({
+    required String password,
+    required String newEmail,
+  }) {
     return Auth().changeEmail(password, newEmail).then((status) {
-      notifyListeners();
+      if (status == AuthStatus.done) state = Auth().currentUser;
       return status;
     });
   }
 
-  Future<AuthStatus> changePassword(
-      {required String oldPassword, required String newPassword}) {
+  Future<AuthStatus> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) {
     return Auth().changePassword(oldPassword, newPassword).then((status) {
       return status;
     });
   }
 
   Future<AuthStatus> deleteProfile(String password) async {
-    await CloudDb().deleteAllSujects(currentUser?.uid);
+    await CloudDb().deleteAllData(Auth().currentUser?.uid);
+    ref.read(dataSyncProvider.notifier).set(false, updateData: false);
 
     return Auth().deleteProfile(password).then((status) {
-      notifyListeners();
+      if (status == AuthStatus.done) state = Auth().currentUser;
       return status;
     });
   }
 
-  Future<void> sendVerificationEmail() {
-    return Auth().sendVerificationEmail();
-  }
+  Future<void> sendVerificationEmail() => Auth().sendVerificationEmail();
 
   Future<bool> checkEmailVerified() {
-    return Auth().checkEmailVerified().then((result) {
-      if (result) notifyListeners();
-      return result;
+    return Auth().checkEmailVerified().then((isVerified) {
+      if (isVerified) state = Auth().currentUser;
+      return isVerified;
     });
   }
 }

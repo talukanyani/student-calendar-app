@@ -1,87 +1,100 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/services/cloud_database.dart';
-import 'package:sc_app/services/local_database.dart';
 import 'package:sc_app/utils/enums.dart';
-import 'authentication.dart';
 
-class SettingController extends ChangeNotifier {
-  SettingController(this.authController) {
-    _useChachedSettings();
+class ThemeModeController extends StateNotifier<ThemeMode> {
+  ThemeModeController() : super(ThemeMode.system) {
+    _useCachedValue();
   }
 
-  final AuthController authController;
-
-  bool get _isAuthed => authController.currentUser != null;
-  String? get _userId => authController.currentUser?.uid;
-
-  ThemeMode _themeMode = ThemeMode.system;
-  TablesSortSetting _tablesSort = TablesSortSetting.name;
-  int _weekStartDay = DateTime.monday;
-  bool _isActivitiesSync = false;
-
-  ThemeMode get themeMode => _themeMode;
-  TablesSortSetting get tablesSort => _tablesSort;
-  int get weekStartDay => _weekStartDay;
-  bool get isActivitiesSync => _isActivitiesSync && _isAuthed;
-
-  void setTheme(ThemeMode value) {
-    _themeMode = value;
-    notifyListeners();
+  void set(ThemeMode value) {
+    state = value;
 
     SharedPreferences.getInstance().then((prefs) {
       prefs.setInt('themeMode', value.index);
     });
   }
 
-  void setTablesSort(TablesSortSetting value) {
-    _tablesSort = value;
-    notifyListeners();
+  void _useCachedValue() {
+    SharedPreferences.getInstance().then((prefs) {
+      state = ThemeMode.values[prefs.getInt('themeMode') ?? state.index];
+    });
+  }
+}
+
+class TablesSortController extends StateNotifier<TablesSort> {
+  TablesSortController() : super(TablesSort.name) {
+    _useCachedValue();
+  }
+
+  void set(TablesSort value) {
+    state = value;
 
     SharedPreferences.getInstance().then((prefs) {
       prefs.setInt('tablesSort', value.index);
     });
   }
 
-  void setWeekStart(int value) {
-    _weekStartDay = value;
-    notifyListeners();
+  void _useCachedValue() {
+    SharedPreferences.getInstance().then((prefs) {
+      state = TablesSort.values[prefs.getInt('tablesSort') ?? state.index];
+    });
+  }
+}
+
+class WeekStartController extends StateNotifier<int> {
+  WeekStartController() : super(DateTime.monday) {
+    _useCachedValue();
+  }
+
+  void set(int value) {
+    state = value;
 
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setInt('weekStartDay', value);
+      prefs.setInt('weekStart', value);
     });
   }
 
-  Future<void> setActivitiesSync(bool value, {bool updateData = true}) async {
-    _isActivitiesSync = value;
-    notifyListeners();
+  void _useCachedValue() {
+    SharedPreferences.getInstance().then((prefs) {
+      state = prefs.getInt('weekStart') ?? state;
+    });
+  }
+}
+
+class DataSyncController extends StateNotifier<bool> {
+  DataSyncController(this.ref) : super(false) {
+    _useCachedValue();
+  }
+
+  final Ref ref;
+
+  void set(bool value, {bool updateData = true}) {
+    state = value;
 
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool('isSync', value);
+      prefs.setBool('isDataSync', value);
     });
 
     if (value && updateData) {
-      CloudDb().addMultipleSubjets(
-        await LocalDb().cachedSubjects,
-        userId: _userId,
+      CloudDb().addMultipleData(
+        ref.read(dataProvider),
+        userId: ref.read(userIdProvider),
       );
     }
 
     if (!value && updateData) {
-      CloudDb().deleteAllSujects(_userId);
+      CloudDb().deleteAllData(ref.read(userIdProvider));
     }
   }
 
-  Future<void> _useChachedSettings() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    _themeMode =
-        ThemeMode.values[prefs.getInt('themeMode') ?? _themeMode.index];
-    _tablesSort = TablesSortSetting
-        .values[prefs.getInt('tablesSort') ?? _themeMode.index];
-    _weekStartDay = prefs.getInt('weekStartDay') ?? _weekStartDay;
-    _isActivitiesSync = prefs.getBool('isSync') ?? _isActivitiesSync;
-
-    notifyListeners();
+  void _useCachedValue() {
+    SharedPreferences.getInstance().then((prefs) {
+      state = prefs.getBool('isDataSync') ?? state;
+    });
   }
 }

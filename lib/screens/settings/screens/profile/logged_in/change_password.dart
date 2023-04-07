@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
@@ -9,14 +9,15 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
 
-class ChangePasswordScreen extends StatefulWidget {
+class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
 
   @override
-  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
+  ConsumerState<ChangePasswordScreen> createState() =>
+      _ChangePasswordScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   String? _errorMessage;
   String? _oldPasswordErrorMessage;
   String? _newPasswordErrorMessage;
@@ -29,14 +30,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _changePassword(BuildContext context) {
+  void _changePassword({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    Provider.of<AuthController>(context, listen: false)
+    ref
+        .read(authProvider.notifier)
         .changePassword(
-      oldPassword: _oldPasswordInputController.text,
-      newPassword: _newPasswordInputController.text,
-    )
+          oldPassword: _oldPasswordInputController.text,
+          newPassword: _newPasswordInputController.text,
+        )
         .then((status) {
       setState(() => _isLoading = false);
 
@@ -62,12 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           });
           break;
         default:
-          Navigator.pop(context);
-          Show.snackBar(
-            context,
-            text: 'Password was successfully changed.',
-            snackBarIcon: SnackBarIcon.done,
-          );
+          onDone();
       }
     });
   }
@@ -190,7 +187,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             onPressed: () {
               setState(() => _errorMessage = null);
               if (_formKey.currentState!.validate()) {
-                _changePassword(context);
+                _changePassword(
+                  onDone: () {
+                    Navigator.pop(context);
+                    Show.snackBar(
+                      context,
+                      text: 'Password was successfully changed.',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
+                  },
+                );
               }
             },
             child: const Text('Change'),

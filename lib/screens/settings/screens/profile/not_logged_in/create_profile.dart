@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
 import '../logged_in/email_verification.dart';
 import 'login.dart';
 
-class CreateProfileScreen extends StatefulWidget {
+class CreateProfileScreen extends ConsumerStatefulWidget {
   const CreateProfileScreen({super.key});
 
   @override
-  State<CreateProfileScreen> createState() => _CreateProfileScreenState();
+  ConsumerState<CreateProfileScreen> createState() =>
+      _CreateProfileScreenState();
 }
 
-class _CreateProfileScreenState extends State<CreateProfileScreen> {
+class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
   String? _errorMessage;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
@@ -29,17 +30,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _createProfile(BuildContext context) {
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-
+  void _createProfile({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    authProvider
+    ref
+        .read(authProvider.notifier)
         .createProfile(
-      name: _nameInputController.text.trim(),
-      email: _emailInputController.text,
-      password: _passwordInputController.text,
-    )
+          name: _nameInputController.text.trim(),
+          email: _emailInputController.text,
+          password: _passwordInputController.text,
+        )
         .then((value) {
       setState(() => _isLoading = false);
 
@@ -65,12 +65,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           });
           break;
         default:
-          authProvider.sendVerificationEmail();
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const EmailVerificationScreen(),
-            ),
-          );
+          onDone();
       }
     });
   }
@@ -204,7 +199,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             onPressed: () {
               setState(() => _errorMessage = null);
               if (_formKey.currentState!.validate()) {
-                _createProfile(context);
+                _createProfile(
+                  onDone: () {
+                    ref.read(authProvider.notifier).sendVerificationEmail();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const EmailVerificationScreen(),
+                      ),
+                    );
+                  },
+                );
               }
             },
             child: const Text('Create Profile'),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/primary_top_bar.dart';
@@ -31,25 +29,6 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activitiesController = Provider.of<ActivityController>(context);
-
-    var todayActivities = activitiesController.dayActivities(today);
-    var tomorrowActivities = activitiesController.dayActivities(tomorrow);
-
-    int next7daysActivitiesCount() {
-      int activitiesCount = 0;
-
-      for (var i = 0; i < 7; i++) {
-        var dayActivities = activitiesController.dayActivities(
-          today.add(Duration(days: i)),
-        );
-
-        activitiesCount += dayActivities.length;
-      }
-
-      return activitiesCount;
-    }
-
     return Stack(
       children: <Widget>[
         Image(
@@ -103,23 +82,15 @@ class Body extends StatelessWidget {
                 children: [
                   Box(
                     title: 'Today',
-                    child: ActivitiesList(
-                      date: today,
-                      activities: todayActivities,
-                    ),
+                    child: ActivitiesList(date: today),
                   ),
                   Box(
                     title: 'Tomorrow',
-                    child: ActivitiesList(
-                      date: tomorrow,
-                      activities: tomorrowActivities,
-                    ),
+                    child: ActivitiesList(date: tomorrow),
                   ),
-                  Box(
+                  const Box(
                     title: 'This Week',
-                    child: WeekActivities(
-                      activitiesCount: next7daysActivitiesCount(),
-                    ),
+                    child: WeekActivities(),
                   ),
                 ],
               ),

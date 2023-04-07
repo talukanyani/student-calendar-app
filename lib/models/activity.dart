@@ -1,35 +1,45 @@
-class ActivityModel {
+class Activity {
   int id;
   int subjectId;
   String subjectName;
-  String activity;
-  DateTime dateTime;
+  String title;
+  DateTime date;
 
-  ActivityModel({
+  Activity({
     required this.id,
     required this.subjectId,
     required this.subjectName,
-    required this.activity,
-    required this.dateTime,
+    required this.title,
+    required this.date,
   });
 
-  Map<String, dynamic> toEncodableJson() {
+  Activity copyWith({String? title, DateTime? date}) {
+    return Activity(
+      id: id,
+      subjectId: subjectId,
+      subjectName: subjectName,
+      title: title ?? this.title,
+      date: date ?? this.date,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'subjectId': subjectId,
       'subjectName': subjectName,
-      'activity': activity,
-      'dateTime': dateTime.toString(),
+      'title': title,
+      'date': date.toString(),
     };
   }
 
-  factory ActivityModel.fromEncodableJson(Map<String, dynamic> json) {
-    return ActivityModel(
+  factory Activity.fromJson(Map<String, dynamic> json) {
+    return Activity(
       id: json['id'],
       subjectId: json['subjectId'],
       subjectName: json['subjectName'],
-      activity: json['activity'],
-      dateTime: DateTime.parse(json['dateTime']),
+      title: json['title'],
+      date: DateTime.parse(json['date']),
     );
   }
 }

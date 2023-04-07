@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/alerts.dart';
@@ -11,14 +11,15 @@ import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/bullet_list.dart';
 import 'package:sc_app/widgets/loading.dart';
 
-class DeleteProfileScreen extends StatefulWidget {
+class DeleteProfileScreen extends ConsumerStatefulWidget {
   const DeleteProfileScreen({super.key});
 
   @override
-  State<DeleteProfileScreen> createState() => _DeleteProfileScreenState();
+  ConsumerState<DeleteProfileScreen> createState() =>
+      _DeleteProfileScreenState();
 }
 
-class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
+class _DeleteProfileScreenState extends ConsumerState<DeleteProfileScreen> {
   String? errorMessage;
   String? passwordErrorMessage;
   bool _isPasswordHidden = true;
@@ -27,12 +28,13 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _deleteProfile(BuildContext context) {
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-
+  void _deleteProfile({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    authProvider.deleteProfile(_inputController.text).then((status) {
+    ref
+        .read(authProvider.notifier)
+        .deleteProfile(_inputController.text)
+        .then((status) {
       setState(() => _isLoading = false);
 
       switch (status) {
@@ -47,12 +49,7 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
           });
           break;
         default:
-          Navigator.pop(context);
-          Show.snackBar(
-            context,
-            text: 'Profile was successfully deleted.',
-            snackBarIcon: SnackBarIcon.done,
-          );
+          onDone();
       }
     });
   }
@@ -165,7 +162,16 @@ class _DeleteProfileScreenState extends State<DeleteProfileScreen> {
                       '\nYou won\'t be able to revert this action.',
                     ),
                     actionName: 'Delete',
-                    action: () => _deleteProfile(context),
+                    action: () => _deleteProfile(
+                      onDone: () {
+                        Navigator.pop(context);
+                        Show.snackBar(
+                          context,
+                          text: 'Profile was successfully deleted.',
+                          snackBarIcon: SnackBarIcon.done,
+                        );
+                      },
+                    ),
                   ),
                 );
               }

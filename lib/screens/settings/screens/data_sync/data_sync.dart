@@ -1,38 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/setting.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import 'modals/login_alert.dart';
 
-class DataSyncScreen extends StatefulWidget {
+class DataSyncScreen extends ConsumerStatefulWidget {
   const DataSyncScreen({super.key});
 
   @override
-  State<DataSyncScreen> createState() => _DataSyncScreenState();
+  ConsumerState<DataSyncScreen> createState() => _DataSyncScreenState();
 }
 
-class _DataSyncScreenState extends State<DataSyncScreen> {
+class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
   void _onActivitiesSyncTurnOn(BuildContext context) {
-    final settingProvider =
-        Provider.of<SettingController>(context, listen: false);
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-
-    if (authProvider.currentUser == null) {
+    if (!ref.watch(isLoggedInProvider)) {
       Show.modal(context, modal: const LoginAlert());
       return;
     }
 
-    settingProvider.setActivitiesSync(true);
+    ref.read(dataSyncProvider.notifier).set(true);
   }
 
   void _onActivitiesSyncTurnOff(BuildContext context) {
-    final settingProvider = Provider.of<SettingController>(
-      context,
-      listen: false,
-    );
-
     Show.modal(
       context,
       modal: ConfirmationAlert(
@@ -40,22 +31,20 @@ class _DataSyncScreenState extends State<DataSyncScreen> {
         content: const Text(
           'Are you sure you want turn off activities sync?',
         ),
-        action: () => settingProvider.setActivitiesSync(false),
+        action: () => ref.read(dataSyncProvider.notifier).set(false),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final settingController = Provider.of<SettingController>(context);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Data Sync')),
       body: ListView(
         primary: false,
         children: [
           SwitchListTile(
-            value: settingController.isActivitiesSync,
+            value: ref.watch(dataSyncAndAuthedProvider),
             onChanged: (value) {
               if (value) {
                 _onActivitiesSyncTurnOn(context);

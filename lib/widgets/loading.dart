@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key, this.text});
@@ -8,6 +9,7 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColorScheme.background5,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

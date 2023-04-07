@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-
 import 'package:sc_app/screens/home/home.dart';
 import 'package:sc_app/screens/add/add.dart';
 import 'package:sc_app/screens/calendar/calendar.dart';
@@ -25,11 +24,10 @@ class BottomBar extends StatelessWidget {
       onTap: (int index) {
         if (index == screenIndex) return;
 
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => _primaryScreens[index],
-          ),
+        if (index == 0) Navigator.pop(context);
+
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => _primaryScreens[index]),
           (route) => route.isFirst,
         );
       },

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/subject.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -13,29 +13,29 @@ import 'package:sc_app/widgets/modal.dart';
 import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
-class TableAddForm extends StatefulWidget {
+class TableAddForm extends ConsumerStatefulWidget {
   const TableAddForm({super.key});
 
   @override
-  State<TableAddForm> createState() => _TableAddFormState();
+  ConsumerState<TableAddForm> createState() => _TableAddFormState();
 }
 
-class _TableAddFormState extends State<TableAddForm> {
+class _TableAddFormState extends ConsumerState<TableAddForm> {
   String _selectedColor = _colors[Random().nextInt(7)];
 
   static final List<String> _colors = [...tableColors.keys];
 
   final _titleInputController = TextEditingController();
 
-  void _addSubject(BuildContext context) {
-    Provider.of<SubjectController>(context, listen: false).addSubject(
-      SubjectModel(
-        id: DateTime.now().millisecondsSinceEpoch,
-        name: _titleInputController.text.trim(),
-        color: _selectedColor,
-        activities: [],
-      ),
-    );
+  void _addSubject() {
+    ref.read(dataProvider.notifier).addSubject(
+          Subject(
+            id: DateTime.now().millisecondsSinceEpoch,
+            name: _titleInputController.text.trim(),
+            color: _selectedColor,
+            activities: [],
+          ),
+        );
   }
 
   @override
@@ -116,7 +116,7 @@ class _TableAddFormState extends State<TableAddForm> {
                       snackBarIcon: SnackBarIcon.error,
                     );
                   } else {
-                    _addSubject(context);
+                    _addSubject();
                     Navigator.pop(context);
                     Show.snackBar(
                       context,

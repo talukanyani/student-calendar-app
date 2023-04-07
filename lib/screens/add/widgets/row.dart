@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/models/activity.dart';
@@ -36,36 +36,28 @@ TableRow headerRow() {
   );
 }
 
-TableRow row({required ActivityModel activity}) {
-  final activityTime = activity.dateTime;
-
-  String getYear() {
-    if (activityTime.year == DateTime.now().year) {
-      return '';
-    } else {
-      return activityTime.year.toString();
-    }
-  }
+TableRow row({required Activity activity}) {
+  final activityDate = activity.date;
 
   return TableRow(
     children: [
       Padding(
         padding: const EdgeInsets.all(8),
-        child: Text(activity.activity),
+        child: Text(activity.title),
       ),
       Padding(
         padding: const EdgeInsets.all(8),
         child: Text(
-          '${Helpers.padTwoNums(activityTime.day)} '
-          '${getMonthName(activityTime.month - 1)} '
-          '${getYear()}',
+          '${Helpers.padTwoNums(activityDate.day)} '
+          '${getMonthName(activityDate.month - 1)} '
+          '${activityDate.year == DateTime.now().year ? '' : activityDate.year}',
         ),
       ),
       Padding(
         padding: const EdgeInsets.all(8),
         child: Text(
-          '${Helpers.padTwoNums(activityTime.hour)}:'
-          '${Helpers.padTwoNums(activityTime.minute)}',
+          '${Helpers.padTwoNums(activityDate.hour)}:'
+          '${Helpers.padTwoNums(activityDate.minute)}',
         ),
       ),
       MoreRowActionsButton(activity: activity),
@@ -73,16 +65,13 @@ TableRow row({required ActivityModel activity}) {
   );
 }
 
-class MoreRowActionsButton extends StatelessWidget {
+class MoreRowActionsButton extends ConsumerWidget {
   const MoreRowActionsButton({super.key, required this.activity});
 
-  final ActivityModel activity;
+  final Activity activity;
 
   @override
-  Widget build(BuildContext context) {
-    final activityProvider =
-        Provider.of<ActivityController>(context, listen: false);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       type: MaterialType.transparency,
       child: SizedBox(
@@ -117,18 +106,18 @@ class MoreRowActionsButton extends StatelessWidget {
                       FluentIcons.delete_24_filled,
                     ),
                     content: Text(
-                      '${activity.activity} activity will be deleted permanently.',
+                      '${activity.title} activity will be deleted permanently.',
                     ),
                     actionName: 'Delete',
                     action: () {
-                      activityProvider.deleteActivity(
-                        activityId: activity.id,
-                        subjectId: activity.subjectId,
-                      );
+                      ref.read(dataProvider.notifier).deleteActivity(
+                            activityId: activity.id,
+                            subjectId: activity.subjectId,
+                          );
                       Show.snackBar(
                         context,
-                        text:
-                            'One activity from ${activity.subjectName} was deleted.',
+                        text: 'One activity from ${activity.subjectName} '
+                            'was deleted.',
                         snackBarIcon: SnackBarIcon.done,
                       );
                     },

@@ -1,39 +1,37 @@
 import 'activity.dart';
 
-class SubjectModel {
+class Subject {
   int id;
   String name;
   String color;
-  List<ActivityModel> activities;
+  List<Activity> activities;
 
-  SubjectModel({
+  Subject({
     required this.id,
     required this.name,
     required this.color,
     required this.activities,
   });
 
-  Map<String, dynamic> toEncodableJson() {
-    return {
-      'id': id,
-      'name': name,
-      'color': color,
-      'activities': List.generate(activities.length, (index) {
-        return activities.elementAt(index).toEncodableJson();
-      }),
-    };
+  Subject copyWith({String? name, String? color, List<Activity>? activities}) {
+    return Subject(
+      id: id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+      activities: activities ?? this.activities,
+    );
   }
 
-  factory SubjectModel.fromEncodableJson(Map<String, dynamic> json) {
-    return SubjectModel(
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'name': name, 'color': color};
+  }
+
+  factory Subject.fromJson(Map<String, dynamic> json) {
+    return Subject(
       id: json['id'],
       name: json['name'],
       color: json['color'],
-      activities: List.generate(json['activities'].length, (index) {
-        return ActivityModel.fromEncodableJson(
-          json['activities'].elementAt(index),
-        );
-      }),
+      activities: [],
     );
   }
 }

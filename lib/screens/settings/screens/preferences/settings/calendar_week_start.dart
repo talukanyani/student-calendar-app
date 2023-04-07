@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/setting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/modal.dart';
 
-class CalendarWeekStartSettingModal extends StatelessWidget {
+class CalendarWeekStartSettingModal extends ConsumerWidget {
   const CalendarWeekStartSettingModal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final settingController = Provider.of<SettingController>(context);
-
-    RadioListTile option(int value) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    RadioListTile<int> option(int value) {
       return RadioListTile(
         value: value,
-        groupValue: settingController.weekStartDay,
+        groupValue: ref.watch(weekStartProvider),
         onChanged: (value) {
-          settingController.setWeekStart(value);
+          ref.read(weekStartProvider.notifier).set(value ?? 1);
           Navigator.pop(context);
         },
         visualDensity: const VisualDensity(vertical: -3),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/themes/color_scheme.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -10,14 +10,14 @@ import 'package:sc_app/widgets/loading.dart';
 
 import 'email_verification.dart';
 
-class ChangeEmailScreen extends StatefulWidget {
+class ChangeEmailScreen extends ConsumerStatefulWidget {
   const ChangeEmailScreen({super.key});
 
   @override
-  State<ChangeEmailScreen> createState() => _ChangeEmailScreenState();
+  ConsumerState<ChangeEmailScreen> createState() => _ChangeEmailScreenState();
 }
 
-class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
+class _ChangeEmailScreenState extends ConsumerState<ChangeEmailScreen> {
   String? _errorMessage;
   String? _emailErrorMessage;
   String? _passwordErrorMessage;
@@ -29,16 +29,15 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _changeEmail(BuildContext context) {
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-
+  void _changeEmail({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    authProvider
+    ref
+        .read(authProvider.notifier)
         .changeEmail(
-      password: _passwordInputController.text,
-      newEmail: _emailInputController.text,
-    )
+          password: _passwordInputController.text,
+          newEmail: _emailInputController.text,
+        )
         .then((status) {
       setState(() => _isLoading = false);
 
@@ -64,12 +63,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
           });
           break;
         default:
-          authProvider.sendVerificationEmail();
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const EmailVerificationScreen(),
-            ),
-          );
+          onDone();
       }
     });
   }
@@ -175,7 +169,16 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
             onPressed: () {
               setState(() => _errorMessage = null);
               if (_formKey.currentState!.validate()) {
-                _changeEmail(context);
+                _changeEmail(
+                  onDone: () {
+                    ref.read(authProvider.notifier).sendVerificationEmail();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const EmailVerificationScreen(),
+                      ),
+                    );
+                  },
+                );
               }
             },
             child: const Text('Change'),

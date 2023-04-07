@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/loading.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
+class ResetPasswordScreen extends ConsumerStatefulWidget {
   const ResetPasswordScreen({super.key});
 
   @override
-  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  ConsumerState<ResetPasswordScreen> createState() =>
+      _ResetPasswordScreenState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   String? _errorMessage;
   bool _isLoading = false;
 
   final _emailInputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _resetPassword(BuildContext context) {
+  void _resetPassword({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    Provider.of<AuthController>(context, listen: false)
+    ref
+        .read(authProvider.notifier)
         .resetPassword(_emailInputController.text)
         .then((status) {
       setState(() => _isLoading = false);
@@ -47,19 +49,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           });
           break;
         default:
-          Navigator.pop(context);
-          Show.modal(
-            context,
-            modal: const InfoAlert(
-              title: Text('Email Sent'),
-              content: Text(
-                'Email with password reset link was sent. '
-                'Go to change password on that link then '
-                'come back here to log in with new password.'
-                '\n\nIf you didn\'t recieve the email you may try again.',
-              ),
-            ),
-          );
+          onDone();
       }
     });
   }
@@ -114,17 +104,29 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
           const SizedBox(height: 8),
           ForegroundFilledBtn(
-            onPressed: _isLoading
-                ? null
-                : () {
-                    setState(() => _errorMessage = null);
-                    if (_formKey.currentState!.validate()) {
-                      _resetPassword(context);
-                    }
+            onPressed: () {
+              setState(() => _errorMessage = null);
+              if (_formKey.currentState!.validate()) {
+                _resetPassword(
+                  onDone: () {
+                    Navigator.pop(context);
+                    Show.modal(
+                      context,
+                      modal: const InfoAlert(
+                        title: Text('Email Sent'),
+                        content: Text(
+                          'Email with password reset link was sent. '
+                          'Go to change password on that link then '
+                          'come back here to log in with new password.'
+                          '\n\nIf you didn\'t recieve the email you may try again.',
+                        ),
+                      ),
+                    );
                   },
-            child: _isLoading
-                ? const CircularProgressIndicator()
-                : const Text('Reset'),
+                );
+              }
+            },
+            child: const Text('Reset'),
           ),
           const SizedBox(height: 8),
           Text(

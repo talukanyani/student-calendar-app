@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/setting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/modal.dart';
 
-class TablesSortSettingModal extends StatelessWidget {
+class TablesSortSettingModal extends ConsumerWidget {
   const TablesSortSettingModal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final settingController = Provider.of<SettingController>(context);
-
-    RadioListTile option(TablesSortSetting value) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    RadioListTile<TablesSort> option(TablesSort value) {
       return RadioListTile(
         value: value,
-        groupValue: settingController.tablesSort,
+        groupValue: ref.watch(tablesSortProvider),
         onChanged: (value) {
-          settingController.setTablesSort(value);
+          ref.read(tablesSortProvider.notifier).set(value ?? TablesSort.name);
           Navigator.pop(context);
         },
         visualDensity: const VisualDensity(vertical: -3),
@@ -27,8 +25,8 @@ class TablesSortSettingModal extends StatelessWidget {
     return Modal(
       insetPadding: 32,
       children: [
-        option(TablesSortSetting.name),
-        option(TablesSortSetting.dateAdded),
+        option(TablesSort.name),
+        option(TablesSort.dateAdded),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/setting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/utils/enums.dart';
@@ -9,13 +9,11 @@ import 'settings/calendar_week_start.dart';
 import 'settings/tables_sort.dart';
 // import 'settings/theme_mode.dart';
 
-class PreferencesScreen extends StatelessWidget {
+class PreferencesScreen extends ConsumerWidget {
   const PreferencesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final settingController = Provider.of<SettingController>(context);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Preferences')),
       body: ListView(
@@ -23,7 +21,7 @@ class PreferencesScreen extends StatelessWidget {
         children: [
           // ListTile(
           //   title: const Text('Theme Mode'),
-          //   subtitle: Text(settingController.themeMode.title),
+          //   subtitle: Text(ref.watch(themeModeProvider).title),
           //   leading: Column(
           //     children: const [
           //       Spacer(),
@@ -38,7 +36,7 @@ class PreferencesScreen extends StatelessWidget {
           // ),
           ListTile(
             title: const Text('Sort Tables By'),
-            subtitle: Text(settingController.tablesSort.title),
+            subtitle: Text(ref.watch(tablesSortProvider).title),
             leading: Column(
               children: const [
                 Spacer(),
@@ -54,7 +52,7 @@ class PreferencesScreen extends StatelessWidget {
           ListTile(
             title: const Text('Calendar Week Start'),
             subtitle: Text(
-              getWeekDayFullName(settingController.weekStartDay - 1),
+              getWeekDayFullName(ref.watch(weekStartProvider) - 1),
             ),
             leading: Column(
               children: const [

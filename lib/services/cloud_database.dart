@@ -37,31 +37,23 @@ class CloudDb {
     return snapshot.docs.first.reference;
   }
 
-  Future<List<SubjectModel>> getSyncedSubjects(String? userId) async {
+  Future<List<Subject>> getSyncedData(String? userId) async {
     var subjectsSnapshot = await _subjectsCollection(userId).get();
 
-    List<SubjectModel> subjects = [];
+    List<Subject> subjects = [];
 
     for (var subjectDoc in subjectsSnapshot.docs) {
       var activitiesSnapshot =
           await subjectDoc.reference.collection('activities').get();
 
-      List<ActivityModel> activities = [];
+      List<Activity> activities = [];
 
       for (var activityDoc in activitiesSnapshot.docs) {
-        activities.add(
-          ActivityModel(
-            id: activityDoc.data()['id'],
-            subjectId: activityDoc.data()['subjectId'],
-            subjectName: activityDoc.data()['subjectName'],
-            activity: activityDoc.data()['activity'],
-            dateTime: (activityDoc.data()['dateTime'] as Timestamp).toDate(),
-          ),
-        );
+        activities.add(Activity.fromJson(activityDoc.data()));
       }
 
       subjects.add(
-        SubjectModel(
+        Subject(
           id: subjectDoc.data()['id'],
           name: subjectDoc.data()['name'],
           color: subjectDoc.data()['color'],
@@ -73,23 +65,16 @@ class CloudDb {
     return subjects;
   }
 
-  Future<void> addSubject(SubjectModel subject, {required userId}) async {
-    await _subjectsCollection(userId).add(
-      {'id': subject.id, 'name': subject.name, 'color': subject.color},
-    );
+  Future<void> addSubject(Subject subject, {required String? userId}) async {
+    await _subjectsCollection(userId).add(subject.toJson());
   }
 
-  Future<void> editSubject({
-    required String? userId,
-    required int subjectId,
-    required String newName,
-    required String newColor,
-  }) async {
-    var doc = await _subjectDoc(userId: userId, subjectId: subjectId);
-    await doc.update({'name': newName, 'color': newColor});
+  Future<void> editSubject(Subject subject, {required String? userId}) async {
+    var doc = await _subjectDoc(userId: userId, subjectId: subject.id);
+    await doc.update(subject.toJson());
   }
 
-  Future<void> deleteSubject(int id, {required userId}) async {
+  Future<void> deleteSubject(int id, {required String? userId}) async {
     var subjectDoc = await _subjectDoc(userId: userId, subjectId: id);
     var activitiesSnapShot = await subjectDoc.collection('activities').get();
 
@@ -100,38 +85,25 @@ class CloudDb {
     await subjectDoc.delete();
   }
 
-  Future<void> addActivity(ActivityModel activity,
-      {required String? userId}) async {
+  Future<void> addActivity(Activity activity, {required String? userId}) async {
     var subjectDoc =
         await _subjectDoc(userId: userId, subjectId: activity.subjectId);
     var activitiesCollection = subjectDoc.collection('activities');
 
-    await activitiesCollection.add({
-      'id': activity.id,
-      'subjectId': activity.subjectId,
-      'subjectName': activity.subjectName,
-      'activity': activity.activity,
-      'dateTime': activity.dateTime,
-    });
+    await activitiesCollection.add(activity.toJson());
   }
 
-  Future<void> editActivity({
+  Future<void> editActivity(
+    Activity activity, {
     required String? userId,
-    required int subjectId,
-    required int activityId,
-    required String newActivity,
-    required DateTime newDate,
   }) async {
     var doc = await _activityDoc(
       userId: userId,
-      subjectId: subjectId,
-      activityId: activityId,
+      subjectId: activity.subjectId,
+      activityId: activity.id,
     );
 
-    await doc.update({
-      'activity': newActivity,
-      'dateTime': newDate,
-    });
+    await doc.update(activity.toJson());
   }
 
   Future<void> deleteActivity({
@@ -148,28 +120,22 @@ class CloudDb {
     await doc.delete();
   }
 
-  Future<void> addMultipleSubjets(List<SubjectModel> subjects,
-      {required String? userId}) async {
+  Future<void> addMultipleData(
+    List<Subject> subjects, {
+    required String? userId,
+  }) async {
     for (var subject in subjects) {
-      await _subjectsCollection(userId).add({
-        'id': subject.id,
-        'name': subject.name,
-        'color': subject.color,
-      }).then((subjectDoc) async {
+      await _subjectsCollection(userId)
+          .add(subject.toJson())
+          .then((subjectDoc) async {
         for (var activity in subject.activities) {
-          await subjectDoc.collection('activities').add({
-            'id': activity.id,
-            'subjectId': activity.subjectId,
-            'subjectName': activity.subjectName,
-            'activity': activity.activity,
-            'dateTime': activity.dateTime,
-          });
+          await subjectDoc.collection('activities').add(activity.toJson());
         }
       });
     }
   }
 
-  Future<void> deleteAllSujects(String? userId) async {
+  Future<void> deleteAllData(String? userId) async {
     var subjectsSnapshot = await _subjectsCollection(userId).get();
 
     for (var subjectDoc in subjectsSnapshot.docs) {

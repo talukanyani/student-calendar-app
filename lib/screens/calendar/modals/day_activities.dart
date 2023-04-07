@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/activities_list.dart';
 import 'package:sc_app/widgets/modal.dart';
 
 class DayActivitiesModal extends StatelessWidget {
-  const DayActivitiesModal({
-    super.key,
-    required this.date,
-    required this.activities,
-  });
+  const DayActivitiesModal({super.key, required this.date});
 
   final DateTime date;
-  final List<ActivityModel> activities;
 
-  String get title {
+  String get weekDay {
     DateTime today = DateTime.now();
     DateTime tomorrow = today.add(const Duration(days: 1));
 
@@ -39,14 +33,15 @@ class DayActivitiesModal extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                '$title, ${date.day} ${getMonthFullName(date.month - 1)}',
+                '$weekDay, ${date.day} ${getMonthFullName(date.month - 1)} '
+                '${date.year == DateTime.now().year ? '' : date.year}',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
             const SizedBox(height: 8),
             SizedBox(
               height: 160,
-              child: ActivitiesList(activities: activities, date: date),
+              child: ActivitiesList(date: date),
             ),
           ],
         ),

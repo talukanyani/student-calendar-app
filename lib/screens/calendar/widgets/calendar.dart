@@ -1,108 +1,124 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/setting.dart';
-import 'displayed_month_name.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
+import 'package:sc_app/utils/calendar_names.dart';
 import 'calendar_week_days.dart';
-import 'calendar_month.dart';
+import 'calendar_day.dart';
 
-class Calendar extends StatefulWidget {
+class Calendar extends ConsumerStatefulWidget {
   const Calendar({super.key});
 
   @override
-  State<Calendar> createState() => _CalendarState();
+  ConsumerState<Calendar> createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar> {
-  int _displayedMonthIndex = _currMonthIndex;
+class _CalendarState extends ConsumerState<Calendar> {
+  int _displayedMonthIndex = _currentMonthIndex;
 
-  static DateTime currDate = DateTime.now();
-  static int previousMonthCount = (currDate.month - 1) + 12;
-  static final int _currMonthIndex = previousMonthCount;
+  static const _yearsBeforeCurrentYear = 100;
+  static const _yearsAfterCurrentYear = 99;
+  static const _monthsInAYear = 12;
+  static const _monthColumns = 7;
+  static const _monthRows = 6;
+  static const _monthGridSquares = _monthColumns * _monthRows;
+  static const _gridRatio = 0.8;
 
-  DateTime getDate(int dayIndex, int monthIndex, int weekStartDay) {
-    if (monthIndex > _displayedMonthIndex) {
-      return getNextMonthDates(dayIndex, monthIndex, weekStartDay);
-    } else if (monthIndex < _displayedMonthIndex) {
-      return getPrevMonthDates(dayIndex, monthIndex, weekStartDay);
+  static final _currentMonthIndex =
+      (_yearsBeforeCurrentYear * _monthsInAYear) + (DateTime.now().month - 1);
+  static final _calendarFirstDate =
+      DateTime(DateTime.now().year - _yearsBeforeCurrentYear);
+
+  DateTime get _displayedMonthDate => DateTime(
+        _calendarFirstDate.year,
+        _calendarFirstDate.month + _displayedMonthIndex,
+      );
+
+  List<DateTime> getMonthDates(int index) {
+    if (index > _displayedMonthIndex) {
+      return getNextMonthDates(index);
+    } else if (index < _displayedMonthIndex) {
+      return getPrevMonthDates(index);
     } else {
-      return getDisplayedMonthDates(dayIndex, monthIndex, weekStartDay);
+      return getDisplayedMonthDates(index);
     }
   }
 
-  DateTime getDisplayedMonthDates(
-    int dayIndex,
-    int monthIndex,
-    int weekStartDay,
-  ) {
-    var displayedMonthFirstDate = DateTime(
-      currDate.year,
-      currDate.month + (monthIndex - previousMonthCount),
-      1,
+  List<DateTime> getDisplayedMonthDates(int index) {
+    var monthFirstDate = DateTime(
+      _calendarFirstDate.year,
+      _calendarFirstDate.month + index,
     );
 
-    int difference() {
-      int difference = displayedMonthFirstDate.weekday - weekStartDay;
-      if (difference < 0) difference += 7;
-
-      return difference;
+    // For first date to be at the start of the week
+    while (monthFirstDate.weekday != ref.watch(weekStartProvider)) {
+      monthFirstDate = monthFirstDate.subtract(const Duration(days: 1));
     }
 
-    // startDate is the first date in the first week of the month
-    // it should be on mon/sun/sat depending on weekStartDay setting
-    var startDate = displayedMonthFirstDate.subtract(
-      Duration(days: difference()),
-    );
+    List<DateTime> monthDates = [];
 
-    return startDate.add(Duration(days: dayIndex));
-  }
-
-  DateTime getNextMonthDates(int dayIndex, int monthIndex, int weekStartDay) {
-    var displayedMonthLastDate =
-        getDisplayedMonthDates(41, _displayedMonthIndex, weekStartDay);
-
-    var startDate = displayedMonthLastDate.add(
-      Duration(days: 1 + (42 * (monthIndex - (_displayedMonthIndex + 1)))),
-    );
-
-    return startDate.add(Duration(days: dayIndex));
-  }
-
-  DateTime getPrevMonthDates(int dayIndex, int monthIndex, int weekStartDay) {
-    var displayedMounthFirstDate =
-        getDisplayedMonthDates(0, _displayedMonthIndex, weekStartDay);
-
-    var startDate = displayedMounthFirstDate.subtract(
-      Duration(days: 42 + (42 * ((_displayedMonthIndex - 1) - monthIndex))),
-    );
-
-    return startDate.add(Duration(days: dayIndex));
-  }
-
-  DateTime displayedMonthDate(int weekStartDay) {
-    return getDate(7, _displayedMonthIndex, weekStartDay);
-  }
-
-  final double _gridRatio = 0.8;
-
-  double getViewFraction(constraints) {
-    double pageViewHeight = constraints.maxHeight;
-    double pageViewWidth = constraints.maxWidth;
-
-    double monthHeight = (((pageViewWidth / 7) * (1 / _gridRatio)) * 6);
-
-    double fraction = monthHeight / pageViewHeight;
-
-    if (fraction > 1 || fraction <= 0) {
-      return 1;
+    for (var i = 0; i < _monthGridSquares; i++) {
+      monthDates.add(monthFirstDate.add(Duration(days: i)));
     }
+
+    return monthDates;
+  }
+
+  List<DateTime> getNextMonthDates(int index) {
+    final displayedMonthLastDate = getDisplayedMonthDates(
+      _displayedMonthIndex,
+    )[_monthGridSquares - 1];
+
+    final startDate = displayedMonthLastDate.add(
+      Duration(
+        days: 1 + (_monthGridSquares * (index - (_displayedMonthIndex + 1))),
+      ),
+    );
+
+    List<DateTime> monthDates = [];
+
+    for (var i = 0; i < _monthGridSquares; i++) {
+      monthDates.add(startDate.add(Duration(days: i)));
+    }
+
+    return monthDates;
+  }
+
+  List<DateTime> getPrevMonthDates(int index) {
+    final displayedMonthFirstDate = getDisplayedMonthDates(
+      _displayedMonthIndex,
+    )[0];
+
+    final startDate = displayedMonthFirstDate.subtract(
+      Duration(
+        days: _monthGridSquares +
+            (_monthGridSquares * ((_displayedMonthIndex - 1) - index)),
+      ),
+    );
+
+    List<DateTime> monthDates = [];
+
+    for (var i = 0; i < _monthGridSquares; i++) {
+      monthDates.add(startDate.add(Duration(days: i)));
+    }
+    return monthDates;
+  }
+
+  double getViewFraction(BoxConstraints constraints) {
+    final pageViewHeight = constraints.maxHeight;
+    final pageViewWidth = constraints.maxWidth;
+
+    final monthHeight =
+        (((pageViewWidth / _monthColumns) * (1 / _gridRatio)) * _monthRows);
+
+    var fraction = monthHeight / pageViewHeight;
+
+    if (fraction > 1 || fraction <= 0) fraction = 1;
 
     return fraction;
   }
 
   @override
   Widget build(BuildContext context) {
-    final weekStartDay = Provider.of<SettingController>(context).weekStartDay;
-
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
@@ -121,7 +137,7 @@ class _CalendarState extends State<Calendar> {
       ),
       child: Column(
         children: [
-          DisplayedMonthName(monthDate: displayedMonthDate(weekStartDay)),
+          DisplayedMonthTitle(month: _displayedMonthDate),
           const SizedBox(height: 16),
           const CalendarWeekDays(),
           const SizedBox(height: 16),
@@ -132,21 +148,37 @@ class _CalendarState extends State<Calendar> {
                   scrollDirection: Axis.vertical,
                   physics: const ClampingScrollPhysics(),
                   controller: PageController(
-                    initialPage: _currMonthIndex,
+                    initialPage: _currentMonthIndex,
                     viewportFraction: getViewFraction(constraints),
                   ),
                   padEnds: false,
                   onPageChanged: (index) {
                     setState(() => _displayedMonthIndex = index);
                   },
-                  itemCount: 48,
+                  itemCount:
+                      (_yearsBeforeCurrentYear + 1 + _yearsAfterCurrentYear) *
+                          _monthsInAYear,
                   itemBuilder: (context, monthIndex) {
-                    return CalendarMonth(
-                      dayDate: (dayIndex) {
-                        return getDate(dayIndex, monthIndex, weekStartDay);
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: _monthColumns,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: _gridRatio,
+                      ),
+                      itemCount: _monthGridSquares,
+                      itemBuilder: (context, dayIndex) {
+                        final dates = getMonthDates(monthIndex);
+
+                        return CalendarDay(
+                          date: dates[dayIndex],
+                          isInDisplayedMonth: dates[dayIndex].month ==
+                              _displayedMonthDate.month,
+                        );
                       },
-                      displayedMonth: displayedMonthDate(weekStartDay).month,
-                      gridRatio: _gridRatio,
                     );
                   },
                 );
@@ -154,6 +186,31 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class DisplayedMonthTitle extends StatelessWidget {
+  const DisplayedMonthTitle({super.key, required this.month});
+
+  final DateTime month;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '${getMonthFullName(month.month - 1)} '
+        '${month.year == DateTime.now().year ? '' : month.year}',
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -9,24 +8,27 @@ import 'package:sc_app/widgets/loading.dart';
 import '../modals/login_alert.dart';
 import 'send_response.dart';
 
-class SuggestionScreen extends StatefulWidget {
+class SuggestionScreen extends ConsumerStatefulWidget {
   const SuggestionScreen({super.key});
 
   @override
-  State<SuggestionScreen> createState() => _SuggestionScreenState();
+  ConsumerState<SuggestionScreen> createState() => _SuggestionScreenState();
 }
 
-class _SuggestionScreenState extends State<SuggestionScreen> {
+class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
   bool _isLoading = false;
 
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context, User user) {
+  void _send(BuildContext context) {
     setState(() => _isLoading = true);
 
     CloudDb()
-        .sendSuggestion(_inputController.text.trim(), user: user)
+        .sendSuggestion(
+      _inputController.text.trim(),
+      user: ref.watch(authProvider),
+    )
         .then((_) {
       setState(() => _isLoading = false);
 
@@ -52,8 +54,6 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthController>(context).currentUser;
-
     if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
@@ -89,7 +89,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           ForegroundFilledBtn(
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
-              if (user == null) {
+              if (!ref.watch(isLoggedInProvider)) {
                 Show.modal(
                   context,
                   modal: const LoginAlert(sendName: 'suggestion'),
@@ -97,7 +97,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 return;
               }
 
-              _send(context, user);
+              _send(context);
             },
             child: const Text('Send'),
           ),

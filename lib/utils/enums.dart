@@ -17,17 +17,17 @@ enum SnackBarIcon {
   info,
 }
 
-enum TablesSortSetting {
+enum TablesSort {
   name,
   dateAdded,
 }
 
-extension TablesSortSettingExtension on TablesSortSetting {
+extension TablesSortExtension on TablesSort {
   String get title {
     switch (this) {
-      case TablesSortSetting.name:
+      case TablesSort.name:
         return 'Name';
-      case TablesSortSetting.dateAdded:
+      case TablesSort.dateAdded:
         return 'Date Added';
     }
   }

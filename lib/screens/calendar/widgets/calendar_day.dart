@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import '../modals/day_activities.dart';
 
-class CalendarDay extends StatefulWidget {
+class CalendarDay extends ConsumerWidget {
   const CalendarDay({
     super.key,
     required this.date,
@@ -15,14 +15,7 @@ class CalendarDay extends StatefulWidget {
   final DateTime date;
   final bool isInDisplayedMonth;
 
-  @override
-  State<CalendarDay> createState() => _CalendarDayState();
-}
-
-class _CalendarDayState extends State<CalendarDay> {
-  bool buttonSplash = false;
-
-  bool get isToday => Helpers.isSameDay(widget.date, DateTime.now());
+  bool get isToday => Helpers.isSameDay(date, DateTime.now());
 
   double getOpacity(int activitiesCount) {
     switch (activitiesCount) {
@@ -42,43 +35,22 @@ class _CalendarDayState extends State<CalendarDay> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final activitiesController = Provider.of<ActivityController>(context);
-    final activities = activitiesController.dayActivities(widget.date);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activities = ref.watch(dayActivitiesProvider(date));
 
     return GestureDetector(
       onTap: () => Show.modal(
         context,
-        modal: DayActivitiesModal(
-          date: widget.date,
-          activities: activities,
-        ),
+        modal: DayActivitiesModal(date: date),
       ),
-      onTapDown: (_) => setState(() => buttonSplash = true),
-      onTapUp: (_) {
-        Future.delayed(
-          const Duration(milliseconds: 500),
-          () => setState(() => buttonSplash = false),
-        );
-      },
-      onTapCancel: () => setState(() => buttonSplash = false),
       child: Opacity(
-        opacity: widget.isInDisplayedMonth ? 1 : 0.25,
+        opacity: isInDisplayedMonth ? 1 : 0.25,
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary.withOpacity(
                   getOpacity(activities.length),
                 ),
-            boxShadow: buttonSplash
-                ? [
-                    BoxShadow(
-                      color: Theme.of(context).colorScheme.primaryContainer,
-                      blurRadius: 8,
-                      spreadRadius: 8,
-                    ),
-                  ]
-                : null,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               width: isToday ? 4 : 1,
@@ -87,7 +59,7 @@ class _CalendarDayState extends State<CalendarDay> {
                   : Theme.of(context).dividerColor,
             ),
           ),
-          child: Text(widget.date.day.toString()),
+          child: Text(date.day.toString()),
         ),
       ),
     );

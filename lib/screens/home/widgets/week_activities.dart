@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/screens/add/add.dart';
 import 'package:sc_app/screens/calendar/calendar.dart';
 
-class WeekActivities extends StatelessWidget {
-  const WeekActivities({super.key, required this.activitiesCount});
+class WeekActivities extends ConsumerWidget {
+  const WeekActivities({super.key});
 
-  final int activitiesCount;
+  int next7daysActivitiesCount(WidgetRef ref) {
+    int activitiesCount = 0;
 
-  String get word1 {
-    if (activitiesCount == 0) return 'no';
-    return activitiesCount.toString();
-  }
+    for (var i = 0; i < 7; i++) {
+      var dayActivities = ref.watch(dayActivitiesProvider(
+        DateTime.now().add(Duration(days: i)),
+      ));
 
-  String get word2 {
-    if (activitiesCount <= 1) return 'activity';
-    return 'activities';
+      activitiesCount += dayActivities.length;
+    }
+
+    return activitiesCount;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Align(
       alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('You have $word1 $word2 this week'),
+          Text(
+            'You have ${next7daysActivitiesCount(ref) == 0 ? 'no' : next7daysActivitiesCount(ref)} '
+            '${next7daysActivitiesCount(ref) < 1 ? 'actitvity' : 'activities'} this week',
+          ),
           const SizedBox(height: 16),
           SizedBox(
             height: 32,

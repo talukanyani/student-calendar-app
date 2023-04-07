@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
 
-class EmailVerificationScreen extends StatefulWidget {
+class EmailVerificationScreen extends ConsumerStatefulWidget {
   const EmailVerificationScreen({super.key});
 
   @override
-  State<EmailVerificationScreen> createState() =>
+  ConsumerState<EmailVerificationScreen> createState() =>
       _EmailVerificationScreenState();
 }
 
-class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+class _EmailVerificationScreenState
+    extends ConsumerState<EmailVerificationScreen> {
   Timer? resendTimer;
   Timer? checkVerificationTimer;
   int resendCountdown = 30;
@@ -37,8 +38,6 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     Future.delayed(
       Duration.zero,
       () {
-        final authProvider =
-            Provider.of<AuthController>(context, listen: false);
         int counter = 0;
 
         checkVerificationTimer = Timer.periodic(
@@ -50,7 +49,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
             if (isVerified) timer.cancel();
 
-            authProvider.checkEmailVerified().then((result) {
+            ref.read(authProvider.notifier).checkEmailVerified().then((result) {
               setState(() => isVerified = result);
             });
           },
@@ -78,8 +77,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
 
   Widget verifyBody(BuildContext context) {
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-    final email = authProvider.currentUser?.email ?? 'your email address';
+    final email = ref.watch(userEmailProvider) ?? 'your email address';
 
     return Column(
       children: [
@@ -110,7 +108,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         child: InlineBtn(
                           label: 'resend',
                           onPressed: () {
-                            authProvider.sendVerificationEmail();
+                            ref
+                                .read(authProvider.notifier)
+                                .sendVerificationEmail();
                             startResendTimer();
                           },
                         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/authentication.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
@@ -8,26 +8,27 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
 
-class ChangeNameScreen extends StatefulWidget {
+class ChangeNameScreen extends ConsumerStatefulWidget {
   const ChangeNameScreen({super.key});
 
   @override
-  State<ChangeNameScreen> createState() => _ChangeNameScreenState();
+  ConsumerState<ChangeNameScreen> createState() => _ChangeNameScreenState();
 }
 
-class _ChangeNameScreenState extends State<ChangeNameScreen> {
+class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
   String? errorMessage;
   bool _isLoading = false;
 
   final inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _changeName(BuildContext context) {
-    final authProvider = Provider.of<AuthController>(context, listen: false);
-
+  void _changeName({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
-    authProvider.updateName(inputController.text.trim()).then((status) {
+    ref
+        .read(authProvider.notifier)
+        .updateName(inputController.text.trim())
+        .then((status) {
       setState(() => _isLoading = false);
 
       switch (status) {
@@ -42,12 +43,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
           });
           break;
         default:
-          Navigator.pop(context);
-          Show.snackBar(
-            context,
-            text: 'Name was successfully edited.',
-            snackBarIcon: SnackBarIcon.done,
-          );
+          onDone();
       }
     });
   }
@@ -105,7 +101,16 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
             onPressed: () {
               setState(() => errorMessage = null);
               if (_formKey.currentState!.validate()) {
-                _changeName(context);
+                _changeName(
+                  onDone: () {
+                    Navigator.pop(context);
+                    Show.snackBar(
+                      context,
+                      text: 'Name was successfully changed.',
+                      snackBarIcon: SnackBarIcon.done,
+                    );
+                  },
+                );
               }
             },
             child: const Text('Save'),

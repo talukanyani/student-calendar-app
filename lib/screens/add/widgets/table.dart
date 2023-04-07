@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/activity.dart';
-import 'package:sc_app/controllers/subject.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
@@ -20,14 +19,10 @@ import 'oval_text_container.dart';
 class SubjectTable extends StatelessWidget {
   const SubjectTable({super.key, required this.subject});
 
-  final SubjectModel subject;
+  final Subject subject;
 
   @override
   Widget build(BuildContext context) {
-    final activityController = Provider.of<ActivityController>(context);
-
-    final activities = activityController.subjectActivities(subject.id);
-
     return RectContainer(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -60,8 +55,8 @@ class SubjectTable extends StatelessWidget {
             children: [
               headerRow(),
               ...List.generate(
-                activities.length,
-                (index) => row(activity: activities[index]),
+                subject.activities.length,
+                (index) => row(activity: subject.activities[index]),
               ),
             ],
           ),
@@ -75,7 +70,7 @@ class SubjectTable extends StatelessWidget {
 class Title extends StatelessWidget {
   const Title({super.key, required this.subject});
 
-  final SubjectModel subject;
+  final Subject subject;
 
   @override
   Widget build(BuildContext context) {
@@ -94,18 +89,13 @@ class Title extends StatelessWidget {
   }
 }
 
-class MoreTableActionsButton extends StatelessWidget {
+class MoreTableActionsButton extends ConsumerWidget {
   const MoreTableActionsButton({super.key, required this.subject});
 
-  final SubjectModel subject;
+  final Subject subject;
 
   @override
-  Widget build(BuildContext context) {
-    final subjectProvider = Provider.of<SubjectController>(
-      context,
-      listen: false,
-    );
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Material(
       type: MaterialType.transparency,
       child: PopupMenuButton(
@@ -138,7 +128,7 @@ class MoreTableActionsButton extends StatelessWidget {
                   ),
                   actionName: 'Delete',
                   action: () {
-                    subjectProvider.deleteSubject(subject.id);
+                    ref.read(dataProvider.notifier).deleteSubject(subject.id);
                     Show.snackBar(
                       context,
                       text: 'One subject was deleted.',

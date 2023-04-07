@@ -1,36 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
-import 'package:sc_app/models/activity.dart';
+import 'package:sc_app/providers/data.dart';
 
-class ActivitiesList extends StatelessWidget {
-  const ActivitiesList({
-    super.key,
-    required this.date,
-    required this.activities,
-  });
+class ActivitiesList extends ConsumerWidget {
+  const ActivitiesList({super.key, required this.date});
 
   final DateTime date;
-  final List<ActivityModel> activities;
+
+  static final today = DateTime.now();
+  static final tomorrow = today.add(const Duration(days: 1));
+  static final yesterday = today.subtract(const Duration(days: 1));
 
   String get dateWord {
-    DateTime today = DateTime.now();
-    DateTime tomorrow = today.add(const Duration(days: 1));
-
     if (Helpers.isSameDay(date, today)) return 'today';
     if (Helpers.isSameDay(date, tomorrow)) return 'tomorrow';
+    if (Helpers.isSameDay(date, yesterday)) return 'yesterday';
     return 'on this day';
   }
 
-  TimeOfDay getTime(index) {
-    DateTime date = activities[index].dateTime;
-    return TimeOfDay(hour: date.hour, minute: date.minute);
+  String get verb {
+    if (date.isBefore(DateTime(today.year, today.month, today.day))) {
+      return 'had';
+    }
+    return 'have';
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activities = ref.watch(dayActivitiesProvider(date));
+
     if (activities.isEmpty) {
       return Center(
-        child: TextBox(text: 'You have no activity $dateWord'),
+        child: TextBox(text: 'You $verb no activity $dateWord'),
       );
     }
 
@@ -45,14 +47,19 @@ class ActivitiesList extends StatelessWidget {
           leading: Column(
             children: <Widget>[
               index == 0 ? const SizedBox(height: 12) : const VertLine(),
-              TextBox(text: getTime(index).format(context)),
+              TextBox(
+                text: TimeOfDay(
+                  hour: activities[index].date.hour,
+                  minute: activities[index].date.minute,
+                ).format(context),
+              ),
               index == (activities.length - 1)
                   ? const SizedBox(height: 12)
                   : const VertLine(),
             ],
           ),
           title: Text(
-            '${activities[index].subjectName} ${activities[index].activity}',
+            '${activities[index].subjectName} ${activities[index].title}',
           ),
         );
       },

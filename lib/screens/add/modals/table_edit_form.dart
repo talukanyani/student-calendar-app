@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sc_app/controllers/subject.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
@@ -12,16 +12,16 @@ import 'package:sc_app/widgets/modal.dart';
 import '../widgets/label_text.dart';
 import '../widgets/radio_color_block.dart';
 
-class TableEditForm extends StatefulWidget {
+class TableEditForm extends ConsumerStatefulWidget {
   const TableEditForm({super.key, required this.subject});
 
-  final SubjectModel subject;
+  final Subject subject;
 
   @override
-  State<TableEditForm> createState() => _TableEditFormState();
+  ConsumerState<TableEditForm> createState() => _TableEditFormState();
 }
 
-class _TableEditFormState extends State<TableEditForm> {
+class _TableEditFormState extends ConsumerState<TableEditForm> {
   String _selectedColor = _colors[0];
 
   static final List<String> _colors = [...tableColors.keys];
@@ -29,11 +29,11 @@ class _TableEditFormState extends State<TableEditForm> {
   final _titleInputController = TextEditingController();
 
   void _editSubject(BuildContext context) {
-    Provider.of<SubjectController>(context, listen: false).editSubject(
-      id: widget.subject.id,
-      newName: _titleInputController.text.trim(),
-      newColor: _selectedColor,
-    );
+    ref.read(dataProvider.notifier).editSubject(
+          id: widget.subject.id,
+          newName: _titleInputController.text.trim(),
+          newColor: _selectedColor,
+        );
   }
 
   @override
