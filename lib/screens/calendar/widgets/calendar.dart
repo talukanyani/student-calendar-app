@@ -21,7 +21,7 @@ class _CalendarState extends ConsumerState<Calendar> {
   static const _monthColumns = 7;
   static const _monthRows = 6;
   static const _monthGridSquares = _monthColumns * _monthRows;
-  static const _gridRatio = 0.8;
+  static const _gridRatio = 0.9;
 
   static final _currentMonthIndex =
       (_yearsBeforeCurrentYear * _monthsInAYear) + (DateTime.now().month - 1);
@@ -122,8 +122,6 @@ class _CalendarState extends ConsumerState<Calendar> {
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: const BorderRadius.all(Radius.elliptical(16, 32)),

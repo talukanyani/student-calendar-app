@@ -13,10 +13,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: PrimaryTopBar(title: 'SC'),
-      body: Body(),
-      bottomNavigationBar: BottomBar(screenIndex: 0),
+    return Scaffold(
+      appBar: const PrimaryTopBar(title: 'SC'),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return ListView(
+            primary: false,
+            children: [
+              Container(
+                height: constraints.maxHeight,
+                constraints: const BoxConstraints(minHeight: 400),
+                child: const Body(),
+              ),
+            ],
+          );
+        },
+      ),
+      bottomNavigationBar: const BottomBar(screenIndex: 0),
     );
   }
 }
@@ -74,7 +87,7 @@ class Body extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 160 + (MediaQuery.of(context).size.width * 0.16),
+              height: 160 + (MediaQuery.of(context).size.height * 0.1),
               child: PageView(
                 controller: PageController(viewportFraction: 0.9),
                 padEnds: false,
