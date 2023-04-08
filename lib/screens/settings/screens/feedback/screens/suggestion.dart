@@ -62,6 +62,11 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
+          Text(
+            'Something not functioning the way you want? Send us a suggestion.',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          const SizedBox(height: 24),
           Form(
             key: _formKey,
             child: TextFormField(

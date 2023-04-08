@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 
@@ -12,17 +13,21 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var grey = CustomColorScheme.grey4;
 
-    Widget legalInfoBtn({required String label, required String url}) {
+    Widget button({
+      required void Function() onPressed,
+      required Text text,
+      required Icon icon,
+    }) {
       return Row(
         children: [
           TextButton(
-            onPressed: () => Helpers.lauchLink(url),
+            onPressed: onPressed,
             style: TextButton.styleFrom(foregroundColor: grey),
             child: Row(
               children: [
-                const Icon(Iconsax.document),
+                icon,
                 const SizedBox(width: 8),
-                Text(label),
+                text,
               ],
             ),
           ),
@@ -49,13 +54,27 @@ class AboutScreen extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 32),
-          legalInfoBtn(
-            label: 'Terms of Use',
-            url: 'https://tmlab.tech/terms',
+          button(
+            onPressed: () {
+              Share.share(
+                'Checkout this mobile app called Student Calendar, '
+                'it helps with managing your assessments and activities. '
+                'Download it at https://tmlab.tech/student_calendar/download',
+                subject: 'Student Calendar App',
+              );
+            },
+            text: const Text('Share this app'),
+            icon: const Icon(Iconsax.share),
           ),
-          legalInfoBtn(
-            label: 'Privacy Policy',
-            url: 'https://tmlab.tech/privacy',
+          button(
+            onPressed: () => Helpers.lauchLink('https://tmlab.tech/terms'),
+            text: const Text('Terms of Use'),
+            icon: const Icon(Iconsax.document),
+          ),
+          button(
+            onPressed: () => Helpers.lauchLink('https://tmlab.tech/privacy'),
+            text: const Text('Privacy Policy'),
+            icon: const Icon(Iconsax.document),
           ),
           const SizedBox(height: 32),
           Text(

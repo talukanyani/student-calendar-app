@@ -60,6 +60,12 @@ class _BugReportScreenState extends ConsumerState<BugReportScreen> {
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
+          Text(
+            'Something not working or crashing? '
+            'We didn\'t notice that. Please let us know.',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          const SizedBox(height: 24),
           Form(
             key: _formKey,
             child: TextFormField(

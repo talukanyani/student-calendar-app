@@ -59,6 +59,11 @@ class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
+          Text(
+            'You don\'t know how something works? We know how, ask us.',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          const SizedBox(height: 24),
           Form(
             key: _formKey,
             child: TextFormField(
