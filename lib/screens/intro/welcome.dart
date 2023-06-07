@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/widgets/android_system_navbar.dart';
 import 'package:sc_app/widgets/buttons.dart';
@@ -37,9 +38,10 @@ class WelcomeScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 48),
               child: Image(
-                image: const AssetImage(
-                  'assets/images/home_bg_1080x1080.png',
-                ),
+                image: context.isDarkMode
+                    ? const AssetImage(
+                        'assets/images/student_home_desk_(dark_version).png')
+                    : const AssetImage('assets/images/student_home_desk.png'),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 fit: BoxFit.contain,
@@ -58,9 +60,9 @@ class WelcomeScreen extends ConsumerWidget {
                           color: Theme.of(context).colorScheme.onBackground,
                         ),
                   ),
-                  Wrap(
+                  const Wrap(
                     spacing: -8,
-                    children: const [
+                    children: [
                       Icon(Icons.horizontal_rule),
                       Icon(Icons.horizontal_rule),
                       Icon(Icons.arrow_forward),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 
 OutlinedBorder shape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(12),
@@ -22,7 +21,7 @@ class ForegroundFilledBtn extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        backgroundColor: CustomColorScheme.foreground5,
+        backgroundColor: Theme.of(context).colorScheme.onBackground,
         foregroundColor: Theme.of(context).colorScheme.background,
         shape: shape,
       ),
@@ -44,7 +43,6 @@ class ForegroundBorderBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foregroundColor = Theme.of(context).colorScheme.onBackground;
-    final borderColor = CustomColorScheme.foreground5;
 
     return OutlinedButton(
       onPressed: onPressed,
@@ -58,9 +56,9 @@ class ForegroundBorderBtn extends StatelessWidget {
         shape: MaterialStateProperty.all<OutlinedBorder>(shape),
         side: MaterialStateProperty.resolveWith<BorderSide>((states) {
           if (states.contains(MaterialState.disabled)) {
-            return border(borderColor.withOpacity(0.1));
+            return border(foregroundColor.withOpacity(0.1));
           }
-          return border(borderColor);
+          return border(foregroundColor);
         }),
       ),
       child: child,
@@ -135,7 +133,7 @@ class GreyFilledBtn extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         elevation: 0,
         shape: shape,
-        backgroundColor: CustomColorScheme.background5,
+        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
         foregroundColor: Theme.of(context).colorScheme.onBackground,
       ),
       child: child,

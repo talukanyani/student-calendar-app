@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/utils/table_colors.dart';
+import 'package:sc_app/themes/color_scheme.dart';
 
 class RadioColorBlock extends StatelessWidget {
   const RadioColorBlock({
@@ -19,11 +19,11 @@ class RadioColorBlock extends StatelessWidget {
 
     return RawMaterialButton(
       onPressed: () => onChanged(color),
-      splashColor: tableColors[color],
+      splashColor: context.subjectColors[color],
       shape: RoundedRectangleBorder(
         side: isSelected
             ? BorderSide(
-                color: tableColors[color]!,
+                color: context.subjectColors[color]!,
                 width: 2,
               )
             : BorderSide.none,
@@ -34,7 +34,7 @@ class RadioColorBlock extends StatelessWidget {
         child: Container(
           height: 28,
           width: 28,
-          color: tableColors[color],
+          color: context.subjectColors[color],
           alignment: Alignment.center,
           child: isSelected ? const Icon(Icons.done, size: 20) : null,
         ),

@@ -27,7 +27,7 @@ class LoggedInScreen extends ConsumerWidget {
                 Icon(
                   FluentIcons.person_circle_32_filled,
                   size: 64,
-                  color: CustomColorScheme.grey3,
+                  color: context.grey3,
                 ),
                 Text(
                   ref.watch(userNameProvider) ?? 'Profile',

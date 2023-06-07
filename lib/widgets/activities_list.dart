@@ -75,7 +75,7 @@ class VertLine extends StatelessWidget {
     return Container(
       height: 12,
       width: 2,
-      color: Theme.of(context).primaryColorLight,
+      color: Theme.of(context).colorScheme.primaryContainer,
     );
   }
 }
@@ -91,7 +91,7 @@ class TextBox extends StatelessWidget {
       height: 24,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColorLight,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(text),

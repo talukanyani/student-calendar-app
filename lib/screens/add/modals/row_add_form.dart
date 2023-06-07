@@ -9,8 +9,8 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/activity_input.dart';
-import '../widgets/label_text.dart';
 
 class RowAddForm extends ConsumerStatefulWidget {
   const RowAddForm({super.key, required this.subject});
@@ -62,11 +62,11 @@ class _RowAddFormState extends ConsumerState<RowAddForm> {
         Text(
           'Add an Activity for ${widget.subject.name}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: CustomColorScheme.grey4,
+                color: context.grey4,
               ),
         ),
         const SizedBox(height: 20),
-        const LabelText(text: 'Title'),
+        const TextFieldLabel(text: 'Title'),
         ActivityInput(inputController: _titleInputController),
         const SizedBox(height: 16),
         Row(
@@ -76,7 +76,7 @@ class _RowAddFormState extends ConsumerState<RowAddForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const LabelText(text: 'Date'),
+                  const TextFieldLabel(text: 'Date'),
                   TextField(
                     onTap: () => showDatePicker(
                       context: context,
@@ -116,7 +116,7 @@ class _RowAddFormState extends ConsumerState<RowAddForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const LabelText(text: 'Time'),
+                  const TextFieldLabel(text: 'Time'),
                   TextField(
                     onTap: () => showTimePicker(
                       context: context,

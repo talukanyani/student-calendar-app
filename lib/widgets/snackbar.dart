@@ -14,16 +14,22 @@ SnackBar mySnackBar(
 
     switch (snackBarIcon) {
       case SnackBarIcon.done:
-        leading = Icon(Iconsax.tick_circle, color: CustomColorScheme.success1);
+        leading = Icon(
+          Iconsax.tick_circle,
+          color: context.successContainerColor,
+        );
         break;
       case SnackBarIcon.error:
         leading = Icon(
           Iconsax.close_circle,
-          color: Theme.of(context).colorScheme.error,
+          color: Theme.of(context).colorScheme.errorContainer,
         );
         break;
       case SnackBarIcon.info:
-        leading = Icon(Iconsax.info_circle, color: CustomColorScheme.warning1);
+        leading = Icon(
+          Iconsax.info_circle,
+          color: context.warningContainerColor,
+        );
         break;
       default:
         leading = const SizedBox(width: 0);

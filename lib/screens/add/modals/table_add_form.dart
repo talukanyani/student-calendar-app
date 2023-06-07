@@ -6,11 +6,10 @@ import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
-import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
-import '../widgets/label_text.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/radio_color_block.dart';
 
 class TableAddForm extends ConsumerStatefulWidget {
@@ -21,9 +20,8 @@ class TableAddForm extends ConsumerStatefulWidget {
 }
 
 class _TableAddFormState extends ConsumerState<TableAddForm> {
-  String _selectedColor = _colors[Random().nextInt(7)];
-
-  static final List<String> _colors = [...tableColors.keys];
+  String _selectedColor =
+      subjectColorNames[Random().nextInt(subjectColorNames.length + 1)];
 
   final _titleInputController = TextEditingController();
 
@@ -51,11 +49,11 @@ class _TableAddFormState extends ConsumerState<TableAddForm> {
         Text(
           'Add a Subject',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: CustomColorScheme.grey4,
+                color: context.grey4,
               ),
         ),
         const SizedBox(height: 20),
-        const LabelText(text: 'Title'),
+        const TextFieldLabel(text: 'Title'),
         TextField(
           controller: _titleInputController,
           keyboardType: TextInputType.text,
@@ -72,8 +70,7 @@ class _TableAddFormState extends ConsumerState<TableAddForm> {
           ),
         ),
         const SizedBox(height: 16),
-        const LabelText(text: 'Color'),
-        // color picker
+        const TextFieldLabel(text: 'Color'),
         LayoutBuilder(
           builder: (context, constraints) {
             return GridView.builder(
@@ -86,7 +83,7 @@ class _TableAddFormState extends ConsumerState<TableAddForm> {
               itemCount: 7,
               itemBuilder: (context, index) {
                 return RadioColorBlock(
-                  color: _colors[index],
+                  color: subjectColorNames[index],
                   selectedColor: _selectedColor,
                   onChanged: (color) {
                     setState(() => _selectedColor = color);

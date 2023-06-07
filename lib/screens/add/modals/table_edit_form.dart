@@ -5,11 +5,10 @@ import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
-import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
-import '../widgets/label_text.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/radio_color_block.dart';
 
 class TableEditForm extends ConsumerStatefulWidget {
@@ -22,13 +21,11 @@ class TableEditForm extends ConsumerStatefulWidget {
 }
 
 class _TableEditFormState extends ConsumerState<TableEditForm> {
-  String _selectedColor = _colors[0];
-
-  static final List<String> _colors = [...tableColors.keys];
+  String _selectedColor = subjectColorNames[0];
 
   final _titleInputController = TextEditingController();
 
-  void _editSubject(BuildContext context) {
+  void _editSubject() {
     ref.read(dataProvider.notifier).editSubject(
           id: widget.subject.id,
           newName: _titleInputController.text.trim(),
@@ -56,11 +53,11 @@ class _TableEditFormState extends ConsumerState<TableEditForm> {
         Text(
           'Edit a Subject',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: CustomColorScheme.grey4,
+                color: context.grey4,
               ),
         ),
         const SizedBox(height: 20),
-        const LabelText(text: 'Title'),
+        const TextFieldLabel(text: 'Title'),
         TextField(
           controller: _titleInputController,
           keyboardType: TextInputType.text,
@@ -77,7 +74,7 @@ class _TableEditFormState extends ConsumerState<TableEditForm> {
           ),
         ),
         const SizedBox(height: 16),
-        const LabelText(text: 'Color'),
+        const TextFieldLabel(text: 'Color'),
         // color picker
         LayoutBuilder(
           builder: (context, constraints) {
@@ -91,7 +88,7 @@ class _TableEditFormState extends ConsumerState<TableEditForm> {
               itemCount: 7,
               itemBuilder: (context, index) {
                 return RadioColorBlock(
-                  color: _colors[index],
+                  color: subjectColorNames[index],
                   selectedColor: _selectedColor,
                   onChanged: (color) {
                     setState(() => _selectedColor = color);
@@ -122,14 +119,14 @@ class _TableEditFormState extends ConsumerState<TableEditForm> {
                     );
                   } else if (_titleInputController.text ==
                           widget.subject.name &&
-                      _selectedColor == widget.subject.name) {
+                      _selectedColor == widget.subject.color) {
                     Show.snackBar(
                       context,
                       text: 'You did not change anything :)',
                       snackBarIcon: SnackBarIcon.info,
                     );
                   } else {
-                    _editSubject(context);
+                    _editSubject();
                     Navigator.pop(context);
                     Show.snackBar(
                       context,

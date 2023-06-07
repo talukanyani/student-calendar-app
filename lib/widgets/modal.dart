@@ -11,7 +11,7 @@ class Modal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndroidSystemNavbarStyle(
-      color: CustomColorScheme.grey1,
+      color: context.grey1,
       child: Dialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,

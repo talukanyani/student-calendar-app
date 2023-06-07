@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/themes/theme.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'widgets/android_system_navbar.dart';
 import 'screens/intro/splash.dart';
 import 'screens/intro/welcome.dart';
@@ -17,13 +17,12 @@ Future<void> main() async {
   runApp(const ProviderScope(child: App()));
 }
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AndroidSystemNavbarStyle(
-      color: CustomColorScheme.background5,
       child: MaterialApp(
         title: 'Student Calendar',
         home: FutureBuilder(
@@ -40,6 +39,8 @@ class App extends StatelessWidget {
           },
         ),
         theme: lightTheme(),
+        darkTheme: darkTheme(),
+        themeMode: ref.watch(themeModeProvider),
         debugShowCheckedModeBanner: false,
       ),
     );

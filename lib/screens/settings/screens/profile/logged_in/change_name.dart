@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 
 class ChangeNameScreen extends ConsumerStatefulWidget {
   const ChangeNameScreen({super.key});
@@ -62,13 +62,10 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
-          Text(
-            'Enter New Name',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: CustomColorScheme.grey4,
-                ),
+          const TextFieldLabel(
+            text: 'Enter New Name',
+            bottomPadding: 8,
           ),
-          const SizedBox(height: 8),
           Form(
             key: _formKey,
             child: TextFormField(

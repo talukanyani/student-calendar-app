@@ -9,8 +9,8 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/modal.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/activity_input.dart';
-import '../widgets/label_text.dart';
 
 class RowEditForm extends ConsumerStatefulWidget {
   const RowEditForm({super.key, required this.activity});
@@ -30,6 +30,7 @@ class _RowEditFormState extends ConsumerState<RowEditForm> {
   final _timeInputController = TextEditingController();
 
   String get _titleInput => _titleInputController.text.trim();
+
   DateTime get _selectedDateAndTime => DateTime(
         _selectedDate!.year,
         _selectedDate!.month,
@@ -48,6 +49,7 @@ class _RowEditFormState extends ConsumerState<RowEditForm> {
   }
 
   String get _oldActivityTitle => widget.activity.title;
+
   DateTime get _oldActivityDate => widget.activity.date;
 
   @override
@@ -84,11 +86,11 @@ class _RowEditFormState extends ConsumerState<RowEditForm> {
         Text(
           'Edit an Activity for ${widget.activity.subjectName}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: CustomColorScheme.grey4,
+                color: context.grey4,
               ),
         ),
         const SizedBox(height: 20),
-        const LabelText(text: 'Title'),
+        const TextFieldLabel(text: 'Title'),
         ActivityInput(inputController: _titleInputController),
         const SizedBox(height: 16),
         Row(
@@ -98,7 +100,7 @@ class _RowEditFormState extends ConsumerState<RowEditForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const LabelText(text: 'Date'),
+                  const TextFieldLabel(text: 'Date'),
                   TextField(
                     onTap: () => showDatePicker(
                       context: context,
@@ -138,7 +140,7 @@ class _RowEditFormState extends ConsumerState<RowEditForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const LabelText(text: 'Time'),
+                  const TextFieldLabel(text: 'Time'),
                   TextField(
                     onTap: () => showTimePicker(
                       context: context,

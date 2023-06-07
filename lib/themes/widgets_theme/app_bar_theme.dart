@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-AppBarTheme topBarTheme(Color bgColor, Color fgColor) {
+AppBarTheme appBarTheme({
+  required Color bgColor,
+  required Color fgColor,
+  required Brightness iconsBrightness,
+}) {
   return AppBarTheme(
     backgroundColor: bgColor,
     foregroundColor: fgColor,
@@ -10,9 +14,9 @@ AppBarTheme topBarTheme(Color bgColor, Color fgColor) {
       color: fgColor,
     ),
     elevation: 0,
-    systemOverlayStyle: const SystemUiOverlayStyle(
+    systemOverlayStyle: SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: iconsBrightness,
     ),
   );
 }

@@ -132,7 +132,7 @@ class _EmailVerificationScreenState
             Icon(
               Iconsax.tick_circle,
               size: 48,
-              color: CustomColorScheme.success1,
+              color: context.successColor,
             ),
             const SizedBox(height: 16),
             Text(

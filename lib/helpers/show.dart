@@ -6,7 +6,7 @@ class Show {
   static modal(
     BuildContext context, {
     required Widget modal,
-    double opacity = 0.15,
+    double opacity = 0.2,
   }) {
     showDialog(
       context: context,
@@ -35,6 +35,7 @@ class Show {
 
 class Hide {
   static modal(BuildContext context) => Navigator.pop(context);
+
   static snackBar(BuildContext context) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }

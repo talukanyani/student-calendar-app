@@ -11,7 +11,7 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var grey = CustomColorScheme.grey4;
+    var grey = context.grey4;
 
     Widget button({
       required void Function() onPressed,

@@ -7,7 +7,6 @@ import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
-import 'package:sc_app/utils/table_colors.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import '../modals/table_edit_form.dart';
@@ -80,10 +79,10 @@ class Title extends StatelessWidget {
         text: Text(
           subject.name,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: CustomColorScheme.grey4,
+                color: context.grey4,
               ),
         ),
-        color: tableColors[subject.color],
+        color: context.subjectColors[subject.color],
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'settings/calendar_week_start.dart';
 import 'settings/tables_sort.dart';
-// import 'settings/theme_mode.dart';
+import 'settings/theme_mode.dart';
 
 class PreferencesScreen extends ConsumerWidget {
   const PreferencesScreen({super.key});
@@ -19,26 +19,26 @@ class PreferencesScreen extends ConsumerWidget {
       body: ListView(
         primary: false,
         children: [
-          // ListTile(
-          //   title: const Text('Theme Mode'),
-          //   subtitle: Text(ref.watch(themeModeProvider).title),
-          //   leading: Column(
-          //     children: const [
-          //       Spacer(),
-          //       Icon(FluentIcons.dark_theme_24_filled),
-          //       Spacer(),
-          //     ],
-          //   ),
-          //   onTap: () => Show.modal(
-          //     context,
-          //     modal: const ThemeModeSettingModal(),
-          //   ),
-          // ),
+          ListTile(
+            title: const Text('Theme Mode'),
+            subtitle: Text(ref.watch(themeModeProvider).title),
+            leading: const Column(
+              children: [
+                Spacer(),
+                Icon(FluentIcons.dark_theme_24_filled),
+                Spacer(),
+              ],
+            ),
+            onTap: () => Show.modal(
+              context,
+              modal: const ThemeModeSettingModal(),
+            ),
+          ),
           ListTile(
             title: const Text('Sort Tables By'),
             subtitle: Text(ref.watch(tablesSortProvider).title),
-            leading: Column(
-              children: const [
+            leading: const Column(
+              children: [
                 Spacer(),
                 Icon(FluentIcons.table_settings_24_filled),
                 Spacer(),
@@ -54,8 +54,8 @@ class PreferencesScreen extends ConsumerWidget {
             subtitle: Text(
               getWeekDayFullName(ref.watch(weekStartProvider) - 1),
             ),
-            leading: Column(
-              children: const [
+            leading: const Column(
+              children: [
                 Spacer(),
                 Icon(FluentIcons.calendar_week_start_24_filled),
                 Spacer(),

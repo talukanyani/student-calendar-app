@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/helpers/show.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -88,13 +88,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Enter Old Password',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
+                const TextFieldLabel(
+                  text: 'Enter Old Password',
+                  bottomPadding: 8,
                 ),
-                const SizedBox(height: 8),
                 TextFormField(
                   controller: _oldPasswordInputController,
                   keyboardType: TextInputType.visiblePassword,
@@ -133,13 +130,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Enter New Password',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
+                const TextFieldLabel(
+                  text: 'Enter New Password',
+                  bottomPadding: 8,
                 ),
-                const SizedBox(height: 8),
                 TextFormField(
                   controller: _newPasswordInputController,
                   keyboardType: TextInputType.visiblePassword,
@@ -148,7 +142,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     if (value == null || value.isEmpty) {
                       return 'New password is required.';
                     } else if (!InputValidator.isStrongPassword(value)) {
-                      return 'New password is too weak.';
+                      return 'Password must be at least 8 characters,'
+                          '\nand include at least one letter, number, and symbol';
                     } else {
                       return null;
                     }

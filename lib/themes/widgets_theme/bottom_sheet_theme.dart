@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-BottomSheetThemeData bottomSheetTheme(Color bgColor) {
+BottomSheetThemeData bottomSheetTheme({required Color bgColor}) {
   return BottomSheetThemeData(
     backgroundColor: bgColor,
     shape: const RoundedRectangleBorder(

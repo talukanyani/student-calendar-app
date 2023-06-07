@@ -162,7 +162,8 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Password is required.';
                     } else if (!InputValidator.isStrongPassword(value)) {
-                      return 'Password is too weak.';
+                      return 'Password must be at least 8 characters,'
+                          '\nand include at least one letter, number, and symbol';
                     } else {
                       return null;
                     }

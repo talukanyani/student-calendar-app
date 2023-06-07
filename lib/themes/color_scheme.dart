@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
-ColorScheme colorScheme() {
+ColorScheme lightColorScheme() {
   return const ColorScheme(
     brightness: Brightness.light,
-    primary: brown,
-    onPrimary: brownWhite,
-    primaryContainer: brownLight,
-    onPrimaryContainer: brownDark,
-    secondary: orange,
-    onSecondary: orangeWhite,
-    secondaryContainer: orangeLight,
-    onSecondaryContainer: orangeDark,
-    tertiary: green,
-    onTertiary: greenWhite,
-    tertiaryContainer: greenLight,
-    onTertiaryContainer: greenDark,
-    background: white245,
+    primary: cafeAuLaitBrown,
+    onPrimary: cafeAuLaitBrownWhite,
+    primaryContainer: cafeAuLaitBrownLight,
+    onPrimaryContainer: cafeAuLaitBrownDark,
+    secondary: earthYellow,
+    onSecondary: earthYellowWhite,
+    secondaryContainer: earthYellowLight,
+    onSecondaryContainer: earthYellowDark,
+    tertiary: palmLeafGreen,
+    onTertiary: palmLeafGreenWhite,
+    tertiaryContainer: palmLeafGreenLight,
+    onTertiaryContainer: palmLeafGreenDark,
+    background: white250,
     onBackground: black20,
-    surface: white250,
+    surface: white255,
     onSurface: black20,
-    surfaceVariant: white240,
+    surfaceVariant: white245,
     onSurfaceVariant: grey80,
     error: errorRed,
     onError: white245,
@@ -28,39 +28,82 @@ ColorScheme colorScheme() {
     onErrorContainer: black20,
     inverseSurface: grey80,
     onInverseSurface: white245,
-    outline: grey200,
+    outline: grey120,
+    outlineVariant: grey160,
     shadow: grey200,
   );
 }
 
-class CustomColorScheme {
-  static Color background1 = white255;
-  static Color background2 = white250;
-  static Color background3 = white245;
-  static Color background4 = white240;
-  static Color background5 = white235;
+ColorScheme darkColorScheme() {
+  return const ColorScheme(
+    brightness: Brightness.dark,
+    primary: cafeAuLaitBrown,
+    onPrimary: cafeAuLaitBrownBlack,
+    primaryContainer: cafeAuLaitBrownDark,
+    onPrimaryContainer: cafeAuLaitBrownLight,
+    secondary: earthYellow,
+    onSecondary: earthYellowBlack,
+    secondaryContainer: earthYellowDark,
+    onSecondaryContainer: earthYellowLight,
+    tertiary: palmLeafGreen,
+    onTertiary: palmLeafGreenBlack,
+    tertiaryContainer: palmLeafGreenDark,
+    onTertiaryContainer: palmLeafGreenLight,
+    background: black10,
+    onBackground: white245,
+    surface: black0,
+    onSurface: white245,
+    surfaceVariant: black20,
+    onSurfaceVariant: grey200,
+    error: errorRedLight,
+    onError: black20,
+    errorContainer: errorRed,
+    onErrorContainer: white245,
+    inverseSurface: grey200,
+    onInverseSurface: black20,
+    outline: grey160,
+    outlineVariant: grey120,
+    shadow: black20,
+  );
+}
 
-  static Color foreground1 = black0;
-  static Color foreground2 = black10;
-  static Color foreground3 = black20;
-  static Color foreground4 = black30;
-  static Color foreground5 = black40;
+List<String> get subjectColorNames {
+  return ['blue', 'turquoise', 'green', 'yellow', 'orange', 'pink', 'purple'];
+}
 
-  static Color grey1 = grey200;
-  static Color grey2 = grey160;
-  static Color grey3 = grey120;
-  static Color grey4 = grey80;
+extension CustomColorScheme on BuildContext {
+  bool get isDarkMode {
+    return Theme.of(this).brightness == Brightness.dark;
+  }
 
-  static Color success1 = successGreen;
-  static Color success2 = successGreenLight;
-  static Color warning1 = warningYellow;
-  static Color warning2 = warningYellowLight;
+  Color get grey1 => isDarkMode ? grey80 : grey200;
 
-  static Color babyBlueEyes = babyBlueEyesLight;
-  static Color freshAirBlue = freshAirBlueLight;
-  static Color calamnsi = calamnsiLight;
-  static Color peach = peachLight;
-  static Color deepPeach = deepPeachLight;
-  static Color paleMagentaPink = paleMagentaPinkLight;
-  static Color mauveViolet = mauveVioletLight;
+  Color get grey2 => isDarkMode ? grey120 : grey160;
+
+  Color get grey3 => isDarkMode ? grey160 : grey120;
+
+  Color get grey4 => isDarkMode ? grey200 : grey80;
+
+  Color get successColor => isDarkMode ? successGreenLight : successGreen;
+
+  Color get successContainerColor =>
+      isDarkMode ? successGreen : successGreenLight;
+
+  Color get warningColor => isDarkMode ? warningYellowLight : warningYellow;
+
+  Color get warningContainerColor =>
+      isDarkMode ? warningYellow : warningYellowLight;
+
+  Map<String, Color> get subjectColors {
+    return {
+      subjectColorNames[0]: isDarkMode ? babyBlueEyesDark : babyBlueEyesLight,
+      subjectColorNames[1]: isDarkMode ? freshAirBlueDark : freshAirBlueLight,
+      subjectColorNames[2]: isDarkMode ? calamansiDark : calamansiLight,
+      subjectColorNames[3]: isDarkMode ? peachDark : peachLight,
+      subjectColorNames[4]: isDarkMode ? deepPeachDark : deepPeachLight,
+      subjectColorNames[5]:
+          isDarkMode ? paleMagentaPinkDark : paleMagentaPinkLight,
+      subjectColorNames[6]: isDarkMode ? mauveVioletDark : mauveVioletLight,
+    };
+  }
 }

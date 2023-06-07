@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
@@ -10,6 +9,7 @@ import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/bullet_list.dart';
 import 'package:sc_app/widgets/loading.dart';
+import 'package:sc_app/widgets/textfield_label.dart';
 
 class DeleteProfileScreen extends ConsumerStatefulWidget {
   const DeleteProfileScreen({super.key});
@@ -76,12 +76,12 @@ class _DeleteProfileScreenState extends ConsumerState<DeleteProfileScreen> {
           BulletList(
             texts: [
               Text(
-                'All your synced data/activities will be permanantly deleted.',
+                'All your synced data/activities will be permanently deleted.',
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
               RichText(
                 text: TextSpan(
-                  text: 'Your profile will be permanantly deleted, and ',
+                  text: 'Your profile will be permanently deleted, and ',
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                   children: const [
                     TextSpan(
@@ -94,13 +94,10 @@ class _DeleteProfileScreenState extends ConsumerState<DeleteProfileScreen> {
             ],
           ),
           const SizedBox(height: 32),
-          Text(
-            'Enter Your Password',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: CustomColorScheme.grey4,
-                ),
+          const TextFieldLabel(
+            text: 'Enter Your Password',
+            bottomPadding: 8,
           ),
-          const SizedBox(height: 8),
           Form(
             key: _formKey,
             child: TextFormField(

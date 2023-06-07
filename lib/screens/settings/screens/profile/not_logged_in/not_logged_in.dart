@@ -21,7 +21,7 @@ class NotLoggedInScreen extends StatelessWidget {
                 Icon(
                   FluentIcons.person_circle_32_regular,
                   size: 64,
-                  color: CustomColorScheme.grey3,
+                  color: context.grey3,
                 ),
                 Text(
                   'No Profile',

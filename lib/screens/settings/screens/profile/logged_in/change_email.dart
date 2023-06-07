@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-
+import 'package:sc_app/widgets/textfield_label.dart';
 import 'email_verification.dart';
 
 class ChangeEmailScreen extends ConsumerStatefulWidget {
@@ -87,13 +86,10 @@ class _ChangeEmailScreenState extends ConsumerState<ChangeEmailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Enter Your Password',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
+                const TextFieldLabel(
+                  text: 'Enter Your Password',
+                  bottomPadding: 8,
                 ),
-                const SizedBox(height: 8),
                 TextFormField(
                   controller: _passwordInputController,
                   keyboardType: TextInputType.visiblePassword,
@@ -130,13 +126,10 @@ class _ChangeEmailScreenState extends ConsumerState<ChangeEmailScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Enter New Email',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: CustomColorScheme.grey4,
-                      ),
+                const TextFieldLabel(
+                  text: 'Enter New Email',
+                  bottomPadding: 8,
                 ),
-                const SizedBox(height: 8),
                 TextFormField(
                   controller: _emailInputController,
                   inputFormatters: [InputFormatter.noSpace()],

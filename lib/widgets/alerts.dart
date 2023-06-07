@@ -22,7 +22,7 @@ class Alert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndroidSystemNavbarStyle(
-      color: CustomColorScheme.grey1,
+      color: context.grey1,
       child: AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,
@@ -78,7 +78,7 @@ class ConfirmationAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndroidSystemNavbarStyle(
-      color: CustomColorScheme.grey1,
+      color: context.grey1,
       child: AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,
@@ -118,7 +118,7 @@ class InfoAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AndroidSystemNavbarStyle(
-      color: CustomColorScheme.grey1,
+      color: context.grey1,
       child: AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 2,

@@ -20,8 +20,8 @@ class OvalTextContainer extends StatelessWidget {
           vertical: horizontalPadding / 4,
           horizontal: horizontalPadding,
         ),
-        color:
-            color ?? Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        alignment: Alignment.center,
+        color: color ?? Theme.of(context).colorScheme.surfaceVariant,
         child: text,
       ),
     );

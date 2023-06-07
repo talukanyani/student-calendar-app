@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-BottomNavigationBarThemeData bottomBarTheme(Color bgColor, Color fgColor) {
+BottomNavigationBarThemeData bottomNavBarTheme({
+  required Color bgColor,
+  required Color fgColor,
+}) {
   return BottomNavigationBarThemeData(
     backgroundColor: bgColor,
     elevation: 0,

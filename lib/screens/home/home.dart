@@ -43,11 +43,12 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: [
         Image(
-          image: const AssetImage(
-            'assets/images/home_bg_1080x1080.png',
-          ),
+          image: context.isDarkMode
+              ? const AssetImage(
+                  'assets/images/student_home_desk_(dark_version).png')
+              : const AssetImage('assets/images/student_home_desk.png'),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           fit: BoxFit.contain,
@@ -65,7 +66,7 @@ class Body extends StatelessWidget {
                     'Good day,',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w300,
-                          color: CustomColorScheme.grey4,
+                          color: context.grey4,
                         ),
                   ),
                   Text(
