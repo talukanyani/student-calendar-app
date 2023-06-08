@@ -4,7 +4,7 @@ import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
-import 'modals/login_alert.dart';
+import '../../modals/login_alert.dart';
 
 class DataSyncScreen extends ConsumerStatefulWidget {
   const DataSyncScreen({super.key});
@@ -16,11 +16,17 @@ class DataSyncScreen extends ConsumerStatefulWidget {
 class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
   void _onActivitiesSyncTurnOn(BuildContext context) {
     if (!ref.watch(isLoggedInProvider)) {
-      Show.modal(context, modal: const LoginAlert());
-      return;
+      Show.modal(
+        context,
+        modal: const LoginAlert(
+          message: Text(
+            'To turn on data sync, you have to log in with your profile.',
+          ),
+        ),
+      );
+    } else {
+      ref.read(dataSyncProvider.notifier).set(true);
     }
-
-    ref.read(dataSyncProvider.notifier).set(true);
   }
 
   void _onActivitiesSyncTurnOff(BuildContext context) {

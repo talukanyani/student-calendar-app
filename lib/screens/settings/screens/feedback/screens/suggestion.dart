@@ -5,7 +5,8 @@ import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-import '../modals/login_alert.dart';
+import '../../../modals/login_alert.dart';
+import '../widgets/login_message.dart';
 import 'send_response.dart';
 
 class SuggestionScreen extends ConsumerStatefulWidget {
@@ -38,7 +39,7 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
             sendName: 'suggestion',
             message: Text(
               'Thank you so much for your suggestion. '
-              'Your suggestion helps us improve.',
+                  'Your suggestion helps us improve.',
             ),
           );
         }),
@@ -64,7 +65,10 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
         children: [
           Text(
             'Something not functioning the way you want? Send us a suggestion.',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodyLarge,
           ),
           const SizedBox(height: 24),
           Form(
@@ -79,7 +83,7 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
                 if (value == null || value.isEmpty) {
                   return 'Write your suggestion';
                 } else if (value.length < 30) {
-                  return 'Further expalain your suggestion.';
+                  return 'Further explain your suggestion.';
                 } else {
                   return null;
                 }
@@ -97,7 +101,9 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
               if (!ref.watch(isLoggedInProvider)) {
                 Show.modal(
                   context,
-                  modal: const LoginAlert(sendName: 'suggestion'),
+                  modal: const LoginAlert(
+                    message: LoginMessage(sendName: 'suggestion'),
+                  ),
                 );
                 return;
               }

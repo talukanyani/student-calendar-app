@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
-import 'package:sc_app/widgets/alerts.dart';
 import 'package:sc_app/widgets/loading.dart';
+import 'reset_password_response.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -45,7 +44,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           break;
         case AuthStatus.unknownError:
           setState(() {
-            _errorMessage = 'There was an error while reseting your password.';
+            _errorMessage = 'An error occurred.';
           });
           break;
         default:
@@ -71,9 +70,16 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         children: [
           Text(
             'Reset Password',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headlineMedium
+                ?.copyWith(
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .onBackground,
+            ),
           ),
           const SizedBox(height: 32),
           Form(
@@ -108,21 +114,14 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
               setState(() => _errorMessage = null);
               if (_formKey.currentState!.validate()) {
                 _resetPassword(
-                  onDone: () {
-                    Navigator.pop(context);
-                    Show.modal(
-                      context,
-                      modal: const InfoAlert(
-                        title: Text('Email Sent'),
-                        content: Text(
-                          'Email with password reset link was sent. '
-                          'Go to change password on that link then '
-                          'come back here to log in with new password.'
-                          '\n\nIf you didn\'t recieve the email you may try again.',
+                  onDone: () =>
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (
+                              context) => const ResetPasswordResponseScreen(),
                         ),
                       ),
-                    );
-                  },
                 );
               }
             },
@@ -131,7 +130,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           const SizedBox(height: 8),
           Text(
             _errorMessage ?? '',
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
+            style: TextStyle(color: Theme
+                .of(context)
+                .colorScheme
+                .error),
           ),
         ],
       ),

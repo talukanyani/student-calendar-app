@@ -27,7 +27,7 @@ class _CalendarState extends ConsumerState<Calendar> {
   static final _currentMonthIndex =
       (_yearsBeforeCurrentYear * _monthsInAYear) + (_currentDate.month - 1);
   static final _calendarFirstDate =
-  DateTime(_currentDate.year - _yearsBeforeCurrentYear);
+      DateTime(_currentDate.year - _yearsBeforeCurrentYear);
 
   List<DateTime> getMonthDates(int index) {
     if (index > _displayedMonthIndex) {
@@ -104,13 +104,26 @@ class _CalendarState extends ConsumerState<Calendar> {
     final pageViewWidth = constraints.maxWidth;
 
     final monthHeight =
-    (((pageViewWidth / _monthColumns) * (1 / _gridRatio)) * _monthRows);
+        (((pageViewWidth / _monthColumns) * (1 / _gridRatio)) * _monthRows);
 
     var fraction = monthHeight / pageViewHeight;
 
     if (fraction > 1 || fraction <= 0) fraction = 1;
 
     return fraction;
+  }
+
+  @override
+  void initState() {
+    Future(() {
+      ref.read(displayedMonthDateProvider.notifier).change(
+            DateTime(
+              _calendarFirstDate.year,
+              _calendarFirstDate.month + _displayedMonthIndex,
+            ),
+          );
+    });
+    super.initState();
   }
 
   @override
@@ -135,15 +148,15 @@ class _CalendarState extends ConsumerState<Calendar> {
                   onPageChanged: (index) {
                     setState(() => _displayedMonthIndex = index);
                     ref.read(displayedMonthDateProvider.notifier).change(
-                      DateTime(
-                        _calendarFirstDate.year,
-                        _calendarFirstDate.month + index,
-                      ),
-                    );
+                          DateTime(
+                            _calendarFirstDate.year,
+                            _calendarFirstDate.month + index,
+                          ),
+                        );
                   },
                   itemCount:
-                  (_yearsBeforeCurrentYear + 1 + _yearsAfterCurrentYear) *
-                      _monthsInAYear,
+                      (_yearsBeforeCurrentYear + 1 + _yearsAfterCurrentYear) *
+                          _monthsInAYear,
                   itemBuilder: (context, monthIndex) {
                     final monthDates = getMonthDates(monthIndex);
 
@@ -151,7 +164,7 @@ class _CalendarState extends ConsumerState<Calendar> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: _monthColumns,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,

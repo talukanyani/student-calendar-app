@@ -5,7 +5,8 @@ import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-import '../modals/login_alert.dart';
+import '../../../modals/login_alert.dart';
+import '../widgets/login_message.dart';
 import 'send_response.dart';
 
 class AskHelpScreen extends ConsumerStatefulWidget {
@@ -94,7 +95,9 @@ class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
               if (!ref.watch(isLoggedInProvider)) {
                 Show.modal(
                   context,
-                  modal: const LoginAlert(sendName: 'help'),
+                  modal: const LoginAlert(
+                    message: LoginMessage(sendName: 'help'),
+                  ),
                 );
                 return;
               }

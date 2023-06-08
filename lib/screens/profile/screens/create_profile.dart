@@ -6,7 +6,7 @@ import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-import '../logged_in/email_verification.dart';
+import 'email_verification.dart';
 import 'login.dart';
 
 class CreateProfileScreen extends ConsumerStatefulWidget {

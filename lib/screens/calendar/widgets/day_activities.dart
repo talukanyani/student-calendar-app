@@ -8,12 +8,15 @@ import '../state/selected_day.dart';
 class DayActivities extends ConsumerWidget {
   const DayActivities({super.key});
 
-  static final DateTime today = DateTime.now();
-  static final DateTime tomorrow = today.add(const Duration(days: 1));
+  static final DateTime _today = DateTime.now();
+  static final DateTime _tomorrow = _today.add(const Duration(days: 1));
+  static final DateTime _yesterday = _today.subtract(const Duration(days: 1));
 
-  String weekDay(DateTime date) {
-    if (Helpers.isSameDay(date, today)) return 'Today';
-    if (Helpers.isSameDay(date, tomorrow)) return 'Tomorrow';
+  String _weekDay(DateTime date) {
+    if (Helpers.isSameDay(date, _today)) return 'Today';
+    if (Helpers.isSameDay(date, _tomorrow)) return 'Tomorrow';
+    if (Helpers.isSameDay(date, _yesterday)) return 'Yesterday';
+
     return getWeekDayFullName(date.weekday - 1);
   }
 
@@ -25,8 +28,8 @@ class DayActivities extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${weekDay(date)}, ${date.day} ${getMonthFullName(date.month - 1)}'
-          ' ${date.year == today.year ? '' : date.year}',
+          '${_weekDay(date)}, ${date.day} ${getMonthFullName(date.month - 1)}'
+          ' ${date.year == _today.year ? '' : date.year}',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),

@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/screens/home/home.dart';
+import 'package:sc_app/screens/profile/screens/create_profile.dart';
+import 'package:sc_app/screens/profile/screens/login.dart';
 import 'package:sc_app/widgets/buttons.dart';
-import '../settings/screens/profile/not_logged_in/create_profile.dart';
-import '../settings/screens/profile/not_logged_in/login.dart';
-import '../home/home.dart';
 
 class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});

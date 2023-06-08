@@ -7,7 +7,7 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
 import 'package:sc_app/widgets/textfield_label.dart';
-import 'email_verification.dart';
+import '../../email_verification.dart';
 
 class ChangeEmailScreen extends ConsumerStatefulWidget {
   const ChangeEmailScreen({super.key});

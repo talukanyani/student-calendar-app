@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'screens/profile/profile.dart';
+import 'package:sc_app/screens/profile/profile.dart';
 import 'screens/data_sync/data_sync.dart';
 import 'screens/preferences/preferences.dart';
 import 'screens/feedback/feedback.dart';
@@ -40,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
             title: 'Profile',
             subtitle: 'Manage your profile',
             icon: FluentIcons.person_circle_32_filled,
-            onTap: () => Navigator.of(context).push(
+            onTap: () => Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const ProfileScreen(),
               ),
