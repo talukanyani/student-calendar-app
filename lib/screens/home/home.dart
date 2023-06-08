@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/calendar_names.dart';
-import 'package:sc_app/widgets/primary_top_bar.dart';
-import 'package:sc_app/widgets/bottom_bar.dart';
+import 'package:sc_app/widgets/bottom_nav_bar.dart';
+import 'package:sc_app/widgets/profile_icon_button.dart';
 import 'package:sc_app/widgets/activities_list.dart';
 import 'widgets/box.dart';
 import 'widgets/week_activities.dart';
@@ -13,12 +13,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PrimaryTopBar(
-        title: 'SC',
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('SC'),
+        actions: const [ProfileIconButton()],
       ),
       body: const Body(),
-      bottomNavigationBar: const BottomBar(screenIndex: 0),
+      bottomNavigationBar: const BottomNavBar(screenIndex: 0),
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/utils/calendar_names.dart';
-import 'calendar_week_days.dart';
+import '../state/displayed_month_date.dart';
+import 'week_days_bar.dart';
 import 'calendar_day.dart';
 
 class Calendar extends ConsumerStatefulWidget {
@@ -23,15 +23,11 @@ class _CalendarState extends ConsumerState<Calendar> {
   static const _monthGridSquares = _monthColumns * _monthRows;
   static const _gridRatio = 0.9;
 
+  static final _currentDate = DateTime.now();
   static final _currentMonthIndex =
-      (_yearsBeforeCurrentYear * _monthsInAYear) + (DateTime.now().month - 1);
+      (_yearsBeforeCurrentYear * _monthsInAYear) + (_currentDate.month - 1);
   static final _calendarFirstDate =
-      DateTime(DateTime.now().year - _yearsBeforeCurrentYear);
-
-  DateTime get _displayedMonthDate => DateTime(
-        _calendarFirstDate.year,
-        _calendarFirstDate.month + _displayedMonthIndex,
-      );
+  DateTime(_currentDate.year - _yearsBeforeCurrentYear);
 
   List<DateTime> getMonthDates(int index) {
     if (index > _displayedMonthIndex) {
@@ -108,7 +104,7 @@ class _CalendarState extends ConsumerState<Calendar> {
     final pageViewWidth = constraints.maxWidth;
 
     final monthHeight =
-        (((pageViewWidth / _monthColumns) * (1 / _gridRatio)) * _monthRows);
+    (((pageViewWidth / _monthColumns) * (1 / _gridRatio)) * _monthRows);
 
     var fraction = monthHeight / pageViewHeight;
 
@@ -119,25 +115,11 @@ class _CalendarState extends ConsumerState<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
-        borderRadius: const BorderRadius.all(Radius.elliptical(16, 32)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            blurRadius: 16,
-            spreadRadius: -8,
-            color: Theme.of(context).shadowColor,
-          ),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       child: Column(
         children: [
-          DisplayedMonthTitle(month: _displayedMonthDate),
-          const SizedBox(height: 16),
-          const CalendarWeekDays(),
+          const WeekDaysBar(),
           const SizedBox(height: 16),
           Expanded(
             child: LayoutBuilder(
@@ -152,16 +134,24 @@ class _CalendarState extends ConsumerState<Calendar> {
                   padEnds: false,
                   onPageChanged: (index) {
                     setState(() => _displayedMonthIndex = index);
+                    ref.read(displayedMonthDateProvider.notifier).change(
+                      DateTime(
+                        _calendarFirstDate.year,
+                        _calendarFirstDate.month + index,
+                      ),
+                    );
                   },
                   itemCount:
-                      (_yearsBeforeCurrentYear + 1 + _yearsAfterCurrentYear) *
-                          _monthsInAYear,
+                  (_yearsBeforeCurrentYear + 1 + _yearsAfterCurrentYear) *
+                      _monthsInAYear,
                   itemBuilder: (context, monthIndex) {
+                    final monthDates = getMonthDates(monthIndex);
+
                     return GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: _monthColumns,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
@@ -169,12 +159,8 @@ class _CalendarState extends ConsumerState<Calendar> {
                       ),
                       itemCount: _monthGridSquares,
                       itemBuilder: (context, dayIndex) {
-                        final dates = getMonthDates(monthIndex);
-
                         return CalendarDay(
-                          date: dates[dayIndex],
-                          isInDisplayedMonth: dates[dayIndex].month ==
-                              _displayedMonthDate.month,
+                          date: monthDates[dayIndex],
                         );
                       },
                     );
@@ -184,31 +170,6 @@ class _CalendarState extends ConsumerState<Calendar> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class DisplayedMonthTitle extends StatelessWidget {
-  const DisplayedMonthTitle({super.key, required this.month});
-
-  final DateTime month;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        '${getMonthFullName(month.month - 1)} '
-        '${month.year == DateTime.now().year ? '' : month.year}',
-        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }

@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/widgets/primary_top_bar.dart';
-import 'package:sc_app/widgets/bottom_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/utils/calendar_names.dart';
+import 'package:sc_app/widgets/bottom_nav_bar.dart';
+import 'package:sc_app/widgets/profile_icon_button.dart';
+import 'state/displayed_month_date.dart';
 import 'widgets/calendar.dart';
 
-class CalendarScreen extends StatelessWidget {
+class CalendarScreen extends ConsumerWidget {
   const CalendarScreen({super.key});
 
+  String _monthTitle(DateTime date) {
+    final currentDate = DateTime.now();
+    final monthName = getMonthFullName(date.month - 1);
+    final year = (date.year == currentDate.year) ? '' : date.year.toString();
+
+    return '$monthName $year';
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final displayedMonthDate = ref.watch(displayedMonthDateProvider);
+
     return Scaffold(
-      appBar: const PrimaryTopBar(title: 'Calendar'),
-      body: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 480),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return ListView(
-              primary: false,
-              children: [
-                Container(
-                  height: constraints.maxHeight,
-                  constraints: const BoxConstraints(minHeight: 520),
-                  child: const Calendar(),
-                ),
-              ],
-            );
-          },
-        ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(_monthTitle(displayedMonthDate)),
+        actions: const [ProfileIconButton()],
       ),
-      bottomNavigationBar: const BottomBar(screenIndex: 2),
+      body: const Calendar(),
+      bottomNavigationBar: const BottomNavBar(screenIndex: 2),
     );
   }
 }

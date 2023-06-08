@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
-import '../modals/day_activities.dart';
+import '../state/displayed_month_date.dart';
+import '../state/selected_day.dart';
+import 'day_activities.dart';
 
-class CalendarDay extends ConsumerWidget {
-  const CalendarDay({
-    super.key,
-    required this.date,
-    this.isInDisplayedMonth = true,
-  });
+class CalendarDay extends ConsumerStatefulWidget {
+  const CalendarDay({super.key, required this.date});
 
   final DateTime date;
-  final bool isInDisplayedMonth;
 
-  bool get isToday => Helpers.isSameDay(date, DateTime.now());
+  @override
+  ConsumerState<CalendarDay> createState() => _CalendarDayState();
+}
 
-  double getOpacity(int activitiesCount) {
-    switch (activitiesCount) {
+class _CalendarDayState extends ConsumerState<CalendarDay> {
+  bool get _isInDisplayedMonth =>
+      widget.date.month == ref.watch(displayedMonthDateProvider).month;
+
+  bool get _isToday => Helpers.isSameDay(widget.date, DateTime.now());
+
+  bool get _isSelected =>
+      Helpers.isSameDay(widget.date, ref.watch(selectedDayProvider));
+
+  double getOpacity() {
+    switch (ref.watch(dayActivitiesProvider(widget.date)).length) {
       case 0:
         return 0.00;
       case 1:
@@ -35,31 +42,41 @@ class CalendarDay extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final activities = ref.watch(dayActivitiesProvider(date));
-
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Show.modal(
-        context,
-        modal: DayActivitiesModal(date: date),
-      ),
+      onTap: () {
+        ref.read(selectedDayProvider.notifier).change(widget.date);
+
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: (240 + (MediaQuery.of(context).size.height * 0.2)),
+              child: const DayActivities(),
+            );
+          },
+        );
+      },
       child: Opacity(
-        opacity: isInDisplayedMonth ? 1 : 0.25,
+        opacity: _isInDisplayedMonth ? 1 : 0.25,
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiary.withOpacity(
-                  getOpacity(activities.length),
+                  getOpacity(),
                 ),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: _isSelected
+                ? BorderRadius.circular(16)
+                : BorderRadius.circular(8),
             border: Border.all(
-              width: isToday ? 4 : 1,
-              color: isToday
+              width: _isToday ? 2 : 1,
+              color: _isToday
                   ? Theme.of(context).colorScheme.secondary
                   : Theme.of(context).dividerColor,
             ),
           ),
-          child: Text(date.day.toString()),
+          child: Text(widget.date.day.toString()),
         ),
       ),
     );

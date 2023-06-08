@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 BottomSheetThemeData bottomSheetTheme({required Color bgColor}) {
   return BottomSheetThemeData(
+    showDragHandle: true,
     backgroundColor: bgColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(

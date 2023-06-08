@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/enums.dart';
-import 'package:sc_app/widgets/primary_top_bar.dart';
-import 'package:sc_app/widgets/bottom_bar.dart';
+import 'package:sc_app/widgets/bottom_nav_bar.dart';
+import 'package:sc_app/widgets/profile_icon_button.dart';
 import 'widgets/table.dart';
 import 'widgets/table_add_button.dart';
 
@@ -13,10 +13,14 @@ class AddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: PrimaryTopBar(title: 'Add'),
-      body: Tables(),
-      bottomNavigationBar: BottomBar(screenIndex: 1),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('Add'),
+        actions: const [ProfileIconButton()],
+      ),
+      body: const Tables(),
+      bottomNavigationBar: const BottomNavBar(screenIndex: 1),
     );
   }
 }

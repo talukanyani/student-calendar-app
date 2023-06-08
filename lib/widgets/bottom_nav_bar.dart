@@ -4,8 +4,8 @@ import 'package:sc_app/screens/home/home.dart';
 import 'package:sc_app/screens/add/add.dart';
 import 'package:sc_app/screens/calendar/calendar.dart';
 
-class BottomBar extends StatelessWidget {
-  const BottomBar({required this.screenIndex, super.key});
+class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({required this.screenIndex, super.key});
 
   final int screenIndex;
 
