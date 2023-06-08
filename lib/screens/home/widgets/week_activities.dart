@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
-import 'package:sc_app/screens/add/add.dart';
 import 'package:sc_app/screens/calendar/calendar.dart';
+import 'package:sc_app/screens/tables/tables.dart';
 
 class WeekActivities extends ConsumerWidget {
   const WeekActivities({super.key});
@@ -30,19 +30,17 @@ class WeekActivities extends ConsumerWidget {
         children: [
           Text(
             'You have ${next7daysActivitiesCount(ref) == 0 ? 'no' : next7daysActivitiesCount(ref)} '
-            '${next7daysActivitiesCount(ref) < 1 ? 'actitvity' : 'activities'} this week',
+            '${next7daysActivitiesCount(ref) < 1 ? 'activity' : 'activities'} this week',
           ),
           const SizedBox(height: 16),
           SizedBox(
             height: 32,
             child: OutlinedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CalendarScreen()),
-                );
-              },
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const CalendarScreen(),
+                ),
+              ),
               child: const Text('View Calendar'),
             ),
           ),
@@ -50,12 +48,11 @@ class WeekActivities extends ConsumerWidget {
           SizedBox(
             height: 32,
             child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddScreen()),
-                );
-              },
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const TablesScreen(),
+                ),
+              ),
               child: const Text('Add Activities'),
             ),
           ),

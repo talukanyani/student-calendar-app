@@ -9,7 +9,7 @@ import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/alerts.dart';
-import '../modals/row_edit_form.dart';
+import '../modals/activity_edit_form.dart';
 import 'oval_text_container.dart';
 import 'popup_menu_item.dart';
 
@@ -87,7 +87,7 @@ class MoreRowActionsButton extends ConsumerWidget {
                 Navigator.pop(context);
                 Show.modal(
                   context,
-                  modal: RowEditForm(activity: activity),
+                  modal: ActivityEditForm(activity: activity),
                 );
               },
             ),

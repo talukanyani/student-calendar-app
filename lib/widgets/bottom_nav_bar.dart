@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:sc_app/screens/home/home.dart';
-import 'package:sc_app/screens/add/add.dart';
+import 'package:sc_app/screens/tables/tables.dart';
 import 'package:sc_app/screens/calendar/calendar.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -11,7 +11,7 @@ class BottomNavBar extends StatelessWidget {
 
   static const List<Widget> _primaryScreens = <Widget>[
     HomeScreen(),
-    AddScreen(),
+    TablesScreen(),
     CalendarScreen(),
   ];
 
@@ -41,9 +41,9 @@ class BottomNavBar extends StatelessWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(FluentIcons.add_circle_24_regular),
-          activeIcon: Icon(FluentIcons.add_circle_24_filled),
-          label: 'Add',
+          icon: Icon(FluentIcons.table_24_regular),
+          activeIcon: Icon(FluentIcons.table_24_filled),
+          label: 'Tables',
         ),
         BottomNavigationBarItem(
           icon: Icon(FluentIcons.calendar_ltr_24_regular),

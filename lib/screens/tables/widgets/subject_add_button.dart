@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
-import '../modals/table_add_form.dart';
+import '../modals/subject_add_form.dart';
 
-class TableAddButton extends StatelessWidget {
-  const TableAddButton({super.key, required this.subjectsCount});
+class SubjectAddButton extends StatelessWidget {
+  const SubjectAddButton({super.key, required this.subjectsCount});
 
   final int subjectsCount;
 
@@ -23,7 +23,7 @@ class TableAddButton extends StatelessWidget {
               snackBarIcon: SnackBarIcon.info,
             );
           } else {
-            Show.modal(context, modal: const TableAddForm());
+            Show.modal(context, modal: const SubjectAddForm());
           }
         },
         style: OutlinedButton.styleFrom(

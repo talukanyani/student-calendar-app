@@ -12,16 +12,16 @@ import 'package:sc_app/widgets/modal.dart';
 import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/activity_input.dart';
 
-class RowAddForm extends ConsumerStatefulWidget {
-  const RowAddForm({super.key, required this.subject});
+class ActivityAddForm extends ConsumerStatefulWidget {
+  const ActivityAddForm({super.key, required this.subject});
 
   final Subject subject;
 
   @override
-  ConsumerState<RowAddForm> createState() => _RowAddFormState();
+  ConsumerState<ActivityAddForm> createState() => _ActivityAddFormState();
 }
 
-class _RowAddFormState extends ConsumerState<RowAddForm> {
+class _ActivityAddFormState extends ConsumerState<ActivityAddForm> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 

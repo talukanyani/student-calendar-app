@@ -12,16 +12,16 @@ import 'package:sc_app/widgets/modal.dart';
 import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/activity_input.dart';
 
-class RowEditForm extends ConsumerStatefulWidget {
-  const RowEditForm({super.key, required this.activity});
+class ActivityEditForm extends ConsumerStatefulWidget {
+  const ActivityEditForm({super.key, required this.activity});
 
   final Activity activity;
 
   @override
-  ConsumerState<RowEditForm> createState() => _RowEditFormState();
+  ConsumerState<ActivityEditForm> createState() => _ActivityEditFormState();
 }
 
-class _RowEditFormState extends ConsumerState<RowEditForm> {
+class _ActivityEditFormState extends ConsumerState<ActivityEditForm> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 

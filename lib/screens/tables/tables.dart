@@ -6,17 +6,17 @@ import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/bottom_nav_bar.dart';
 import 'package:sc_app/widgets/profile_icon_button.dart';
 import 'widgets/table.dart';
-import 'widgets/table_add_button.dart';
+import 'widgets/subject_add_button.dart';
 
-class AddScreen extends StatelessWidget {
-  const AddScreen({super.key});
+class TablesScreen extends StatelessWidget {
+  const TablesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Add'),
+        title: const Text('Tables'),
         actions: const [ProfileIconButton()],
       ),
       body: const Tables(),
@@ -50,7 +50,7 @@ class Tables extends ConsumerWidget {
       itemCount: subjectsCount + 1,
       itemBuilder: (context, index) {
         if (index == subjectsCount) {
-          return TableAddButton(subjectsCount: subjectsCount);
+          return SubjectAddButton(subjectsCount: subjectsCount);
         }
 
         return SubjectTable(subject: sortedSubjects()[index]);

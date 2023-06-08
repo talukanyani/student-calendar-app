@@ -9,9 +9,9 @@ import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/rect_container.dart';
 import 'package:sc_app/widgets/alerts.dart';
-import '../modals/table_edit_form.dart';
+import '../modals/subject_edit_form.dart';
 import 'row.dart';
-import 'row_add_button.dart';
+import 'activity_add_button.dart';
 import 'popup_menu_item.dart';
 import 'oval_text_container.dart';
 
@@ -59,7 +59,7 @@ class SubjectTable extends StatelessWidget {
               ),
             ],
           ),
-          RowAddButton(subject: subject),
+          ActivityAddButton(subject: subject),
         ],
       ),
     );
@@ -108,7 +108,7 @@ class MoreTableActionsButton extends ConsumerWidget {
               Navigator.pop(context);
               Show.modal(
                 context,
-                modal: TableEditForm(subject: subject),
+                modal: SubjectEditForm(subject: subject),
               );
             },
           ),

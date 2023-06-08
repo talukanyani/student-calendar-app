@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
@@ -12,28 +11,33 @@ import 'package:sc_app/widgets/modal.dart';
 import 'package:sc_app/widgets/textfield_label.dart';
 import '../widgets/radio_color_block.dart';
 
-class TableAddForm extends ConsumerStatefulWidget {
-  const TableAddForm({super.key});
+class SubjectEditForm extends ConsumerStatefulWidget {
+  const SubjectEditForm({super.key, required this.subject});
+
+  final Subject subject;
 
   @override
-  ConsumerState<TableAddForm> createState() => _TableAddFormState();
+  ConsumerState<SubjectEditForm> createState() => _SubjectEditFormState();
 }
 
-class _TableAddFormState extends ConsumerState<TableAddForm> {
-  String _selectedColor =
-      subjectColorNames[Random().nextInt(subjectColorNames.length + 1)];
+class _SubjectEditFormState extends ConsumerState<SubjectEditForm> {
+  String _selectedColor = subjectColorNames[0];
 
   final _titleInputController = TextEditingController();
 
-  void _addSubject() {
-    ref.read(dataProvider.notifier).addSubject(
-          Subject(
-            id: DateTime.now().millisecondsSinceEpoch,
-            name: _titleInputController.text.trim(),
-            color: _selectedColor,
-            activities: [],
-          ),
+  void _editSubject() {
+    ref.read(dataProvider.notifier).editSubject(
+          id: widget.subject.id,
+          newName: _titleInputController.text.trim(),
+          newColor: _selectedColor,
         );
+  }
+
+  @override
+  void initState() {
+    _titleInputController.text = widget.subject.name;
+    setState(() => _selectedColor = widget.subject.color);
+    super.initState();
   }
 
   @override
@@ -47,7 +51,7 @@ class _TableAddFormState extends ConsumerState<TableAddForm> {
     return Modal(
       children: [
         Text(
-          'Add a Subject',
+          'Edit a Subject',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: context.grey4,
               ),
@@ -71,6 +75,7 @@ class _TableAddFormState extends ConsumerState<TableAddForm> {
         ),
         const SizedBox(height: 16),
         const TextFieldLabel(text: 'Color'),
+        // color picker
         LayoutBuilder(
           builder: (context, constraints) {
             return GridView.builder(
@@ -112,17 +117,25 @@ class _TableAddFormState extends ConsumerState<TableAddForm> {
                       text: 'Please enter a title.',
                       snackBarIcon: SnackBarIcon.error,
                     );
+                  } else if (_titleInputController.text ==
+                          widget.subject.name &&
+                      _selectedColor == widget.subject.color) {
+                    Show.snackBar(
+                      context,
+                      text: 'You did not change anything :)',
+                      snackBarIcon: SnackBarIcon.info,
+                    );
                   } else {
-                    _addSubject();
+                    _editSubject();
                     Navigator.pop(context);
                     Show.snackBar(
                       context,
-                      text: 'One subject was added',
+                      text: 'One subject was edited',
                       snackBarIcon: SnackBarIcon.done,
                     );
                   }
                 },
-                child: const Text('Add'),
+                child: const Text('Save'),
               ),
             ),
           ],

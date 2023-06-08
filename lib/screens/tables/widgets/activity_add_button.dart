@@ -3,10 +3,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/enums.dart';
-import '../modals/row_add_form.dart';
+import '../modals/activity_add_form.dart';
 
-class RowAddButton extends StatelessWidget {
-  const RowAddButton({super.key, required this.subject});
+class ActivityAddButton extends StatelessWidget {
+  const ActivityAddButton({super.key, required this.subject});
 
   final Subject subject;
 
@@ -26,11 +26,11 @@ class RowAddButton extends StatelessWidget {
           } else {
             Show.modal(
               context,
-              modal: RowAddForm(subject: subject),
+              modal: ActivityAddForm(subject: subject),
             );
           }
         },
-        tooltip: 'Add activity',
+        tooltip: 'add an activity',
         icon: const Icon(Iconsax.add_square),
       ),
     );
