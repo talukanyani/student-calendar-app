@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/helpers/other_helpers.dart';
-import 'package:sc_app/widgets/android_system_navbar.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import '../settings/screens/profile/not_logged_in/create_profile.dart';
 import '../settings/screens/profile/not_logged_in/login.dart';
@@ -28,137 +27,146 @@ class WelcomeScreen extends ConsumerWidget {
 
     var bodySmallText = Theme.of(context).textTheme.bodySmall;
 
-    return AndroidSystemNavbarStyle(
-      color: Theme.of(context).colorScheme.background,
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(backgroundColor: Colors.transparent),
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 48),
-              child: Image(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        toolbarHeight: 0,
+      ),
+      body: Stack(
+        children: [
+          Container(
+            width: double.maxFinite,
+            height: double.maxFinite,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Theme.of(context).colorScheme.onPrimary,
+                  Theme.of(context).colorScheme.surfaceVariant,
+                ],
+                stops: const [0.213, 0.213],
+              ),
+              image: DecorationImage(
                 image: context.isDarkMode
                     ? const AssetImage(
                         'assets/images/student_home_desk_(dark_version).png')
                     : const AssetImage('assets/images/student_home_desk.png'),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
                 fit: BoxFit.contain,
-                alignment: Alignment.topCenter,
+                alignment: Alignment.topRight,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(flex: 2),
-                  Text(
-                    'Get Started!',
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                  ),
-                  const Wrap(
-                    spacing: -8,
-                    children: [
-                      Icon(Icons.horizontal_rule),
-                      Icon(Icons.horizontal_rule),
-                      Icon(Icons.arrow_forward),
-                    ],
-                  ),
-                  const Spacer(flex: 3),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: PrimaryFilledBtn(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return const LoginScreen();
-                              }),
-                            );
-                          },
-                          child: const Text('Log In'),
-                        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(flex: 2),
+                Text(
+                  'Get Started!',
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: PrimaryBorderBtn(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return const CreateProfileScreen();
-                              }),
-                            );
-                          },
-                          child: const Text('Create Profile'),
-                        ),
+                ),
+                const Wrap(
+                  spacing: -8,
+                  children: [
+                    Icon(Icons.horizontal_rule),
+                    Icon(Icons.horizontal_rule),
+                    Icon(Icons.arrow_forward),
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryFilledBtn(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('Log In'),
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {
-                            setIsFirstLaunch();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text('Continue Without Profile'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    alignment: Alignment.center,
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        Text(
-                          'By using this app, you agree to our',
-                          style: bodySmallText,
-                        ),
-                        InlineBtn(
-                          onPressed: () => Helpers.lauchLink(
-                            'https://tmlab.tech/terms',
-                          ),
-                          label: 'Terms of Use',
-                          textStyle: bodySmallText?.copyWith(
-                            decoration: TextDecoration.underline,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        Text('and', style: bodySmallText),
-                        InlineBtn(
-                          onPressed: () => Helpers.lauchLink(
-                            'https://tmlab.tech/privacy',
-                          ),
-                          label: 'Privacy Policy',
-                          textStyle: bodySmallText?.copyWith(
-                            decoration: TextDecoration.underline,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
                     ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryBorderBtn(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const CreateProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('Create Profile'),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          setIsFirstLaunch();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('Continue Without Profile'),
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  alignment: Alignment.center,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      Text(
+                        'By using this app, you agree to our',
+                        style: bodySmallText,
+                      ),
+                      InlineBtn(
+                        onPressed: () => Helpers.lauchLink(
+                          'https://tmlab.tech/terms',
+                        ),
+                        label: 'Terms of Use',
+                        textStyle: bodySmallText?.copyWith(
+                          decoration: TextDecoration.underline,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      Text('and', style: bodySmallText),
+                      InlineBtn(
+                        onPressed: () => Helpers.lauchLink(
+                          'https://tmlab.tech/privacy',
+                        ),
+                        label: 'Privacy Policy',
+                        textStyle: bodySmallText?.copyWith(
+                          decoration: TextDecoration.underline,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
