@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'package:sc_app/widgets/buttons.dart';
 
 class LoginMessage extends StatelessWidget {
@@ -20,7 +20,7 @@ class LoginMessage extends StatelessWidget {
             children: [
               WidgetSpan(
                 child: InlineBtn(
-                  onPressed: () => Helpers.lauchLink(
+                  onPressed: () => Helpers.launchLink(
                     'mailto:tmlab.tech@hotmail.com',
                   ),
                   label: 'email us',

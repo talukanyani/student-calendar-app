@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
@@ -95,9 +94,9 @@ class _BugReportScreenState extends ConsumerState<BugReportScreen> {
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
               if (!ref.watch(isLoggedInProvider)) {
-                Show.modal(
-                  context,
-                  modal: const LoginAlert(
+                showDialog(
+                  context: context,
+                  builder: (context) => const LoginAlert(
                     message: LoginMessage(sendName: 'bug report'),
                   ),
                 );

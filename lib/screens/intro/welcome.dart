@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/themes/color_scheme.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'package:sc_app/screens/home/home.dart';
 import 'package:sc_app/screens/profile/screens/create_profile.dart';
 import 'package:sc_app/screens/profile/screens/login.dart';
@@ -140,7 +140,7 @@ class WelcomeScreen extends ConsumerWidget {
                         style: bodySmallText,
                       ),
                       InlineBtn(
-                        onPressed: () => Helpers.lauchLink(
+                        onPressed: () => Helpers.launchLink(
                           'https://tmlab.tech/terms',
                         ),
                         label: 'Terms of Use',
@@ -151,7 +151,7 @@ class WelcomeScreen extends ConsumerWidget {
                       ),
                       Text('and', style: bodySmallText),
                       InlineBtn(
-                        onPressed: () => Helpers.lauchLink(
+                        onPressed: () => Helpers.launchLink(
                           'https://tmlab.tech/privacy',
                         ),
                         label: 'Privacy Policy',

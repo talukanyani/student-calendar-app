@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'screens/ask_help.dart';
 import 'screens/bug_report.dart';
 import 'screens/suggestion.dart';
@@ -16,7 +16,7 @@ class FeedbackScreen extends StatelessWidget {
         primary: false,
         children: [
           ListTile(
-            onTap: () => Helpers.lauchLink(
+            onTap: () => Helpers.launchLink(
               'https://tmlab.tech/student_calendar/rate?platform='
               '${Platform.isAndroid ? 'playstore' : 'appstore'}',
             ),
@@ -37,7 +37,7 @@ class FeedbackScreen extends StatelessWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const BugReportScreen()),
             ),
-            title: const Text('Rebort a bug'),
+            title: const Text('Report a bug'),
             leading: const Icon(Icons.bug_report),
           ),
           ListTile(

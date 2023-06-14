@@ -1,35 +1,41 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/models/subject.dart';
+import 'package:sc_app/utils/enums.dart';
+import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/services/local_database.dart';
 
 class DataController extends StateNotifier<List<Subject>> {
   DataController(this.ref) : super([]) {
     _updateWithCachedData().then((_) {
-      updateWithSynceddata();
+      updateWithSyncedData();
     });
   }
 
   final Ref ref;
 
   String? get _userId => ref.read(userIdProvider);
+
   bool get _isSync => ref.read(dataSyncAndAuthedProvider) ?? false;
 
-  void addSubject(Subject subject) {
+  Future<DataAddStatus> addSubject(Subject subject) async {
+    if (state.length >= 20) return DataAddStatus.limitError;
+
     state = [...state, subject];
 
-    LocalDb().cacheData(state);
+    await LocalDb().cacheData(state);
     if (_isSync) CloudDb().addSubject(subject, userId: _userId);
+
+    return DataAddStatus.done;
   }
 
-  void editSubject({required int id, String? newName, String? newColor}) {
+  void editSubject({required int id, String? newName, String? newColorName}) {
     state = [
       for (final subject in state)
         if (subject.id == id)
-          subject.copyWith(name: newName, color: newColor)
+          subject.copyWith(name: newName, colorName: newColorName)
         else
           subject,
     ];
@@ -40,7 +46,7 @@ class DataController extends StateNotifier<List<Subject>> {
       final subject = state.firstWhere((element) => element.id == id);
 
       CloudDb().editSubject(
-        subject.copyWith(name: newName, color: newColor),
+        subject.copyWith(name: newName, colorName: newColorName),
         userId: _userId,
       );
     }
@@ -56,7 +62,9 @@ class DataController extends StateNotifier<List<Subject>> {
     if (_isSync) CloudDb().deleteSubject(id, userId: _userId);
   }
 
-  void addActivity(Activity activity) {
+  Future<DataAddStatus> addActivity(Activity activity) async {
+    if (_activitiesCount >= 1000) return DataAddStatus.limitError;
+
     state = [
       for (final subject in state)
         if (subject.id == activity.subjectId)
@@ -65,15 +73,18 @@ class DataController extends StateNotifier<List<Subject>> {
           subject,
     ];
 
-    LocalDb().cacheData(state);
+    await LocalDb().cacheData(state);
     if (_isSync) CloudDb().addActivity(activity, userId: _userId);
+
+    return DataAddStatus.done;
   }
 
   void editActivity({
     required int subjectId,
     required int activityId,
     String? newTitle,
-    DateTime? newDate,
+    String? newDescription,
+    DateTime? newDateTime,
   }) {
     state = [
       for (final subject in state)
@@ -82,7 +93,11 @@ class DataController extends StateNotifier<List<Subject>> {
             activities: [
               for (final activity in subject.activities)
                 if (activity.id == activityId)
-                  activity.copyWith(title: newTitle, date: newDate)
+                  activity.copyWith(
+                    title: newTitle,
+                    description: newDescription,
+                    dateTime: newDateTime,
+                  )
                 else
                   activity,
             ],
@@ -128,12 +143,22 @@ class DataController extends StateNotifier<List<Subject>> {
     }
   }
 
+  int get _activitiesCount {
+    int count = 0;
+
+    for (final subject in state) {
+      count += subject.activities.length;
+    }
+
+    return count;
+  }
+
   Future<void> _updateWithCachedData() async {
     final cachedData = await LocalDb().cachedData;
     state = cachedData;
   }
 
-  Future<void> updateWithSynceddata() async {
+  Future<void> updateWithSyncedData() async {
     if (!_isSync) return;
 
     final syncedData = await CloudDb().getSyncedData(_userId);

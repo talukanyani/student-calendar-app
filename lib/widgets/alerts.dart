@@ -1,67 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:sc_app/themes/color_scheme.dart';
-import 'package:sc_app/widgets/android_system_navbar.dart';
-
-class Alert extends StatelessWidget {
-  const Alert({
-    super.key,
-    required this.title,
-    required this.titleIcon,
-    required this.content,
-    required this.actionName,
-    required this.action,
-  });
-
-  final Widget title;
-  final Icon titleIcon;
-  final Widget content;
-  final String actionName;
-  final void Function() action;
-
-  @override
-  Widget build(BuildContext context) {
-    return AndroidSystemNavbarStyle(
-      color: context.grey1,
-      child: AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 2,
-        title: Wrap(
-          children: [
-            titleIcon,
-            const SizedBox(width: 16),
-            title,
-          ],
-        ),
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.onBackground,
-            ),
-            child: const Text('Cancel'),
-          ),
-          OutlinedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              action();
-            },
-            style: OutlinedButton.styleFrom(
-              fixedSize: const Size.fromWidth(96),
-              foregroundColor: Theme.of(context).colorScheme.onBackground,
-              side: BorderSide(
-                width: 2,
-                color: Theme.of(context).colorScheme.outline,
-              ),
-            ),
-            child: Text(actionName),
-          ),
-        ],
-      ),
-    );
-  }
-}
+import 'buttons.dart';
 
 class ConfirmationAlert extends StatelessWidget {
   const ConfirmationAlert({
@@ -77,34 +16,24 @@ class ConfirmationAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidSystemNavbarStyle(
-      color: context.grey1,
-      child: AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 2,
-        title: title,
-        content: content,
-        actionsPadding: const EdgeInsets.only(top: 0, bottom: 8, right: 8),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.onBackground,
-            ),
-            child: const Text('NO'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              action();
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.onBackground,
-            ),
-            child: const Text('YES'),
-          ),
-        ],
-      ),
+    return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      elevation: 4,
+      title: title,
+      content: content,
+      actions: [
+        PrimaryBorderBtn(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('No'),
+        ),
+        PrimaryBorderBtn(
+          onPressed: () {
+            action();
+            Navigator.pop(context);
+          },
+          child: const Text('Yes'),
+        ),
+      ],
     );
   }
 }
@@ -117,33 +46,27 @@ class InfoAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AndroidSystemNavbarStyle(
-      color: context.grey1,
-      child: AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 2,
-        insetPadding: const EdgeInsets.all(16),
-        title: Wrap(
-          children: [
-            const Icon(FluentIcons.info_24_filled),
-            const SizedBox(width: 16),
-            title,
-          ],
-        ),
-        content: content,
-        contentTextStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onBackground,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.onBackground,
-            ),
-            child: const Text('OK'),
-          ),
+    return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      elevation: 4,
+      insetPadding: const EdgeInsets.all(16),
+      title: Row(
+        children: [
+          const Icon(FluentIcons.info_24_filled),
+          const SizedBox(width: 16),
+          Expanded(child: title),
         ],
       ),
+      content: content,
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.onBackground,
+          ),
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 
-class TextFieldLabel extends StatelessWidget {
-  const TextFieldLabel({super.key, required this.text, this.bottomPadding});
+class InputFieldLabel extends StatelessWidget {
+  const InputFieldLabel({
+    super.key,
+    this.bottomPadding = 4,
+    required this.label,
+  });
 
-  final String text;
-  final double? bottomPadding;
+  final String label;
+  final double bottomPadding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: bottomPadding ?? 4),
+      padding: EdgeInsets.only(bottom: bottomPadding),
       child: Text(
-        text,
+        label,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
               color: context.grey3,
             ),

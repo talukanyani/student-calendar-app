@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
@@ -22,7 +21,7 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context) {
+  void _send({required void Function() onDone}) {
     setState(() => _isLoading = true);
 
     CloudDb()
@@ -32,18 +31,7 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
     )
         .then((_) {
       setState(() => _isLoading = false);
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) {
-          return const SendResponseScreen(
-            sendName: 'suggestion',
-            message: Text(
-              'Thank you so much for your suggestion. '
-                  'Your suggestion helps us improve.',
-            ),
-          );
-        }),
-      );
+      onDone();
     });
   }
 
@@ -65,10 +53,7 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
         children: [
           Text(
             'Something not functioning the way you want? Send us a suggestion.',
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodyLarge,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: 24),
           Form(
@@ -99,16 +84,28 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
             onPressed: () {
               if (!_formKey.currentState!.validate()) return;
               if (!ref.watch(isLoggedInProvider)) {
-                Show.modal(
-                  context,
-                  modal: const LoginAlert(
+                showDialog(
+                  context: context,
+                  builder: (context) => const LoginAlert(
                     message: LoginMessage(sendName: 'suggestion'),
                   ),
                 );
                 return;
               }
 
-              _send(context);
+              _send(onDone: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const SendResponseScreen(
+                      sendName: 'suggestion',
+                      message: Text(
+                        'Thank you so much for your suggestion. '
+                        'Your suggestion helps us improve.',
+                      ),
+                    ),
+                  ),
+                );
+              });
             },
             child: const Text('Send'),
           ),

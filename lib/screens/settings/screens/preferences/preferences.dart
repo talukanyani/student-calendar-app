@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'settings/calendar_week_start.dart';
@@ -29,9 +28,9 @@ class PreferencesScreen extends ConsumerWidget {
                 Spacer(),
               ],
             ),
-            onTap: () => Show.modal(
-              context,
-              modal: const ThemeModeSettingModal(),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => const ThemeModeSettingModal(),
             ),
           ),
           ListTile(
@@ -44,9 +43,9 @@ class PreferencesScreen extends ConsumerWidget {
                 Spacer(),
               ],
             ),
-            onTap: () => Show.modal(
-              context,
-              modal: const TablesSortSettingModal(),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => const TablesSortSettingModal(),
             ),
           ),
           ListTile(
@@ -61,9 +60,9 @@ class PreferencesScreen extends ConsumerWidget {
                 Spacer(),
               ],
             ),
-            onTap: () => Show.modal(
-              context,
-              modal: const CalendarWeekStartSettingModal(),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => const CalendarWeekStartSettingModal(),
             ),
           ),
         ],

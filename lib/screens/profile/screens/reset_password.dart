@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
 import 'package:sc_app/providers/auth.dart';
+import 'package:sc_app/helpers/input_formatter.dart';
+import 'package:sc_app/helpers/input_validator.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
@@ -70,16 +71,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         children: [
           Text(
             'Reset Password',
-            style: Theme
-                .of(context)
-                .textTheme
-                .headlineMedium
-                ?.copyWith(
-              color: Theme
-                  .of(context)
-                  .colorScheme
-                  .onBackground,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
           ),
           const SizedBox(height: 32),
           Form(
@@ -114,14 +108,12 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
               setState(() => _errorMessage = null);
               if (_formKey.currentState!.validate()) {
                 _resetPassword(
-                  onDone: () =>
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (
-                              context) => const ResetPasswordResponseScreen(),
-                        ),
-                      ),
+                  onDone: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResetPasswordResponseScreen(),
+                    ),
+                  ),
                 );
               }
             },
@@ -130,10 +122,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           const SizedBox(height: 8),
           Text(
             _errorMessage ?? '',
-            style: TextStyle(color: Theme
-                .of(context)
-                .colorScheme
-                .error),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
       ),

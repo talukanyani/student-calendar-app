@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../utils/colors.dart';
+import 'package:sc_app/utils/colors.dart';
+import 'widgets_theme/app_bar_theme.dart';
+import 'widgets_theme/bottom_nav_bar_theme.dart';
+import 'widgets_theme/bottom_sheet_theme.dart';
+import 'widgets_theme/input_theme.dart';
+import 'widgets_theme/popup_menu_theme.dart';
+import 'widgets_theme/page_transitions_theme.dart';
 import 'color_scheme.dart';
-import './widgets_theme/app_bar_theme.dart';
-import './widgets_theme/bottom_nav_bar_theme.dart';
-import './widgets_theme/bottom_sheet_theme.dart';
-import './widgets_theme/input_theme.dart';
-import './widgets_theme/popup_menu_theme.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
@@ -24,9 +25,7 @@ ThemeData lightTheme() {
     focusColor: cafeAuLaitBrownLight,
     indicatorColor: cafeAuLaitBrownDark,
     dialogBackgroundColor: white255,
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: {TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()},
-    ),
+    pageTransitionsTheme: pageTransitionsTheme(),
     appBarTheme: appBarTheme(
       bgColor: white250,
       fgColor: grey80,
@@ -54,7 +53,7 @@ ThemeData darkTheme() {
     primaryColorDark: cafeAuLaitBrownDark,
     scaffoldBackgroundColor: black10,
     disabledColor: grey120,
-    shadowColor: black20,
+    shadowColor: black40,
     hintColor: grey120,
     dividerColor: grey120,
     hoverColor: black20,
@@ -62,9 +61,7 @@ ThemeData darkTheme() {
     focusColor: cafeAuLaitBrownDark,
     indicatorColor: cafeAuLaitBrownLight,
     dialogBackgroundColor: black0,
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: {TargetPlatform.android: FadeUpwardsPageTransitionsBuilder()},
-    ),
+    pageTransitionsTheme: pageTransitionsTheme(),
     appBarTheme: appBarTheme(
       bgColor: black10,
       fgColor: grey200,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -67,12 +67,12 @@ class AboutScreen extends StatelessWidget {
             icon: const Icon(Iconsax.share),
           ),
           button(
-            onPressed: () => Helpers.lauchLink('https://tmlab.tech/terms'),
+            onPressed: () => Helpers.launchLink('https://tmlab.tech/terms'),
             text: const Text('Terms of Use'),
             icon: const Icon(Iconsax.document),
           ),
           button(
-            onPressed: () => Helpers.lauchLink('https://tmlab.tech/privacy'),
+            onPressed: () => Helpers.launchLink('https://tmlab.tech/privacy'),
             text: const Text('Privacy Policy'),
             icon: const Icon(Iconsax.document),
           ),

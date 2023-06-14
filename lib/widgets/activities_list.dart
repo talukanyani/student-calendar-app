@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
 import 'package:sc_app/providers/data.dart';
+import 'package:sc_app/helpers/helpers.dart';
+import 'activity_popup_menu.dart';
 
 class ActivitiesList extends ConsumerWidget {
-  const ActivitiesList({super.key, required this.date});
+  const ActivitiesList({
+    super.key,
+    required this.date,
+    this.isReadOnly = false,
+  });
 
   final DateTime date;
+  final bool isReadOnly;
 
   static final today = DateTime.now();
   static final tomorrow = today.add(const Duration(days: 1));
@@ -29,6 +36,7 @@ class ActivitiesList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activities = ref.watch(dayActivitiesProvider(date));
+    String subjectName(int id) => ref.watch(subjectProvider(id)).name;
 
     if (activities.isEmpty) {
       return Center(
@@ -42,25 +50,35 @@ class ActivitiesList extends ConsumerWidget {
       itemExtent: 48,
       itemCount: activities.length,
       itemBuilder: (context, index) {
+        final activity = activities[index];
+
         return ListTile(
           contentPadding: const EdgeInsets.all(0),
+          title: Text('${subjectName(activity.id)} ${activity.title}'),
           leading: Column(
-            children: <Widget>[
-              index == 0 ? const SizedBox(height: 12) : const VertLine(),
+            children: [
+              Expanded(
+                child: (index == 0) ? const SizedBox() : const VertLine(),
+              ),
               TextBox(
                 text: TimeOfDay(
-                  hour: activities[index].date.hour,
-                  minute: activities[index].date.minute,
+                  hour: activity.dateTime.hour,
+                  minute: activity.dateTime.minute,
                 ).format(context),
               ),
-              index == (activities.length - 1)
-                  ? const SizedBox(height: 12)
-                  : const VertLine(),
+              Expanded(
+                child: (index == (activities.length - 1))
+                    ? const SizedBox()
+                    : const VertLine(),
+              ),
             ],
           ),
-          title: Text(
-            '${activities[index].subjectName} ${activities[index].title}',
-          ),
+          trailing: isReadOnly
+              ? null
+              : ActivityPopupMenuButton(
+                  icon: const Icon(FluentIcons.more_vertical_24_filled),
+                  activity: activity,
+                ),
         );
       },
     );
@@ -73,7 +91,6 @@ class VertLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 12,
       width: 2,
       color: Theme.of(context).colorScheme.primaryContainer,
     );

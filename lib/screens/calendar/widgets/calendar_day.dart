@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import '../state/displayed_month_date.dart';
 import '../state/selected_day.dart';
 import 'day_activities.dart';

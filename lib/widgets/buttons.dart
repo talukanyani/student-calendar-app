@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 OutlinedBorder shape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(12),
 );
+
 BorderSide border(Color color) => BorderSide(width: 2, color: color);
 
 class ForegroundFilledBtn extends StatelessWidget {
@@ -56,7 +57,7 @@ class ForegroundBorderBtn extends StatelessWidget {
         shape: MaterialStateProperty.all<OutlinedBorder>(shape),
         side: MaterialStateProperty.resolveWith<BorderSide>((states) {
           if (states.contains(MaterialState.disabled)) {
-            return border(foregroundColor.withOpacity(0.1));
+            return border(foregroundColor.withOpacity(0.5));
           }
           return border(foregroundColor);
         }),
@@ -106,7 +107,7 @@ class PrimaryBorderBtn extends StatelessWidget {
         shape: MaterialStateProperty.all<OutlinedBorder>(shape),
         side: MaterialStateProperty.resolveWith<BorderSide>((states) {
           if (states.contains(MaterialState.disabled)) {
-            return border(borderColor.withOpacity(0.1));
+            return border(borderColor.withOpacity(0.5));
           }
           return border(borderColor);
         }),

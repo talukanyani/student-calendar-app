@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
+import 'package:sc_app/helpers/input_formatter.dart';
+import 'package:sc_app/helpers/input_validator.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-import 'package:sc_app/widgets/textfield_label.dart';
+import 'package:sc_app/widgets/input_field_label.dart';
 import '../../email_verification.dart';
 
 class ChangeEmailScreen extends ConsumerStatefulWidget {
@@ -86,8 +87,8 @@ class _ChangeEmailScreenState extends ConsumerState<ChangeEmailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TextFieldLabel(
-                  text: 'Enter Your Password',
+                const InputFieldLabel(
+                  label: 'Enter Your Password',
                   bottomPadding: 8,
                 ),
                 TextFormField(
@@ -126,8 +127,8 @@ class _ChangeEmailScreenState extends ConsumerState<ChangeEmailScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                const TextFieldLabel(
-                  text: 'Enter New Email',
+                const InputFieldLabel(
+                  label: 'Enter New Email',
                   bottomPadding: 8,
                 ),
                 TextFormField(

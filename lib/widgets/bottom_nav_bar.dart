@@ -25,7 +25,7 @@ class BottomNavBar extends StatelessWidget {
         if (index == screenIndex) return;
 
         if (index == 0) {
-          Navigator.pop(context);
+          Navigator.popUntil(context, (route) => route.isFirst);
           return;
         }
 

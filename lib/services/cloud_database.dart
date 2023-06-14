@@ -11,23 +11,27 @@ class CloudDb {
   final _suggestionsCollection = _db.collection('suggestions');
 
   CollectionReference<Map<String, dynamic>> _subjectsCollection(
-      String? userId) {
+    String? userId,
+  ) {
     var userDoc = _db.collection('users').doc(userId ?? 'error');
     return userDoc.collection('subjects');
   }
 
-  Future<DocumentReference<Map<String, dynamic>>> _subjectDoc(
-      {required String? userId, required int subjectId}) async {
+  Future<DocumentReference<Map<String, dynamic>>> _subjectDoc({
+    required String? userId,
+    required int subjectId,
+  }) async {
     var query = _subjectsCollection(userId).where('id', isEqualTo: subjectId);
     var snapshot = await query.get();
 
     return snapshot.docs.first.reference;
   }
 
-  Future<DocumentReference<Map<String, dynamic>>> _activityDoc(
-      {required String? userId,
-      required int subjectId,
-      required int activityId}) async {
+  Future<DocumentReference<Map<String, dynamic>>> _activityDoc({
+    required String? userId,
+    required int subjectId,
+    required int activityId,
+  }) async {
     var subjectDoc = await _subjectDoc(userId: userId, subjectId: subjectId);
     var activitiesCollection = subjectDoc.collection('activities');
 
@@ -46,20 +50,14 @@ class CloudDb {
       var activitiesSnapshot =
           await subjectDoc.reference.collection('activities').get();
 
-      List<Activity> activities = [];
+      List<Activity> activities = activitiesSnapshot.docs.map((activityDoc) {
+        return Activity.fromJson(activityDoc.data());
+      }).toList();
 
-      for (var activityDoc in activitiesSnapshot.docs) {
-        activities.add(Activity.fromJson(activityDoc.data()));
-      }
+      Subject subject = Subject.fromJson(subjectDoc.data());
+      subject.activities = activities;
 
-      subjects.add(
-        Subject(
-          id: subjectDoc.data()['id'],
-          name: subjectDoc.data()['name'],
-          color: subjectDoc.data()['color'],
-          activities: activities,
-        ),
-      );
+      subjects.add(subject);
     }
 
     return subjects;

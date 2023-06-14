@@ -63,7 +63,7 @@ ColorScheme darkColorScheme() {
     onInverseSurface: black20,
     outline: grey160,
     outlineVariant: grey120,
-    shadow: black20,
+    shadow: black40,
   );
 }
 

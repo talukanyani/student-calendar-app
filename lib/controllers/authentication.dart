@@ -38,7 +38,7 @@ class AuthController extends StateNotifier<User?> {
 
       if (isSync) {
         ref.read(dataSyncProvider.notifier).set(true, updateData: false);
-        ref.read(dataProvider.notifier).updateWithSynceddata();
+        ref.read(dataProvider.notifier).updateWithSyncedData();
       }
 
       return status;

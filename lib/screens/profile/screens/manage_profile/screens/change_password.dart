@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
-import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/helpers/input_validator.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-import 'package:sc_app/widgets/textfield_label.dart';
+import 'package:sc_app/widgets/input_field_label.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -88,8 +88,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TextFieldLabel(
-                  text: 'Enter Old Password',
+                const InputFieldLabel(
+                  label: 'Enter Old Password',
                   bottomPadding: 8,
                 ),
                 TextFormField(
@@ -130,8 +130,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                const TextFieldLabel(
-                  text: 'Enter New Password',
+                const InputFieldLabel(
+                  label: 'Enter New Password',
                   bottomPadding: 8,
                 ),
                 TextFormField(
@@ -185,7 +185,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                 _changePassword(
                   onDone: () {
                     Navigator.pop(context);
-                    Show.snackBar(
+                    Helpers.showSnackBar(
                       context,
                       text: 'Password was successfully changed.',
                       snackBarIcon: SnackBarIcon.done,

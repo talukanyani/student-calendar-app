@@ -3,34 +3,38 @@ import 'activity.dart';
 class Subject {
   int id;
   String name;
-  String color;
+  String colorName;
   List<Activity> activities;
 
   Subject({
     required this.id,
     required this.name,
-    required this.color,
+    required this.colorName,
     required this.activities,
   });
 
-  Subject copyWith({String? name, String? color, List<Activity>? activities}) {
+  Subject copyWith({
+    String? name,
+    String? colorName,
+    List<Activity>? activities,
+  }) {
     return Subject(
       id: id,
       name: name ?? this.name,
-      color: color ?? this.color,
+      colorName: colorName ?? this.colorName,
       activities: activities ?? this.activities,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'color': color};
+    return {'id': id, 'name': name, 'colorName': colorName};
   }
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
       id: json['id'],
       name: json['name'],
-      color: json['color'],
+      colorName: json['colorName'],
       activities: [],
     );
   }

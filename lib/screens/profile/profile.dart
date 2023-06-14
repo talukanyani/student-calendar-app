@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/themes/color_scheme.dart';
 import 'package:sc_app/screens/settings/settings.dart';
 import 'package:sc_app/widgets/alerts.dart';
@@ -85,9 +84,9 @@ class LoggedInListTiles extends ConsumerWidget {
           leading: const Icon(Icons.manage_accounts_outlined),
         ),
         ListTile(
-          onTap: () => Show.modal(
-            context,
-            modal: ConfirmationAlert(
+          onTap: () => showDialog(
+            context: context,
+            builder: (context) => ConfirmationAlert(
               title: const Text('Log Out?'),
               content: const Text('Are you sure you want to log out?'),
               action: () {

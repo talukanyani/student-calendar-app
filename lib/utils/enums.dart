@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+enum DataAddStatus {
+  done,
+  limitError,
+}
+
 enum AuthStatus {
   done,
   unknownError,

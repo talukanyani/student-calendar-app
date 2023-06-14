@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
-import 'package:sc_app/helpers/show.dart';
+import 'package:sc_app/helpers/input_formatter.dart';
+import 'package:sc_app/helpers/input_validator.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
 import 'package:sc_app/widgets/loading.dart';
-import 'package:sc_app/widgets/textfield_label.dart';
+import 'package:sc_app/widgets/input_field_label.dart';
 
 class ChangeNameScreen extends ConsumerStatefulWidget {
   const ChangeNameScreen({super.key});
@@ -62,8 +63,8 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
         primary: false,
         padding: const EdgeInsets.all(16),
         children: [
-          const TextFieldLabel(
-            text: 'Enter New Name',
+          const InputFieldLabel(
+            label: 'Enter New Name',
             bottomPadding: 8,
           ),
           Form(
@@ -101,9 +102,9 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
                 _changeName(
                   onDone: () {
                     Navigator.pop(context);
-                    Show.snackBar(
+                    Helpers.showSnackBar(
                       context,
-                      text: 'Name was successfully changed.',
+                      text: 'Name was successfully edited.',
                       snackBarIcon: SnackBarIcon.done,
                     );
                   },

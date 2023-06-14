@@ -50,7 +50,7 @@ class Tables extends ConsumerWidget {
       itemCount: subjectsCount + 1,
       itemBuilder: (context, index) {
         if (index == subjectsCount) {
-          return SubjectAddButton(subjectsCount: subjectsCount);
+          return const SubjectAddButton();
         }
 
         return SubjectTable(subject: sortedSubjects()[index]);

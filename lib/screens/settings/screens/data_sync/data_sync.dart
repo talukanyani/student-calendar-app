@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/helpers/show.dart';
 import 'package:sc_app/widgets/alerts.dart';
 import '../../modals/login_alert.dart';
 
@@ -16,9 +15,9 @@ class DataSyncScreen extends ConsumerStatefulWidget {
 class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
   void _onActivitiesSyncTurnOn(BuildContext context) {
     if (!ref.watch(isLoggedInProvider)) {
-      Show.modal(
-        context,
-        modal: const LoginAlert(
+      showDialog(
+        context: context,
+        builder: (context) => const LoginAlert(
           message: Text(
             'To turn on data sync, you have to log in with your profile.',
           ),
@@ -30,9 +29,9 @@ class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
   }
 
   void _onActivitiesSyncTurnOff(BuildContext context) {
-    Show.modal(
-      context,
-      modal: ConfirmationAlert(
+    showDialog(
+      context: context,
+      builder: (context) => ConfirmationAlert(
         title: const Text('Turn Off?'),
         content: const Text(
           'Are you sure you want turn off activities sync?',

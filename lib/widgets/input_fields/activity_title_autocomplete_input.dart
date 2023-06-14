@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/providers/data.dart';
+import 'package:sc_app/helpers/input_formatter.dart';
 
-class ActivityInput extends StatelessWidget {
-  const ActivityInput({super.key, required this.inputController});
+class ActivityTitleAutocompleteInput extends ConsumerWidget {
+  const ActivityTitleAutocompleteInput({super.key, required this.onChanged});
 
-  final TextEditingController inputController;
-
-  static const List<String> _activityOptions = <String>[
-    'Test',
-    'Assignment',
-    'Quiz',
-    'Presantation',
-  ];
+  final void Function(String) onChanged;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<String> options = <String>[
+      'Test',
+      'Assignment',
+      'Quiz',
+      'Presentation',
+      'Exam',
+      ...ref.watch(allActivitiesProvider).map((activity) {
+        return activity.title;
+      }),
+    ];
+
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
-        return _activityOptions.where((String option) {
-          return option
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+
+        return options.where((option) {
+          return option.toLowerCase().contains(
+                textEditingValue.text.toLowerCase(),
+              );
         });
       },
+      onSelected: (selection) => onChanged(selection),
       optionsViewBuilder: (context, onSelected, options) {
         return Align(
           alignment: Alignment.topLeft,
@@ -36,10 +47,10 @@ class ActivityInput extends StatelessWidget {
               bottomRight: Radius.circular(8),
             ),
             child: Container(
-              width: MediaQuery.of(context).size.width - 64,
+              width: (MediaQuery.of(context).size.width - 64),
               constraints: const BoxConstraints(
-                maxWidth: 240,
-                maxHeight: 120,
+                maxWidth: 320,
+                maxHeight: 160,
               ),
               child: ListView.builder(
                 padding: const EdgeInsets.all(0),
@@ -49,14 +60,13 @@ class ActivityInput extends StatelessWidget {
                 itemExtent: 40,
                 itemCount: options.length,
                 itemBuilder: (context, index) {
-                  final option = options.elementAt(index);
                   return InkWell(
-                    onTap: () => onSelected(option),
+                    onTap: () => onSelected(options.elementAt(index)),
                     child: Container(
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        option,
+                        options.elementAt(index),
                         style: const TextStyle(letterSpacing: 1),
                       ),
                     ),
@@ -67,10 +77,11 @@ class ActivityInput extends StatelessWidget {
           ),
         );
       },
-      fieldViewBuilder: (context, _, focusNode, onFieldSubmitted) {
+      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
         return TextField(
-          controller: inputController,
+          controller: controller,
           focusNode: focusNode,
+          onChanged: (value) => onChanged(value.trim()),
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
           maxLength: 30,
@@ -80,7 +91,7 @@ class ActivityInput extends StatelessWidget {
           ],
           style: const TextStyle(letterSpacing: 1),
           decoration: const InputDecoration(
-            hintText: 'Activity Name',
+            hintText: 'Activity Title',
             counterText: '',
           ),
         );

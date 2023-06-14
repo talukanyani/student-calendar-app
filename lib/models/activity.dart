@@ -1,25 +1,30 @@
 class Activity {
   int id;
   int subjectId;
-  String subjectName;
   String title;
-  DateTime date;
+  String? description;
+  DateTime dateTime;
 
   Activity({
     required this.id,
     required this.subjectId,
-    required this.subjectName,
     required this.title,
-    required this.date,
+    this.description,
+    required this.dateTime,
   });
 
-  Activity copyWith({String? title, DateTime? date}) {
+  Activity copyWith({
+    int? subjectId,
+    String? title,
+    String? description,
+    DateTime? dateTime,
+  }) {
     return Activity(
       id: id,
-      subjectId: subjectId,
-      subjectName: subjectName,
+      subjectId: subjectId ?? this.subjectId,
       title: title ?? this.title,
-      date: date ?? this.date,
+      description: description ?? this.description,
+      dateTime: dateTime ?? this.dateTime,
     );
   }
 
@@ -27,9 +32,9 @@ class Activity {
     return {
       'id': id,
       'subjectId': subjectId,
-      'subjectName': subjectName,
       'title': title,
-      'date': date.toString(),
+      'description': description,
+      'dateTime': dateTime.toString(),
     };
   }
 
@@ -37,9 +42,9 @@ class Activity {
     return Activity(
       id: json['id'],
       subjectId: json['subjectId'],
-      subjectName: json['subjectName'],
       title: json['title'],
-      date: DateTime.parse(json['date']),
+      description: json['description'],
+      dateTime: DateTime.parse(json['dateTime']),
     );
   }
 }

@@ -7,6 +7,7 @@ const white245 = Color(0xFFF5F5F5);
 const black0 = Color(0xFF000000);
 const black10 = Color(0xFF0A0A0A);
 const black20 = Color(0xFF141414);
+const black40 = Color(0xFF282828);
 
 const grey80 = Color(0xFF505050);
 const grey120 = Color(0xFF787878);

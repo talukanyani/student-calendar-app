@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/helpers/other_helpers.dart';
+import 'package:sc_app/helpers/helpers.dart';
 import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/widgets/activities_list.dart';
 import '../state/selected_day.dart';

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sc_app/helpers/formatters_and_validators.dart';
+import 'package:sc_app/helpers/input_formatter.dart';
+import 'package:sc_app/helpers/input_validator.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/widgets/buttons.dart';
