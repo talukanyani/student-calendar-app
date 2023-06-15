@@ -3,9 +3,13 @@ import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/models/subject.dart';
-import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/services/local_database.dart';
+
+enum DataAddStatus {
+  done,
+  limitError,
+}
 
 class DataController extends StateNotifier<List<Subject>> {
   DataController(this.ref) : super([]) {
@@ -16,9 +20,9 @@ class DataController extends StateNotifier<List<Subject>> {
 
   final Ref ref;
 
-  String? get _userId => ref.read(userIdProvider);
+  String? get _userId => ref.read(userProvider)?.uid;
 
-  bool get _isSync => ref.read(dataSyncAndAuthedProvider) ?? false;
+  bool get _isSync => ref.watch(dataSyncProvider) && (_userId != null);
 
   Future<DataAddStatus> addSubject(Subject subject) async {
     if (state.length >= 20) return DataAddStatus.limitError;

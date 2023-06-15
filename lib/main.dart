@@ -4,11 +4,11 @@ import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/themes/theme.dart';
-import 'widgets/android_system_navbar.dart';
-import 'screens/intro/splash.dart';
-import 'screens/intro/welcome.dart';
-import 'screens/home/home.dart';
+import 'package:sc_app/views/widgets/android_system_navbar.dart';
+import 'package:sc_app/views/themes/theme.dart';
+import 'views/screens/intro/splash.dart';
+import 'views/screens/intro/welcome.dart';
+import 'views/screens/home/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

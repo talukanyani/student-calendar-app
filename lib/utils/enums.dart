@@ -1,27 +1,5 @@
 import 'package:flutter/material.dart';
 
-enum DataAddStatus {
-  done,
-  limitError,
-}
-
-enum AuthStatus {
-  done,
-  unknownError,
-  networkError,
-  emailInUse,
-  profileNotFound,
-  weakPassword,
-  wrongPassword,
-}
-
-enum SnackBarIcon {
-  none,
-  done,
-  error,
-  info,
-}
-
 enum TablesSort {
   name,
   dateAdded,

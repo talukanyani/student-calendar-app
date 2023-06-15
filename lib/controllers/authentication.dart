@@ -4,7 +4,6 @@ import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/services/authentication.dart';
 import 'package:sc_app/services/cloud_database.dart';
-import 'package:sc_app/utils/enums.dart';
 
 class AuthController extends StateNotifier<User?> {
   AuthController(this.ref) : super(Auth().currentUser);

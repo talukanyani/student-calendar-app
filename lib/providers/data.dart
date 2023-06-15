@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/controllers/data.dart';
-import 'package:sc_app/helpers/helpers.dart';
+import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/models/subject.dart';
 

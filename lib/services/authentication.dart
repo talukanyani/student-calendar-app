@@ -1,11 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sc_app/utils/enums.dart';
+
+enum AuthStatus {
+  done,
+  unknownError,
+  networkError,
+  emailInUse,
+  profileNotFound,
+  weakPassword,
+  wrongPassword,
+}
 
 class Auth {
   static final _auth = FirebaseAuth.instance;
   final _currentUser = _auth.currentUser;
 
   User? get currentUser => _currentUser;
+
   Stream<User?> get userChanges => _auth.userChanges();
 
   Future<AuthStatus> createProfile(String email, String password) async {
@@ -114,7 +124,7 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'requires-recent-login':
-          return _reauthenticate(oldEmail, password).then((status) {
+          return _reAuthenticate(oldEmail, password).then((status) {
             if (status == AuthStatus.done) {
               return changeEmail(password, newEmail);
             } else {
@@ -144,7 +154,7 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'requires-recent-login':
-          return _reauthenticate(email, oldPassword).then((status) {
+          return _reAuthenticate(email, oldPassword).then((status) {
             if (status == AuthStatus.done) {
               return changePassword(oldPassword, newPassword);
             } else {
@@ -171,7 +181,7 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'requires-recent-login':
-          return _reauthenticate(email, password).then((status) {
+          return _reAuthenticate(email, password).then((status) {
             if (status == AuthStatus.done) {
               return deleteProfile(password);
             } else {
@@ -206,7 +216,7 @@ class Auth {
     return _currentUser?.emailVerified ?? false;
   }
 
-  Future<AuthStatus> _reauthenticate(String email, String password) async {
+  Future<AuthStatus> _reAuthenticate(String email, String password) async {
     final credential = EmailAuthProvider.credential(
       email: email,
       password: password,

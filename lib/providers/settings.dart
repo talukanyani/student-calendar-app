@@ -22,7 +22,3 @@ final weekStartProvider =
 final dataSyncProvider = StateNotifierProvider<DataSyncController, bool>((ref) {
   return DataSyncController(ref);
 });
-
-final dataSyncAndAuthedProvider = Provider<bool>((ref) {
-  return ref.watch(dataSyncProvider) && ref.watch(isLoggedInProvider);
-});

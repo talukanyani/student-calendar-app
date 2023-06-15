@@ -1,4 +1,4 @@
-const List<String> _threeLettersMonthNames = <String>[
+const List<String> shortMonthNames = [
   'Jan',
   'Feb',
   'Mar',
@@ -13,7 +13,7 @@ const List<String> _threeLettersMonthNames = <String>[
   'Dec',
 ];
 
-const List<String> _fullMonthNames = <String>[
+const List<String> fullMonthNames = [
   'January',
   'February',
   'March',
@@ -28,20 +28,22 @@ const List<String> _fullMonthNames = <String>[
   'December',
 ];
 
-List<String> _weekDayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const List<String> shortWeekDayNames = [
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat',
+  'Sun',
+];
 
-List<String> _weekDayFullNames = [
+const List<String> fullWeekDayNames = [
   'Monday',
   'Tuesday',
-  'Wednessday',
+  'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
   'Sunday',
 ];
-
-String getMonthName(int index) => _threeLettersMonthNames[index];
-String getMonthFullName(int index) => _fullMonthNames[index];
-
-String getWeekDayName(int index) => _weekDayNames[index];
-String getWeekDayFullName(int index) => _weekDayFullNames[index];

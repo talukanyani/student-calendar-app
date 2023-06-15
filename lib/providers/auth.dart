@@ -6,18 +6,6 @@ final authProvider = StateNotifierProvider<AuthController, User?>((ref) {
   return AuthController(ref);
 });
 
-final isLoggedInProvider = Provider<bool>((ref) {
-  return ref.watch(authProvider) != null;
-});
-
-final userIdProvider = Provider<String?>((ref) {
-  return ref.watch(authProvider)?.uid;
-});
-
-final userEmailProvider = Provider<String?>((ref) {
-  return ref.watch(authProvider)?.email;
-});
-
-final userNameProvider = Provider<String?>((ref) {
-  return ref.watch(authProvider)?.displayName;
+final userProvider = Provider<User?>((ref) {
+  return ref.watch(authProvider);
 });

@@ -73,6 +73,8 @@ class DataSyncController extends StateNotifier<bool> {
 
   final Ref ref;
 
+  String? get _userId => ref.read(userProvider)?.uid;
+
   void set(bool value, {bool updateData = true}) {
     state = value;
 
@@ -83,12 +85,12 @@ class DataSyncController extends StateNotifier<bool> {
     if (value && updateData) {
       CloudDb().addMultipleData(
         ref.read(dataProvider),
-        userId: ref.read(userIdProvider),
+        userId: _userId,
       );
     }
 
     if (!value && updateData) {
-      CloudDb().deleteAllData(ref.read(userIdProvider));
+      CloudDb().deleteAllData(_userId);
     }
   }
 
