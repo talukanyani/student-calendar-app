@@ -4,8 +4,8 @@ import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/widgets/modal.dart';
 
-class CalendarWeekStartSettingModal extends ConsumerWidget {
-  const CalendarWeekStartSettingModal({super.key});
+class CalendarWeekStartModal extends ConsumerWidget {
+  const CalendarWeekStartModal({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,14 +17,22 @@ class CalendarWeekStartSettingModal extends ConsumerWidget {
           ref.read(weekStartProvider.notifier).set(value ?? 1);
           Navigator.pop(context);
         },
-        visualDensity: const VisualDensity(vertical: -3),
         title: Text(Helpers.getFullWeekDayName(value - 1)),
+        visualDensity: const VisualDensity(vertical: -3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       );
     }
 
     return Modal(
       insetPadding: 32,
       children: [
+        Text(
+          'Choose a day',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 16),
         option(DateTime.monday),
         option(DateTime.sunday),
         option(DateTime.saturday),

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/models/activity.dart';
 import 'package:sc_app/models/subject.dart';
+import 'package:sc_app/providers/auth.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/services/local_database.dart';
 
@@ -87,7 +87,6 @@ class DataController extends StateNotifier<List<Subject>> {
     required int subjectId,
     required int activityId,
     String? newTitle,
-    String? newDescription,
     DateTime? newDateTime,
   }) {
     state = [
@@ -97,11 +96,7 @@ class DataController extends StateNotifier<List<Subject>> {
             activities: [
               for (final activity in subject.activities)
                 if (activity.id == activityId)
-                  activity.copyWith(
-                    title: newTitle,
-                    description: newDescription,
-                    dateTime: newDateTime,
-                  )
+                  activity.copyWith(title: newTitle, dateTime: newDateTime)
                 else
                   activity,
             ],

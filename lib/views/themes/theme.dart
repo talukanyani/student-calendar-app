@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/utils/colors.dart';
+
+import 'color_scheme.dart';
 import 'widgets_theme/app_bar_theme.dart';
 import 'widgets_theme/bottom_nav_bar_theme.dart';
 import 'widgets_theme/bottom_sheet_theme.dart';
 import 'widgets_theme/input_theme.dart';
-import 'widgets_theme/popup_menu_theme.dart';
 import 'widgets_theme/page_transitions_theme.dart';
-import 'color_scheme.dart';
+import 'widgets_theme/popup_menu_theme.dart';
 
 ThemeData lightTheme() {
   return ThemeData(
@@ -40,7 +41,7 @@ ThemeData lightTheme() {
       borderColor: grey120,
       hintColor: grey160,
     ),
-    popupMenuTheme: popupMenuTheme(bgColor: white255),
+    popupMenuTheme: popupMenuTheme(bgColor: white245),
   );
 }
 
@@ -76,6 +77,6 @@ ThemeData darkTheme() {
       borderColor: grey160,
       hintColor: grey120,
     ),
-    popupMenuTheme: popupMenuTheme(bgColor: black0),
+    popupMenuTheme: popupMenuTheme(bgColor: black20),
   );
 }

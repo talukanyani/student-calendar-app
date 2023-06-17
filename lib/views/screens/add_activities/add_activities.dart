@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/data.dart';
-import 'package:sc_app/models/activity.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/controllers/data.dart' show DataAddStatus;
+import 'package:sc_app/models/activity.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/widgets/alerts.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
-import 'package:sc_app/views/widgets/rect_container.dart';
-import 'package:sc_app/views/widgets/shake_animation.dart';
 import 'package:sc_app/views/widgets/input_field_label.dart';
 import 'package:sc_app/views/widgets/input_fields/activity_date_input.dart';
-import 'package:sc_app/views/widgets/input_fields/activity_description_input.dart';
 import 'package:sc_app/views/widgets/input_fields/activity_time_input.dart';
 import 'package:sc_app/views/widgets/input_fields/activity_title_autocomplete_input.dart';
+import 'package:sc_app/views/widgets/rect_container.dart';
+import 'package:sc_app/views/widgets/shake_animation.dart';
+
 import 'widgets/form_add_button.dart';
 import 'widgets/subject_input.dart';
 
@@ -30,19 +30,29 @@ class AddActivityScreen extends StatefulWidget {
 class _AddActivityScreenState extends State<AddActivityScreen> {
   int activityFormCount = 1;
 
+  final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Activities')),
       body: ListView.builder(
         primary: false,
+        controller: _scrollController,
         itemCount: (activityFormCount + 1),
         itemBuilder: (context, index) {
           if (index == activityFormCount) {
             return FormAddButton(
               onPressed: (activityFormCount >= 20)
                   ? null
-                  : () => setState(() => activityFormCount += 1),
+                  : () {
+                      setState(() => activityFormCount += 1);
+                      _scrollController.animateTo(
+                        _scrollController.offset + 500,
+                        duration: const Duration(seconds: 2),
+                        curve: Curves.linear,
+                      );
+                    },
             );
           }
 
@@ -67,7 +77,6 @@ class _ActivityFormState extends ConsumerState<ActivityForm> {
   bool _isAdded = false;
   int? _subjectId;
   String? _title;
-  String? _description;
   DateTime? _date;
   TimeOfDay? _time;
 
@@ -98,7 +107,6 @@ class _ActivityFormState extends ConsumerState<ActivityForm> {
             id: DateTime.now().millisecondsSinceEpoch,
             subjectId: _subjectId!,
             title: _title!,
-            description: _description,
             dateTime: DateTime(_date!.year, _date!.month, _date!.day,
                 _time!.hour, _time!.minute),
           ),
@@ -153,7 +161,7 @@ class _ActivityFormState extends ConsumerState<ActivityForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const InputFieldLabel(label: 'Subject'),
+          const InputFieldLabel(label: 'Subject/Module/Course'),
           ShakeAnimation(
             key: _subjectShakeKey,
             child: SubjectInput(
@@ -164,7 +172,7 @@ class _ActivityFormState extends ConsumerState<ActivityForm> {
             ),
           ),
           const SizedBox(height: 16),
-          const InputFieldLabel(label: 'Title'),
+          const InputFieldLabel(label: 'Activity Title'),
           ShakeAnimation(
             key: _titleShakeKey,
             child: ActivityTitleAutocompleteInput(
@@ -173,14 +181,7 @@ class _ActivityFormState extends ConsumerState<ActivityForm> {
               },
             ),
           ),
-          const SizedBox(height: 16),
-          const InputFieldLabel(label: 'Description (optional)'),
-          ActivityDescriptionInput(
-            onChanged: (value) {
-              setState(() => _description = value);
-            },
-          ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(

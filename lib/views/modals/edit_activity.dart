@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/activity.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/views/widgets/input_field_label.dart';
-import 'package:sc_app/views/widgets/input_fields/activity_description_input.dart';
 import 'package:sc_app/views/widgets/input_fields/activity_title_autocomplete_input.dart';
 import 'package:sc_app/views/widgets/shake_animation.dart';
 import 'package:sc_app/views/widgets/snackbar.dart';
+
 import 'widgets/modal_form.dart';
 
 class EditActivityModal extends ConsumerStatefulWidget {
@@ -20,7 +20,6 @@ class EditActivityModal extends ConsumerStatefulWidget {
 
 class _EditActivityModalState extends ConsumerState<EditActivityModal> {
   String? _title;
-  String? _description;
 
   final _shakeKey = GlobalKey<ShakeAnimationState>();
 
@@ -29,7 +28,6 @@ class _EditActivityModalState extends ConsumerState<EditActivityModal> {
           subjectId: widget.activity.subjectId,
           activityId: widget.activity.id,
           newTitle: _title,
-          newDescription: _description,
         );
 
     onDone();
@@ -40,7 +38,7 @@ class _EditActivityModalState extends ConsumerState<EditActivityModal> {
     return ModalForm(
       title: 'Edit ${widget.activity.title} Activity',
       inputFields: [
-        const InputFieldLabel(label: 'Title'),
+        const InputFieldLabel(label: 'Enter New Title'),
         ShakeAnimation(
           key: _shakeKey,
           child: ActivityTitleAutocompleteInput(
@@ -49,19 +47,10 @@ class _EditActivityModalState extends ConsumerState<EditActivityModal> {
             },
           ),
         ),
-        const SizedBox(height: 16),
-        const InputFieldLabel(label: 'Description (optional)'),
-        ActivityDescriptionInput(
-          initialInput: widget.activity.description,
-          onChanged: (value) {
-            setState(() => _description = value);
-          },
-        ),
       ],
       submitButtonText: 'Save',
       onSubmit: () {
-        if (_title == widget.activity.title &&
-            _description == widget.activity.description) {
+        if (_title == widget.activity.title) {
           Navigator.pop(context);
           return;
         }

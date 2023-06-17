@@ -1,6 +1,7 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/models/subject.dart';
 import 'package:sc_app/views/modals/delete_subject.dart';
 import 'package:sc_app/views/modals/edit_subject.dart';
@@ -17,20 +18,19 @@ class SubjectPopupMenuButton extends ConsumerWidget {
       icon: const Icon(Iconsax.more_circle),
       tooltip: 'more actions',
       position: PopupMenuPosition.under,
-      itemBuilder: (context) =>
-      [
+      itemBuilder: (context) => [
         PopupMenuItem(
           value: 1,
           child: popupMenuTile(
             title: 'Edit',
-            icon: Iconsax.edit,
+            icon: FluentIcons.edit_24_regular,
           ),
         ),
         PopupMenuItem(
           value: 2,
           child: popupMenuTile(
             title: 'Delete',
-            icon: Iconsax.trash,
+            icon: FluentIcons.delete_24_regular,
           ),
         ),
       ],

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/services/authentication.dart' show AuthStatus;
 import 'package:sc_app/utils/input_formatter.dart';
 import 'package:sc_app/utils/input_validator.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/loading.dart';
+
 import 'email_verification.dart';
 import 'login.dart';
 
@@ -163,7 +164,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Password is required.';
                     } else if (!InputValidator.isStrongPassword(value)) {
-                      return 'Password must be at least 8 characters,'
+                      return 'Password must be at least 6 characters,'
                           '\nand include at least one letter, number, and symbol';
                     } else {
                       return null;

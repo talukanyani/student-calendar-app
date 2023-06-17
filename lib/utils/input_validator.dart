@@ -10,7 +10,7 @@ class InputValidator {
   }
 
   static bool isStrongPassword(String value) {
-    final regex = RegExp(r"^(?=.*[A-z])(?=.*\d)(?=.*\W).{8,64}$");
+    final regex = RegExp(r"^(?=.*[A-z])(?=.*\d)(?=.*\W).{6,60}$");
     return regex.hasMatch(value);
   }
 }

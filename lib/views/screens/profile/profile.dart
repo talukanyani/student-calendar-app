@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/screens/settings/settings.dart';
+import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/widgets/alerts.dart';
-import 'screens/manage_profile/manage_profile.dart';
+import 'package:sc_app/views/widgets/rect_container.dart';
+
 import 'screens/create_profile.dart';
 import 'screens/login.dart';
+import 'screens/manage_profile/manage_profile.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -22,7 +24,7 @@ class ProfileScreen extends ConsumerWidget {
       body: ListView(
         primary: false,
         children: [
-          Padding(
+          RectContainer(
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -40,26 +42,30 @@ class ProfileScreen extends ConsumerWidget {
                   user?.email ?? '',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
+                const SizedBox(height: 12),
+                isLoggedIn
+                    ? const LoggedInListTiles()
+                    : const NotLoggedInListTiles(),
               ],
             ),
           ),
-          isLoggedIn ? const LoggedInListTiles() : const NotLoggedInListTiles(),
-          ListTile(
-            onTap: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => const SettingsScreen(),
+          RectContainer(
+            child: Material(
+              type: MaterialType.transparency,
+              child: ListTile(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                ),
+                title: const Text('Settings'),
+                leading: const Icon(FluentIcons.settings_32_filled, size: 32),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
-            title: const Text('App Settings'),
-            subtitle: const Text('Theme, Sync, and more'),
-            leading: const Column(
-              children: [
-                Spacer(),
-                Icon(Icons.settings, size: 32),
-                Spacer(),
-              ],
-            ),
-          )
+          ),
         ],
       ),
     );
@@ -73,28 +79,40 @@ class LoggedInListTiles extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        ListTile(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ManageProfileScreen(),
+        Material(
+          type: MaterialType.transparency,
+          child: ListTile(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ManageProfileScreen(),
+              ),
+            ),
+            title: const Text('Manage Profile'),
+            leading: const Icon(FluentIcons.person_accounts_24_filled),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          title: const Text('Manage Profile'),
-          leading: const Icon(Icons.manage_accounts_outlined),
         ),
-        ListTile(
-          onTap: () => showDialog(
-            context: context,
-            builder: (context) => ConfirmationAlert(
-              title: const Text('Log Out?'),
-              content: const Text('Are you sure you want to log out?'),
-              action: () {
-                ref.read(authProvider.notifier).logout();
-              },
+        Material(
+          type: MaterialType.transparency,
+          child: ListTile(
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => ConfirmationAlert(
+                title: const Text('Log Out?'),
+                content: const Text('Are you sure you want to log out?'),
+                action: () {
+                  ref.read(authProvider.notifier).logout();
+                },
+              ),
+            ),
+            title: const Text('Log Out'),
+            leading: const Icon(FluentIcons.sign_out_24_filled),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          title: const Text('Log Out'),
-          leading: const Icon(Icons.logout),
         ),
       ],
     );
@@ -108,23 +126,35 @@ class NotLoggedInListTiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListTile(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
+        Material(
+          type: MaterialType.transparency,
+          child: ListTile(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const LoginScreen(),
+              ),
+            ),
+            title: const Text('Log In'),
+            leading: const Icon(FluentIcons.sign_out_24_filled),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          title: const Text('Log In'),
-          leading: const Icon(Icons.login),
         ),
-        ListTile(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const CreateProfileScreen(),
+        Material(
+          type: MaterialType.transparency,
+          child: ListTile(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const CreateProfileScreen(),
+              ),
+            ),
+            title: const Text('Create Profile'),
+            leading: const Icon(FluentIcons.person_add_24_filled),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-          title: const Text('Create Profile'),
-          leading: const Icon(Icons.person_add_outlined),
         ),
       ],
     );

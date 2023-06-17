@@ -12,6 +12,7 @@ class FormAddButton extends StatelessWidget {
       children: [
         const SizedBox(height: 8),
         Container(
+          margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             shape: BoxShape.circle,

@@ -20,7 +20,7 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
   String? errorMessage;
   bool _isLoading = false;
 
-  final inputController = TextEditingController();
+  final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _changeName({required void Function() onDone}) {
@@ -28,7 +28,7 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
 
     ref
         .read(authProvider.notifier)
-        .updateName(inputController.text.trim())
+        .updateName(_inputController.text.trim())
         .then((status) {
       setState(() => _isLoading = false);
 
@@ -47,6 +47,14 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
           onDone();
       }
     });
+  }
+
+  @override
+  void initState() {
+    Future(() {
+      _inputController.text = ref.watch(userProvider)?.displayName ?? '';
+    });
+    super.initState();
   }
 
   @override
@@ -70,7 +78,7 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
           Form(
             key: _formKey,
             child: TextFormField(
-              controller: inputController,
+              controller: _inputController,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.words,
               maxLength: 15,
@@ -98,6 +106,14 @@ class _ChangeNameScreenState extends ConsumerState<ChangeNameScreen> {
           ForegroundFilledBtn(
             onPressed: () {
               setState(() => errorMessage = null);
+
+              final currentName = ref.watch(userProvider)?.displayName;
+
+              if (_inputController.text.trim() == currentName) {
+                Navigator.pop(context);
+                return;
+              }
+
               if (_formKey.currentState!.validate()) {
                 _changeName(
                   onDone: () {

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/services/authentication.dart' show AuthStatus;
 import 'package:sc_app/utils/input_formatter.dart';
 import 'package:sc_app/utils/input_validator.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/loading.dart';
+
 import 'create_profile.dart';
 import 'reset_password.dart';
 
@@ -190,7 +191,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const ResetPasswordScreen(),
+                      builder: (context) => ResetPasswordScreen(
+                        email: _emailInputController.text,
+                      ),
                     ),
                   );
                 },

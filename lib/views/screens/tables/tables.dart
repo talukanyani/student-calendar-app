@@ -5,8 +5,9 @@ import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
 import 'package:sc_app/views/widgets/profile_icon_button.dart';
-import 'widgets/table.dart';
+
 import 'widgets/subject_add_button.dart';
+import 'widgets/table.dart';
 
 class TablesScreen extends StatelessWidget {
   const TablesScreen({super.key});
@@ -28,6 +29,8 @@ class TablesScreen extends StatelessWidget {
 class Tables extends ConsumerWidget {
   const Tables({super.key});
 
+  static final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final subjects = ref.watch(subjectsAndActivitiesProvider);
@@ -46,11 +49,12 @@ class Tables extends ConsumerWidget {
     }
 
     return ListView.builder(
+      controller: _scrollController,
       physics: const BouncingScrollPhysics(),
       itemCount: subjectsCount + 1,
       itemBuilder: (context, index) {
         if (index == subjectsCount) {
-          return const SubjectAddButton();
+          return SubjectAddButton(controller: _scrollController);
         }
 
         return SubjectTable(subject: sortedSubjects()[index]);

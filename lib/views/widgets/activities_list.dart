@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/utils/helpers.dart';
+
 import 'activity_popup_menu.dart';
 
 class ActivitiesList extends ConsumerWidget {
@@ -54,7 +55,7 @@ class ActivitiesList extends ConsumerWidget {
 
         return ListTile(
           contentPadding: const EdgeInsets.all(0),
-          title: Text('${subjectName(activity.id)} ${activity.title}'),
+          title: Text('${subjectName(activity.subjectId)} ${activity.title}'),
           leading: Column(
             children: [
               Expanded(

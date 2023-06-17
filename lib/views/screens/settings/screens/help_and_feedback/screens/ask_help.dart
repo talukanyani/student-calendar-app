@@ -4,6 +4,7 @@ import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/loading.dart';
+
 import '../../../modals/login_alert.dart';
 import '../widgets/login_message.dart';
 import 'send_response.dart';

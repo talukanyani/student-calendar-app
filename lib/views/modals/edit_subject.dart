@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/models/subject.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/widgets/input_field_label.dart';
 import 'package:sc_app/views/widgets/shake_animation.dart';
 import 'package:sc_app/views/widgets/snackbar.dart';
+
 import 'widgets/modal_form.dart';
-import 'widgets/subject_name_input.dart';
 import 'widgets/subject_color_picker.dart';
+import 'widgets/subject_name_input.dart';
 
 class EditSubjectModal extends ConsumerStatefulWidget {
   const EditSubjectModal({super.key, required this.subject});
@@ -37,6 +38,7 @@ class _EditSubjectModalState extends ConsumerState<EditSubjectModal> {
 
   @override
   void initState() {
+    setState(() => _name = widget.subject.name);
     setState(() => _colorName = widget.subject.colorName);
     super.initState();
   }

@@ -4,8 +4,8 @@ import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/views/widgets/modal.dart';
 
-class TablesSortSettingModal extends ConsumerWidget {
-  const TablesSortSettingModal({super.key});
+class TablesSortModal extends ConsumerWidget {
+  const TablesSortModal({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,14 +17,22 @@ class TablesSortSettingModal extends ConsumerWidget {
           ref.read(tablesSortProvider.notifier).set(value ?? TablesSort.name);
           Navigator.pop(context);
         },
-        visualDensity: const VisualDensity(vertical: -3),
         title: Text(value.title),
+        visualDensity: const VisualDensity(vertical: -3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       );
     }
 
     return Modal(
       insetPadding: 32,
       children: [
+        Text(
+          'Sort By:',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 16),
         option(TablesSort.name),
         option(TablesSort.dateAdded),
       ],

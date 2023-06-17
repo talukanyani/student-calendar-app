@@ -3,7 +3,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/views/modals/add_subject.dart';
 
 class SubjectAddButton extends StatelessWidget {
-  const SubjectAddButton({super.key});
+  const SubjectAddButton({super.key, required this.controller});
+
+  final ScrollController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +13,13 @@ class SubjectAddButton extends StatelessWidget {
       alignment: Alignment.center,
       margin: const EdgeInsets.only(bottom: 16),
       child: OutlinedButton(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const AddSubjectModal(),
-        ),
+        onPressed: () {
+          controller.jumpTo(0);
+          showDialog(
+            context: context,
+            builder: (context) => const AddSubjectModal(),
+          );
+        },
         style: OutlinedButton.styleFrom(
           foregroundColor: Theme.of(context).colorScheme.onBackground,
           shape: RoundedRectangleBorder(

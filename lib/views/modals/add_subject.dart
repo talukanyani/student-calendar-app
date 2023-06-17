@@ -1,17 +1,19 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/controllers/data.dart' show DataAddStatus;
 import 'package:sc_app/models/subject.dart';
+import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/widgets/alerts.dart';
 import 'package:sc_app/views/widgets/input_field_label.dart';
 import 'package:sc_app/views/widgets/shake_animation.dart';
 import 'package:sc_app/views/widgets/snackbar.dart';
+
 import 'widgets/modal_form.dart';
-import 'widgets/subject_name_input.dart';
 import 'widgets/subject_color_picker.dart';
+import 'widgets/subject_name_input.dart';
 
 class AddSubjectModal extends ConsumerStatefulWidget {
   const AddSubjectModal({super.key});
@@ -67,9 +69,9 @@ class _AddSubjectModalState extends ConsumerState<AddSubjectModal> {
   @override
   Widget build(BuildContext context) {
     return ModalForm(
-      title: 'Add a Subject',
+      title: 'Add a Subject/Module/Course',
       inputFields: [
-        const InputFieldLabel(label: 'Title'),
+        const InputFieldLabel(label: 'Name'),
         ShakeAnimation(
           key: _shakeKey,
           child: SubjectNameInput(

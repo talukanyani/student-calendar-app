@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ActivityTimeInput extends StatelessWidget {
+class ActivityTimeInput extends StatefulWidget {
   const ActivityTimeInput({
     super.key,
     this.initialInput,
@@ -11,8 +11,19 @@ class ActivityTimeInput extends StatelessWidget {
   final TimeOfDay? initialInput;
   final void Function(TimeOfDay) onChanged;
 
-  TextEditingController _inputController(BuildContext context) {
-    return TextEditingController(text: initialInput?.format(context) ?? '');
+  @override
+  State<ActivityTimeInput> createState() => _ActivityTimeInputState();
+}
+
+class _ActivityTimeInputState extends State<ActivityTimeInput> {
+  final _textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    Future(() {
+      _textEditingController.text = widget.initialInput?.format(context) ?? '';
+    });
+    super.initState();
   }
 
   @override
@@ -20,14 +31,15 @@ class ActivityTimeInput extends StatelessWidget {
     return TextField(
       onTap: () => showTimePicker(
         context: context,
-        initialTime: initialInput ?? const TimeOfDay(hour: 10, minute: 0),
+        initialTime:
+            widget.initialInput ?? const TimeOfDay(hour: 10, minute: 0),
       ).then((pickedTime) {
         if (pickedTime != null) {
-          _inputController(context).text = pickedTime.format(context);
-          onChanged(pickedTime);
+          _textEditingController.text = pickedTime.format(context);
+          widget.onChanged(pickedTime);
         }
       }),
-      controller: _inputController(context),
+      controller: _textEditingController,
       readOnly: true,
       decoration: const InputDecoration(
         hintText: 'Time',

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sc_app/utils/input_formatter.dart';
 
-class SubjectNameInput extends StatelessWidget {
+class SubjectNameInput extends StatefulWidget {
   const SubjectNameInput({
     super.key,
     this.initialInput,
@@ -11,15 +11,24 @@ class SubjectNameInput extends StatelessWidget {
   final String? initialInput;
   final void Function(String) onChanged;
 
-  TextEditingController get _inputController => TextEditingController(
-        text: initialInput ?? '',
-      );
+  @override
+  State<SubjectNameInput> createState() => _SubjectNameInputState();
+}
+
+class _SubjectNameInputState extends State<SubjectNameInput> {
+  final _textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    _textEditingController.text = widget.initialInput ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: _inputController,
-      onChanged: (value) => onChanged(value.trim()),
+      controller: _textEditingController,
+      onChanged: (value) => widget.onChanged(value.trim()),
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.words,
       maxLength: 30,
@@ -29,7 +38,7 @@ class SubjectNameInput extends StatelessWidget {
       ],
       style: const TextStyle(letterSpacing: 1),
       decoration: const InputDecoration(
-        hintText: 'Subject/Module/Course Name',
+        hintText: 'e.g. Physics',
         counterText: '',
       ),
     );

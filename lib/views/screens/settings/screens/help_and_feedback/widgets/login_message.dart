@@ -21,7 +21,7 @@ class LoginMessage extends StatelessWidget {
               WidgetSpan(
                 child: InlineBtn(
                   onPressed: () => Helpers.launchLink(
-                    'mailto:tmlab.tech@hotmail.com',
+                    'mailto:muts.dev@outlook.com',
                   ),
                   label: 'email us',
                 ),

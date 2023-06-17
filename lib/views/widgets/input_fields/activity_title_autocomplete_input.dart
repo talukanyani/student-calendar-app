@@ -10,7 +10,7 @@ class ActivityTitleAutocompleteInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<String> options = <String>[
+    final List<String> titles = [
       'Test',
       'Assignment',
       'Quiz',
@@ -20,6 +20,9 @@ class ActivityTitleAutocompleteInput extends ConsumerWidget {
         return activity.title;
       }),
     ];
+
+    // remove duplicated titles
+    final options = titles.toSet().toList();
 
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -91,7 +94,7 @@ class ActivityTitleAutocompleteInput extends ConsumerWidget {
           ],
           style: const TextStyle(letterSpacing: 1),
           decoration: const InputDecoration(
-            hintText: 'Activity Title',
+            hintText: 'e.g. Test 1',
             counterText: '',
           ),
         );

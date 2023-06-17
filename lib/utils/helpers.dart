@@ -1,4 +1,5 @@
 import 'package:url_launcher/url_launcher.dart';
+
 import 'calendar_names.dart';
 
 class Helpers {
@@ -16,9 +17,18 @@ class Helpers {
     }
   }
 
-  static Future<void> launchLink(String url) async {
+  static Future<bool> launchLink(String url, {LaunchMode? mode}) async {
     Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) await launchUrl(uri);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: mode ?? LaunchMode.platformDefault,
+      );
+      return true;
+    } else {
+      return false;
+    }
   }
 
   static String getShortMonthName(int index) => shortMonthNames[index];

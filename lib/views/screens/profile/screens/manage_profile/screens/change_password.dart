@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/services/authentication.dart' show AuthStatus;
 import 'package:sc_app/utils/input_validator.dart';
@@ -8,6 +8,8 @@ import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/input_field_label.dart';
 import 'package:sc_app/views/widgets/loading.dart';
 import 'package:sc_app/views/widgets/snackbar.dart';
+
+import '../../reset_password.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -142,7 +144,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     if (value == null || value.isEmpty) {
                       return 'New password is required.';
                     } else if (!InputValidator.isStrongPassword(value)) {
-                      return 'Password must be at least 8 characters,'
+                      return 'Password must be at least 6 characters,'
                           '\nand include at least one letter, number, and symbol';
                     } else {
                       return null;
@@ -202,6 +204,26 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           Text(
             _errorMessage ?? '',
             style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 4,
+            alignment: WrapAlignment.end,
+            children: [
+              const Text('Forgot password?'),
+              InlineBtn(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => ResetPasswordScreen(
+                        email: ref.watch(userProvider)?.email,
+                      ),
+                    ),
+                  );
+                },
+                label: 'Reset Password',
+              )
+            ],
           ),
         ],
       ),

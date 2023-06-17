@@ -14,7 +14,7 @@ InputDecorationTheme inputTheme({
 
   return InputDecorationTheme(
     isDense: true,
-    contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
     border: border,
     enabledBorder: border,
     focusedBorder: border,

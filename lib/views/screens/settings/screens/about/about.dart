@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/themes/color_scheme.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  final appVersion = '1.0.0';
+  static const appVersion = '1.0.0';
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +55,9 @@ class AboutScreen extends StatelessWidget {
           button(
             onPressed: () {
               Share.share(
-                'Checkout this mobile app called Student Calendar, '
-                'it helps with managing your assessments and activities. '
-                'Download it at https://tmlab.tech/student_calendar/download',
+                'Checkout this mobile app called Student Calendar. '
+                'It helps with managing your assessments/activities. '
+                'Download it at https://muts.dev/student_calendar/download',
                 subject: 'Student Calendar App',
               );
             },
@@ -65,19 +65,19 @@ class AboutScreen extends StatelessWidget {
             icon: const Icon(Iconsax.share),
           ),
           button(
-            onPressed: () => Helpers.launchLink('https://tmlab.tech/terms'),
+            onPressed: () => Helpers.launchLink('https://muts.dev/terms'),
             text: const Text('Terms of Use'),
             icon: const Icon(Iconsax.document),
           ),
           button(
-            onPressed: () => Helpers.launchLink('https://tmlab.tech/privacy'),
+            onPressed: () => Helpers.launchLink('https://muts.dev/privacy'),
             text: const Text('Privacy Policy'),
             icon: const Icon(Iconsax.document),
           ),
           const SizedBox(height: 32),
           Text(
             'Copyright \u00A9 ${DateTime.now().year} '
-            'Tmlab. All rights are reserved.',
+            'Muts. All rights are reserved.',
             style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),

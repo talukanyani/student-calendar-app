@@ -6,10 +6,13 @@ import 'package:sc_app/utils/input_formatter.dart';
 import 'package:sc_app/utils/input_validator.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/loading.dart';
+
 import 'reset_password_response.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
-  const ResetPasswordScreen({super.key});
+  const ResetPasswordScreen({super.key, this.email});
+
+  final String? email;
 
   @override
   ConsumerState<ResetPasswordScreen> createState() =>
@@ -52,6 +55,12 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           onDone();
       }
     });
+  }
+
+  @override
+  void initState() {
+    _emailInputController.text = widget.email ?? '';
+    super.initState();
   }
 
   @override

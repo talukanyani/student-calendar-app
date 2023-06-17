@@ -1,19 +1,16 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/providers/auth.dart';
+import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/views/widgets/alerts.dart';
-import '../../modals/login_alert.dart';
 
-class DataSyncScreen extends ConsumerStatefulWidget {
-  const DataSyncScreen({super.key});
+import '../modals/login_alert.dart';
 
-  @override
-  ConsumerState<DataSyncScreen> createState() => _DataSyncScreenState();
-}
+class ActivitiesSync extends ConsumerWidget {
+  const ActivitiesSync({super.key});
 
-class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
-  void _onActivitiesSyncTurnOn(BuildContext context) {
+  void _onTurnOn(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(userProvider) != null;
 
     if (isLoggedIn) {
@@ -30,7 +27,7 @@ class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
     }
   }
 
-  void _onActivitiesSyncTurnOff(BuildContext context) {
+  void _onTurnOff(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (context) => ConfirmationAlert(
@@ -44,30 +41,31 @@ class _DataSyncScreenState extends ConsumerState<DataSyncScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(userProvider) != null;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Data Sync')),
-      body: ListView(
-        primary: false,
-        children: [
-          SwitchListTile(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: const Text('Activities Sync'),
+          subtitle: const Text(
+            'Automatically back up and '
+            'sync your activities across your devices.',
+          ),
+          leading: const Icon(FluentIcons.cloud_32_filled),
+          trailing: Switch(
             value: (ref.watch(dataSyncProvider) && isLoggedIn),
             onChanged: (value) {
               if (value) {
-                _onActivitiesSyncTurnOn(context);
+                _onTurnOn(context, ref);
               } else {
-                _onActivitiesSyncTurnOff(context);
+                _onTurnOff(context, ref);
               }
             },
-            title: const Text('Activities Sync'),
-            subtitle: const Text(
-              'Automatically sync or back up your subjects and activities.',
-            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

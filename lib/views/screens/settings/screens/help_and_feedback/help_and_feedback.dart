@@ -1,30 +1,52 @@
 import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:sc_app/utils/helpers.dart';
+
 import 'screens/ask_help.dart';
 import 'screens/bug_report.dart';
 import 'screens/suggestion.dart';
 
-class FeedbackScreen extends StatelessWidget {
-  const FeedbackScreen({super.key});
+class HelpAndFeedbackScreen extends StatelessWidget {
+  const HelpAndFeedbackScreen({super.key});
+
+  void _redirectToRateApp() {
+    const packageName = 'com.example.sc_app';
+    const appStoreId = '';
+
+    if (Platform.isAndroid) {
+      Helpers.launchLink('market://details?id=$packageName').then((isLaunched) {
+        if (!isLaunched) {
+          Helpers.launchLink(
+            'https://play.google.com/store/apps/details?id=$packageName',
+          );
+        }
+      });
+    }
+
+    if (Platform.isIOS) {
+      Helpers.launchLink('https://apps.apple.com/app/id$appStoreId');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Feedback')),
+      appBar: AppBar(title: const Text('Help & Feedback')),
       body: ListView(
         primary: false,
         children: [
           ListTile(
-            onTap: () => Helpers.launchLink(
-              'https://tmlab.tech/student_calendar/rate?platform='
-              '${Platform.isAndroid ? 'playstore' : 'appstore'}',
-            ),
-            title: Text(
+            onTap: _redirectToRateApp,
+            title: const Text('Rate'),
+            subtitle: Text(
               'Rate and review this app on '
               '${Platform.isAndroid ? 'Play Store' : 'App Store'}',
             ),
-            leading: const Icon(Icons.star),
+            leading: const Column(
+              children: [Spacer(), Icon(Icons.star), Spacer()],
+            ),
+            visualDensity: const VisualDensity(vertical: -3),
           ),
           ListTile(
             onTap: () => Navigator.of(context).push(
