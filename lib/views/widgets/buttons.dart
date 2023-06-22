@@ -1,10 +1,87 @@
 import 'package:flutter/material.dart';
 
-OutlinedBorder shape = RoundedRectangleBorder(
+OutlinedBorder _shape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(12),
 );
 
-BorderSide border(Color color) => BorderSide(width: 2, color: color);
+BorderSide _border(Color color) => BorderSide(width: 2, color: color);
+
+class FilledBtn extends StatelessWidget {
+  const FilledBtn({
+    super.key,
+    required this.onPressed,
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.child,
+  });
+
+  final void Function()? onPressed;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return backgroundColor.withOpacity(0.5);
+          }
+          return backgroundColor;
+        }),
+        foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return foregroundColor.withOpacity(0.5);
+          }
+          return foregroundColor;
+        }),
+        elevation: MaterialStateProperty.all<double>(0),
+        shape: MaterialStateProperty.all<OutlinedBorder>(_shape),
+      ),
+      child: child,
+    );
+  }
+}
+
+class BorderBtn extends StatelessWidget {
+  const BorderBtn({
+    super.key,
+    required this.onPressed,
+    required this.foregroundColor,
+    required this.borderColor,
+    required this.child,
+  });
+
+  final void Function()? onPressed;
+  final Color foregroundColor;
+  final Color borderColor;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return foregroundColor.withOpacity(0.5);
+          }
+          return foregroundColor;
+        }),
+        shape: MaterialStateProperty.all<OutlinedBorder>(_shape),
+        side: MaterialStateProperty.resolveWith<BorderSide>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return _border(foregroundColor.withOpacity(0.5));
+          }
+          return _border(foregroundColor);
+        }),
+      ),
+      child: child,
+    );
+  }
+}
 
 class ForegroundFilledBtn extends StatelessWidget {
   const ForegroundFilledBtn({
@@ -18,14 +95,10 @@ class ForegroundFilledBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return FilledBtn(
+      backgroundColor: Theme.of(context).colorScheme.onBackground,
+      foregroundColor: Theme.of(context).colorScheme.background,
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.onBackground,
-        foregroundColor: Theme.of(context).colorScheme.background,
-        shape: shape,
-      ),
       child: child,
     );
   }
@@ -43,25 +116,10 @@ class ForegroundBorderBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foregroundColor = Theme.of(context).colorScheme.onBackground;
-
-    return OutlinedButton(
+    return BorderBtn(
       onPressed: onPressed,
-      style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return foregroundColor.withOpacity(0.5);
-          }
-          return foregroundColor;
-        }),
-        shape: MaterialStateProperty.all<OutlinedBorder>(shape),
-        side: MaterialStateProperty.resolveWith<BorderSide>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return border(foregroundColor.withOpacity(0.5));
-          }
-          return border(foregroundColor);
-        }),
-      ),
+      foregroundColor: Theme.of(context).colorScheme.onBackground,
+      borderColor: Theme.of(context).colorScheme.onBackground,
       child: child,
     );
   }
@@ -81,7 +139,10 @@ class PrimaryFilledBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(elevation: 0, shape: shape),
+      style: ButtonStyle(
+        elevation: MaterialStateProperty.all<double>(0),
+        shape: MaterialStateProperty.all<OutlinedBorder>(_shape),
+      ),
       child: child,
     );
   }
@@ -99,44 +160,10 @@ class PrimaryBorderBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = Theme.of(context).colorScheme.primaryContainer;
-
-    return OutlinedButton(
+    return BorderBtn(
       onPressed: onPressed,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<OutlinedBorder>(shape),
-        side: MaterialStateProperty.resolveWith<BorderSide>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return border(borderColor.withOpacity(0.5));
-          }
-          return border(borderColor);
-        }),
-      ),
-      child: child,
-    );
-  }
-}
-
-class GreyFilledBtn extends StatelessWidget {
-  const GreyFilledBtn({
-    super.key,
-    required this.onPressed,
-    required this.child,
-  });
-
-  final void Function()? onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        shape: shape,
-        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-        foregroundColor: Theme.of(context).colorScheme.onBackground,
-      ),
+      foregroundColor: Theme.of(context).colorScheme.primary,
+      borderColor: Theme.of(context).colorScheme.primaryContainer,
       child: child,
     );
   }

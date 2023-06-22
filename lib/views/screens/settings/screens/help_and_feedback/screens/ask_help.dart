@@ -5,8 +5,7 @@ import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/loading.dart';
 
-import '../../../modals/login_alert.dart';
-import '../widgets/login_message.dart';
+import '../modals/sign_in_or_email.dart';
 import 'send_response.dart';
 
 class AskHelpScreen extends ConsumerStatefulWidget {
@@ -22,7 +21,7 @@ class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send(BuildContext context) {
+  void _send() {
     setState(() => _isLoading = true);
 
     CloudDb()
@@ -98,14 +97,14 @@ class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
               if (!isLoggedIn) {
                 showDialog(
                   context: context,
-                  builder: (context) => const LoginAlert(
-                    message: LoginMessage(sendName: 'help'),
+                  builder: (context) => const SignInOrEmailModal(
+                    sendName: 'help',
                   ),
                 );
                 return;
               }
 
-              _send(context);
+              _send();
             },
             child: const Text('Send'),
           ),

@@ -1,20 +1,23 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/views/widgets/android_system_navbar.dart';
-import 'package:sc_app/views/themes/theme.dart';
-import 'views/screens/intro/splash.dart';
-import 'views/screens/intro/welcome.dart';
+
+import 'firebase_options.dart';
+import 'providers/settings.dart';
 import 'views/screens/home/home.dart';
+import 'views/themes/theme.dart';
+import 'views/widgets/android_system_navbar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await SharedPreferences.getInstance();
-  runApp(const ProviderScope(child: App()));
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(
+    const ProviderScope(child: App()),
+  );
 }
 
 class App extends ConsumerWidget {
@@ -25,19 +28,7 @@ class App extends ConsumerWidget {
     return AndroidSystemNavbarStyle(
       child: MaterialApp(
         title: 'Student Calendar',
-        home: FutureBuilder(
-          future: SharedPreferences.getInstance().then((prefs) {
-            return prefs.getBool('isFirstLaunch') ?? true;
-          }),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              bool isFirst = snapshot.data ?? false;
-              return isFirst ? const WelcomeScreen() : const HomeScreen();
-            } else {
-              return const SplashScreen();
-            }
-          },
-        ),
+        home: const HomeScreen(),
         theme: lightTheme(),
         darkTheme: darkTheme(),
         themeMode: ref.watch(themeModeProvider),

@@ -20,7 +20,7 @@ class ConfirmationAlert extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.surface,
       insetPadding: const EdgeInsets.all(32),
-      elevation: 4,
+      elevation: 16,
       title: title,
       content: content,
       actions: [
@@ -28,7 +28,7 @@ class ConfirmationAlert extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: (actionName == null) ? const Text('No') : const Text('Cancel'),
         ),
-        OutlinedButton(
+        TextButton(
           onPressed: () {
             action();
             Navigator.pop(context);
@@ -50,7 +50,7 @@ class InfoAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      elevation: 4,
+      elevation: 16,
       insetPadding: const EdgeInsets.all(16),
       title: title,
       icon: const Icon(FluentIcons.info_24_filled),

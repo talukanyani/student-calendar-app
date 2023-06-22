@@ -5,8 +5,7 @@ import 'package:sc_app/services/cloud_database.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/loading.dart';
 
-import '../../../modals/login_alert.dart';
-import '../widgets/login_message.dart';
+import '../modals/sign_in_or_email.dart';
 import 'send_response.dart';
 
 class SuggestionScreen extends ConsumerStatefulWidget {
@@ -22,7 +21,7 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
   final _inputController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void _send({required void Function() onDone}) {
+  void _send() {
     setState(() => _isLoading = true);
 
     CloudDb()
@@ -32,7 +31,18 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
     )
         .then((_) {
       setState(() => _isLoading = false);
-      onDone();
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const SendResponseScreen(
+            sendName: 'suggestion',
+            message: Text(
+              'Thank you so much for your suggestion. '
+              'Your suggestion helps us improve.',
+            ),
+          ),
+        ),
+      );
     });
   }
 
@@ -90,26 +100,14 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
               if (!isLoggedIn) {
                 showDialog(
                   context: context,
-                  builder: (context) => const LoginAlert(
-                    message: LoginMessage(sendName: 'suggestion'),
+                  builder: (context) => const SignInOrEmailModal(
+                    sendName: 'suggestion',
                   ),
                 );
                 return;
               }
 
-              _send(onDone: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const SendResponseScreen(
-                      sendName: 'suggestion',
-                      message: Text(
-                        'Thank you so much for your suggestion. '
-                        'Your suggestion helps us improve.',
-                      ),
-                    ),
-                  ),
-                );
-              });
+              _send();
             },
             child: const Text('Send'),
           ),

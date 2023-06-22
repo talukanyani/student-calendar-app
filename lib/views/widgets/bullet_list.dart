@@ -9,8 +9,9 @@ class BulletList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ...texts.map((text) {
-          return Row(
+        const SizedBox(height: 4),
+        for (final text in texts)
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(width: 16),
@@ -23,8 +24,8 @@ class BulletList extends StatelessWidget {
                 ),
               ),
             ],
-          );
-        })
+          ),
+        const SizedBox(height: 4),
       ],
     );
   }

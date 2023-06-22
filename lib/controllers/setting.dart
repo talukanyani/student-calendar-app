@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart' show ThemeMode;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/providers/auth.dart';
-import 'package:sc_app/providers/data.dart';
-import 'package:sc_app/services/cloud_database.dart';
-import 'package:sc_app/utils/enums.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../providers/auth.dart';
+import '../providers/data.dart';
+import '../services/cloud_database.dart';
+
+extension ThemeModeExtensiom on ThemeMode {
+  String get title {
+    switch (this) {
+      case ThemeMode.light:
+        return 'Light';
+      case ThemeMode.dark:
+        return 'Dark';
+      case ThemeMode.system:
+        return 'System default';
+    }
+  }
+}
 
 class ThemeModeController extends StateNotifier<ThemeMode> {
   ThemeModeController() : super(ThemeMode.system) {
@@ -23,6 +36,22 @@ class ThemeModeController extends StateNotifier<ThemeMode> {
     SharedPreferences.getInstance().then((prefs) {
       state = ThemeMode.values[prefs.getInt('themeMode') ?? state.index];
     });
+  }
+}
+
+enum TablesSort {
+  name,
+  dateAdded,
+}
+
+extension TablesSortExtension on TablesSort {
+  String get title {
+    switch (this) {
+      case TablesSort.name:
+        return 'Name';
+      case TablesSort.dateAdded:
+        return 'Date Added';
+    }
   }
 }
 

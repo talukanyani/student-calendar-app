@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/controllers/setting.dart' show TablesSort;
 import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
 import 'package:sc_app/views/widgets/profile_icon_button.dart';
 

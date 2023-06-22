@@ -11,7 +11,7 @@ class HelpAndFeedbackScreen extends StatelessWidget {
   const HelpAndFeedbackScreen({super.key});
 
   void _redirectToRateApp() {
-    const packageName = 'com.example.sc_app';
+    const packageName = 'com.muts.studentcalendar';
     const appStoreId = '';
 
     if (Platform.isAndroid) {

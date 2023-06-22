@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 enum AuthStatus {
   done,
   unknownError,
   networkError,
-  emailInUse,
-  profileNotFound,
-  weakPassword,
-  wrongPassword,
+  userNotFound,
+  userMismatch,
+  resignIn,
 }
 
 class Auth {
@@ -16,63 +16,24 @@ class Auth {
 
   User? get currentUser => _currentUser;
 
-  Stream<User?> get userChanges => _auth.userChanges();
+  Future<AuthStatus> signInWithGoogle() async {
+    final credential = await _googleSignIn();
 
-  Future<AuthStatus> createProfile(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      AuthStatus status;
       switch (e.code) {
         case 'network-request-failed':
-          status = AuthStatus.networkError;
-          break;
-        case 'email-already-in-use':
-          status = AuthStatus.emailInUse;
-          break;
-        case 'weak-password':
-          status = AuthStatus.weakPassword;
-          break;
+          return AuthStatus.networkError;
         default:
-          status = AuthStatus.unknownError;
+          return AuthStatus.unknownError;
       }
-      return status;
     }
 
     return AuthStatus.done;
   }
 
-  Future<AuthStatus> login(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      AuthStatus status;
-      switch (e.code) {
-        case 'network-request-failed':
-          status = AuthStatus.networkError;
-          break;
-        case 'user-not-found':
-          status = AuthStatus.profileNotFound;
-          break;
-        case 'wrong-password':
-          status = AuthStatus.wrongPassword;
-          break;
-        default:
-          status = AuthStatus.unknownError;
-      }
-      return status;
-    }
-
-    return AuthStatus.done;
-  }
-
-  Future<AuthStatus> logout() async {
+  Future<AuthStatus> signOut() async {
     try {
       await _auth.signOut();
     } catch (e) {
@@ -82,59 +43,13 @@ class Auth {
     return AuthStatus.done;
   }
 
-  Future<AuthStatus> resetPassword(String email) async {
+  Future<AuthStatus> updateName(String name) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch (e) {
-      AuthStatus status;
-      switch (e.code) {
-        case 'network-request-failed':
-          status = AuthStatus.networkError;
-          break;
-        case 'user-not-found':
-          status = AuthStatus.profileNotFound;
-          break;
-        default:
-          status = AuthStatus.unknownError;
-      }
-      return status;
-    }
-
-    return AuthStatus.done;
-  }
-
-  Future<AuthStatus> updateName(String displayName) async {
-    try {
-      await _currentUser?.updateDisplayName(displayName);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'network-request-failed') return AuthStatus.networkError;
-      return AuthStatus.unknownError;
-    }
-
-    return AuthStatus.done;
-  }
-
-  Future<AuthStatus> changeEmail(String password, String newEmail) async {
-    final oldEmail = _currentUser?.email ?? '';
-
-    if (newEmail == oldEmail) return AuthStatus.emailInUse;
-
-    try {
-      await _currentUser?.updateEmail(newEmail);
+      await _currentUser?.updateDisplayName(name);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
-        case 'requires-recent-login':
-          return _reAuthenticate(oldEmail, password).then((status) {
-            if (status == AuthStatus.done) {
-              return changeEmail(password, newEmail);
-            } else {
-              return status;
-            }
-          });
         case 'network-request-failed':
           return AuthStatus.networkError;
-        case 'email-already-in-use':
-          return AuthStatus.emailInUse;
         default:
           return AuthStatus.unknownError;
       }
@@ -143,51 +58,13 @@ class Auth {
     return AuthStatus.done;
   }
 
-  Future<AuthStatus> changePassword(
-    String oldPassword,
-    String newPassword,
-  ) async {
-    final email = _currentUser?.email ?? '';
-
-    try {
-      await _currentUser?.updatePassword(newPassword);
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case 'requires-recent-login':
-          return _reAuthenticate(email, oldPassword).then((status) {
-            if (status == AuthStatus.done) {
-              return changePassword(oldPassword, newPassword);
-            } else {
-              return status;
-            }
-          });
-        case 'network-request-failed':
-          return AuthStatus.networkError;
-        case 'weak-password':
-          return AuthStatus.weakPassword;
-        default:
-          return AuthStatus.unknownError;
-      }
-    }
-
-    return AuthStatus.done;
-  }
-
-  Future<AuthStatus> deleteProfile(String password) async {
-    final email = _currentUser?.email ?? '';
-
+  Future<AuthStatus> deleteProfile() async {
     try {
       await _currentUser?.delete();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'requires-recent-login':
-          return _reAuthenticate(email, password).then((status) {
-            if (status == AuthStatus.done) {
-              return deleteProfile(password);
-            } else {
-              return status;
-            }
-          });
+          return AuthStatus.resignIn;
         case 'network-request-failed':
           return AuthStatus.networkError;
         default:
@@ -198,47 +75,36 @@ class Auth {
     return AuthStatus.done;
   }
 
-  Future<void> sendVerificationEmail() async {
-    try {
-      await _currentUser?.sendEmailVerification();
-    } catch (e) {
-      return;
-    }
-  }
-
-  Future<bool> checkEmailVerified() async {
-    try {
-      await _currentUser?.reload();
-    } catch (e) {
-      return false;
-    }
-
-    return _currentUser?.emailVerified ?? false;
-  }
-
-  Future<AuthStatus> _reAuthenticate(String email, String password) async {
-    final credential = EmailAuthProvider.credential(
-      email: email,
-      password: password,
-    );
+  Future<AuthStatus> resignInWithGoogle() async {
+    final credential = await _googleSignIn();
 
     try {
       await _currentUser?.reauthenticateWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      AuthStatus status;
       switch (e.code) {
         case 'network-request-failed':
-          status = AuthStatus.networkError;
-          break;
-        case 'wrong-password':
-          status = AuthStatus.wrongPassword;
-          break;
+          return AuthStatus.networkError;
+        case 'user-mismatch':
+          return AuthStatus.userMismatch;
+        case 'user-not-found':
+          return AuthStatus.userNotFound;
         default:
-          status = AuthStatus.unknownError;
+          return AuthStatus.unknownError;
       }
-      return status;
     }
 
     return AuthStatus.done;
+  }
+
+  Future<AuthCredential> _googleSignIn() async {
+    final googleUser = await GoogleSignIn().signIn();
+    final googleAuth = await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    return credential;
   }
 }

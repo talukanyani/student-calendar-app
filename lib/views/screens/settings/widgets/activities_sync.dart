@@ -5,7 +5,7 @@ import 'package:sc_app/providers/auth.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/views/widgets/alerts.dart';
 
-import '../modals/login_alert.dart';
+import '../modals/sign_in_alert.dart';
 
 class ActivitiesSync extends ConsumerWidget {
   const ActivitiesSync({super.key});
@@ -18,9 +18,10 @@ class ActivitiesSync extends ConsumerWidget {
     } else {
       showDialog(
         context: context,
-        builder: (context) => const LoginAlert(
+        builder: (context) => const SignInAlert(
           message: Text(
-            'To turn on data sync, you have to log in with your profile.',
+            'You have to log in, to sync and back up '
+            'your subjects and activities.',
           ),
         ),
       );
@@ -49,10 +50,8 @@ class ActivitiesSync extends ConsumerWidget {
       children: [
         ListTile(
           title: const Text('Activities Sync'),
-          subtitle: const Text(
-            'Automatically back up and '
-            'sync your activities across your devices.',
-          ),
+          subtitle:
+              const Text('Automatically sync and back up your activities.'),
           leading: const Icon(FluentIcons.cloud_32_filled),
           trailing: Switch(
             value: (ref.watch(dataSyncProvider) && isLoggedIn),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sc_app/controllers/setting.dart';
 import 'package:sc_app/providers/settings.dart';
-import 'package:sc_app/utils/enums.dart';
 import 'package:sc_app/views/widgets/modal.dart';
 
 class TablesSortModal extends ConsumerWidget {
