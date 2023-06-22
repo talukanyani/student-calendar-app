@@ -7,14 +7,22 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1038255999180:android:ffab2d6d57dc7509b31a69",
+        "mobilesdk_app_id": "1:1038255999180:android:6ea063f95c1d157bb31a69",
         "android_client_info": {
-          "package_name": "com.example.sc_app"
+          "package_name": "com.muts.studentcalendar"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1038255999180-pd1n78au48qnnpk6on0372eqa8m17oo4.apps.googleusercontent.com",
+          "client_id": "1038255999180-f1ev9eb6kkmjtevjc6no18e5vc908hk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.muts.studentcalendar",
+            "certificate_hash": "351a7ca9aa56c8a8d16fddd82358c6f970bd6235"
+          }
+        },
+        {
+          "client_id": "1038255999180-oqfm8f24edo6j1croe02bqi2jsk9ql4u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1038255999180-pd1n78au48qnnpk6on0372eqa8m17oo4.apps.googleusercontent.com",
+              "client_id": "1038255999180-oqfm8f24edo6j1croe02bqi2jsk9ql4u.apps.googleusercontent.com",
               "client_type": 3
             },
             {

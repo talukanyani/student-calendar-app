@@ -4,6 +4,16 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+/// Default [FirebaseOptions] for use with your Firebase apps.
+///
+/// Example:
+/// ```dart
+/// import 'firebase_options.dart';
+/// // ...
+/// await Firebase.initializeApp(
+///   options: DefaultFirebaseOptions.currentPlatform,
+/// );
+/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -16,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -41,20 +54,9 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyATrcJqR8sUWg3aTwpAVnmtr2BZ9HEOOFY',
-    appId: '1:1038255999180:android:ffab2d6d57dc7509b31a69',
+    appId: '1:1038255999180:android:6ea063f95c1d157bb31a69',
     messagingSenderId: '1038255999180',
     projectId: 'student-calendar-7246c',
     storageBucket: 'student-calendar-7246c.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCkYQDGl1vp5vyzH5VmNqQHrufGRibDIyg',
-    appId: '1:1038255999180:ios:dedc9d9d99078209b31a69',
-    messagingSenderId: '1038255999180',
-    projectId: 'student-calendar-7246c',
-    storageBucket: 'student-calendar-7246c.appspot.com',
-    iosClientId:
-        '1038255999180-5ip5umkad236lm50iqfd9qrckg5slj4n.apps.googleusercontent.com',
-    iosBundleId: 'com.example.scApp',
   );
 }

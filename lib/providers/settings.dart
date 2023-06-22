@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sc_app/controllers/setting.dart';
-import 'package:sc_app/utils/enums.dart';
-import 'auth.dart';
+import '../controllers/setting.dart';
 
 final themeModeProvider =
     StateNotifierProvider<ThemeModeController, ThemeMode>((ref) {
