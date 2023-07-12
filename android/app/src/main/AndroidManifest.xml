@@ -1,13 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.muts.studentcalendar">
-
     <application
         android:label="Student Calendar"
         android:name="${applicationName}"
         android:icon="@mipmap/app_icon">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -32,8 +30,4 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <supports-screens
-        android:largeScreens="false"
-        android:xlargeScreens="false" />
-
 </manifest>

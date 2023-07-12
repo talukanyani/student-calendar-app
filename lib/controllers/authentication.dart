@@ -20,8 +20,6 @@ class AuthController extends StateNotifier<User?> {
       var syncedData = await CloudDb().getSyncedData(state?.uid);
       var isSync = syncedData.isNotEmpty;
 
-      print('talu ------- isSync');
-
       if (isSync) {
         ref.read(dataSyncProvider.notifier).set(true, updateData: false);
         ref.read(dataProvider.notifier).updateWithSyncedData();

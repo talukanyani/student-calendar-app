@@ -62,10 +62,8 @@ class ActivitiesList extends ConsumerWidget {
                 child: (index == 0) ? const SizedBox() : const VertLine(),
               ),
               TextBox(
-                text: TimeOfDay(
-                  hour: activity.dateTime.hour,
-                  minute: activity.dateTime.minute,
-                ).format(context),
+                text: '${Helpers.padTwoNums(activity.dateTime.hour)}:'
+                    '${Helpers.padTwoNums(activity.dateTime.minute)}',
               ),
               Expanded(
                 child: (index == (activities.length - 1))

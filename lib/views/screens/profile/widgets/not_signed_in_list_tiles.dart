@@ -20,21 +20,14 @@ class _NotLoggedInListTilesState extends ConsumerState<NotSignedInListTiles> {
   _signInWithGoogle() {
     ref.read(authProvider.notifier).signInWithGoogle().then((status) {
       switch (status) {
+        case AuthStatus.done:
+          break;
         case AuthStatus.networkError:
           ScaffoldMessenger.of(context).showSnackBar(
             mySnackBar(
               context,
               text: 'Network error, check your internet connection.',
               snackBarIcon: SnackBarIcon.error,
-            ),
-          );
-          break;
-        case AuthStatus.done:
-          ScaffoldMessenger.of(context).showSnackBar(
-            mySnackBar(
-              context,
-              text: 'Successfully signed in.',
-              snackBarIcon: SnackBarIcon.done,
             ),
           );
           break;

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -51,6 +48,16 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBhTKaDk00PBesoxJ0-AfS3yVdjwcjKZtQ',
+    appId: '1:1038255999180:web:a2db300c93492ddeb31a69',
+    messagingSenderId: '1038255999180',
+    projectId: 'student-calendar-7246c',
+    authDomain: 'student-calendar-7246c.firebaseapp.com',
+    storageBucket: 'student-calendar-7246c.appspot.com',
+    measurementId: 'G-SB1VESWJT9',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyATrcJqR8sUWg3aTwpAVnmtr2BZ9HEOOFY',
