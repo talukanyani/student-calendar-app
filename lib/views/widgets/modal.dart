@@ -14,10 +14,14 @@ class Modal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return Dialog(
       backgroundColor: Theme.of(context).colorScheme.surface,
       elevation: 2,
-      insetPadding: EdgeInsets.all(insetPadding),
+      insetPadding: (availWidth < 480)
+          ? EdgeInsets.all(insetPadding)
+          : EdgeInsets.symmetric(horizontal: (availWidth - 480) / 2),
       insetAnimationDuration: const Duration(milliseconds: 300),
       insetAnimationCurve: Curves.ease,
       child: ListView(

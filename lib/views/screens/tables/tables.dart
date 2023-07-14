@@ -33,6 +33,8 @@ class Tables extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     final subjects = ref.watch(subjectsAndActivitiesProvider);
     var subjectsCount = subjects.length;
 
@@ -41,7 +43,7 @@ class Tables extends ConsumerWidget {
         case TablesSort.name:
           subjects.sort((a, b) => a.name.compareTo(b.name));
           break;
-        default: // case TablesSort.dateAdded:
+        case TablesSort.dateAdded:
           subjects.sort((a, b) => a.id.compareTo(b.id));
       }
 
@@ -51,6 +53,9 @@ class Tables extends ConsumerWidget {
     return ListView.builder(
       controller: _scrollController,
       physics: const BouncingScrollPhysics(),
+      padding: (availWidth < 560)
+          ? EdgeInsets.zero
+          : EdgeInsets.symmetric(horizontal: (availWidth - 560) / 2),
       itemCount: subjectsCount + 1,
       itemBuilder: (context, index) {
         if (index == subjectsCount) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/utils/calendar_names.dart';
 import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/widgets/activities_list.dart';
@@ -42,27 +41,28 @@ class Body extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Theme.of(context).colorScheme.onPrimary,
-                          Theme.of(context).colorScheme.surfaceVariant,
-                        ],
-                        stops: const [0.924, 0.924],
-                      ),
-                      image: DecorationImage(
-                        image: context.isDarkMode
-                            ? const AssetImage(
-                                'assets/images/student_home_desk_(dark_version).png')
-                            : const AssetImage(
-                                'assets/images/student_home_desk.png'),
-                        fit: BoxFit.contain,
-                        alignment: Alignment.bottomRight,
-                      ),
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      height: 92,
+                      width: double.infinity,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Image(
+                      image: context.isDarkMode
+                          ? const AssetImage(
+                              'assets/images/student_home_desk_(dark_version).png')
+                          : const AssetImage(
+                              'assets/images/student_home_desk.png'),
+                      width: (constraints.maxWidth < 720)
+                          ? constraints.maxWidth
+                          : 720,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   const HomeContent(),
@@ -82,15 +82,29 @@ class HomeContent extends StatelessWidget {
   static final DateTime today = DateTime.now();
   static final DateTime tomorrow = today.add(const Duration(days: 1));
 
+  double getViewFrac(availWidth) {
+    double frac = 280 / availWidth;
+
+    if (frac > 1) {
+      frac = 1;
+    } else if (frac < 0.25) {
+      frac = 0.25;
+    }
+
+    return frac;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
-            children: <Widget>[
+            children: [
               Text(
                 today.day.toString(),
                 style: Theme.of(context).textTheme.displayMedium,
@@ -119,9 +133,11 @@ class HomeContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 224,
+          height: 240,
           child: PageView(
-            controller: PageController(viewportFraction: 0.75),
+            controller: PageController(
+              viewportFraction: getViewFrac(availWidth),
+            ),
             padEnds: false,
             physics: const BouncingScrollPhysics(),
             children: [
