@@ -4,7 +4,9 @@ import 'package:sc_app/controllers/setting.dart' show TablesSort;
 import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
+import 'package:sc_app/views/widgets/main_drawer.dart';
 import 'package:sc_app/views/widgets/profile_icon_button.dart';
+import 'package:sc_app/views/widgets/side_nav_bar.dart';
 
 import 'widgets/subject_add_button.dart';
 import 'widgets/table.dart';
@@ -14,14 +16,22 @@ class TablesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+    final isDrawer = (availWidth >= 600);
+
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: isDrawer,
         title: const Text('Tables'),
         actions: const [ProfileIconButton()],
       ),
-      body: const Tables(),
-      bottomNavigationBar: const BottomNavBar(screenIndex: 1),
+      body: SideNavBar(
+        screenIndex: 1,
+        isVisible: isDrawer,
+        child: const Tables(),
+      ),
+      bottomNavigationBar: isDrawer ? null : const BottomNavBar(screenIndex: 1),
+      drawer: isDrawer ? const MainDrawer(screenIndex: 1) : null,
     );
   }
 }

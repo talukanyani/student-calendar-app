@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/screens/add_activities/add_activities.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
+import 'package:sc_app/views/widgets/main_drawer.dart';
 import 'package:sc_app/views/widgets/profile_icon_button.dart';
+import 'package:sc_app/views/widgets/side_nav_bar.dart';
 import 'state/displayed_month_date.dart';
 import 'widgets/calendar.dart';
 
@@ -21,16 +23,24 @@ class CalendarScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final availWidth = MediaQuery.of(context).size.width;
+    final isDrawer = (availWidth >= 600);
+
     final displayedMonthDate = ref.watch(displayedMonthDateProvider);
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: isDrawer,
         title: Text(_monthTitle(displayedMonthDate)),
         actions: const [ProfileIconButton()],
       ),
-      body: const Calendar(),
-      bottomNavigationBar: const BottomNavBar(screenIndex: 2),
+      body: SideNavBar(
+        screenIndex: 2,
+        isVisible: isDrawer,
+        child: const Calendar(),
+      ),
+      bottomNavigationBar: isDrawer ? null : const BottomNavBar(screenIndex: 2),
+      drawer: isDrawer ? const MainDrawer(screenIndex: 2) : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const AddActivityScreen()),
