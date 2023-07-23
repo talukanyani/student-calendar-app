@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class GoogleLogo extends StatelessWidget {
-  const GoogleLogo({super.key, required this.size, required this.color});
+  const GoogleLogo({super.key, required this.size});
 
   final double size;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class GoogleLogo extends StatelessWidget {
       height: size,
       alignment: Alignment.center,
       child: CustomPaint(
-        painter: GoogleLogoPainter(color: color),
+        painter: GoogleLogoPainter(),
         size: Size.square(size),
       ),
     );
@@ -21,10 +20,6 @@ class GoogleLogo extends StatelessWidget {
 }
 
 class GoogleLogoPainter extends CustomPainter {
-  const GoogleLogoPainter({required this.color});
-
-  final Color color;
-
   @override
   bool shouldRepaint(oldDelegate) => true;
 
@@ -37,17 +32,17 @@ class GoogleLogoPainter extends CustomPainter {
     final arcThickness = size.width / 4.5;
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = arcThickness
-      ..color = color;
+      ..strokeWidth = arcThickness;
 
-    void drawArc(double startAngle, double sweepAngle) {
-      canvas.drawArc(bounds, startAngle, sweepAngle, false, paint);
+    void drawArc(double startAngle, double sweepAngle, Color color) {
+      final currentPaint = paint..color = color;
+      canvas.drawArc(bounds, startAngle, sweepAngle, false, currentPaint);
     }
 
-    drawArc(3.5, 1.9);
-    drawArc(2.5, 1.0);
-    drawArc(0.9, 1.6);
-    drawArc(-0.18, 1.1);
+    drawArc(3.5, 1.9, Colors.red);
+    drawArc(2.5, 1.0, Colors.amber);
+    drawArc(0.9, 1.6, Colors.green.shade600);
+    drawArc(-0.18, 1.1, Colors.blue.shade600);
 
     canvas.drawRect(
       Rect.fromLTRB(
@@ -57,6 +52,7 @@ class GoogleLogoPainter extends CustomPainter {
         bounds.centerRight.dy + (arcThickness / 2),
       ),
       paint
+        ..color = Colors.blue.shade600
         ..style = PaintingStyle.fill
         ..strokeWidth = 0,
     );

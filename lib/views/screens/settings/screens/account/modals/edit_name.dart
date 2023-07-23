@@ -32,24 +32,23 @@ class _EditNameModalState extends ConsumerState<EditNameModal> {
         .then((status) {
       setState(() => _isLoading = false);
       Navigator.pop(context);
-      Navigator.pop(context);
 
       switch (status) {
-        case AuthStatus.networkError:
-          ScaffoldMessenger.of(context).showSnackBar(
-            mySnackBar(
-              context,
-              text: 'Network error, check your internet connection.',
-              snackBarIcon: SnackBarIcon.error,
-            ),
-          );
-          break;
         case AuthStatus.done:
           ScaffoldMessenger.of(context).showSnackBar(
             mySnackBar(
               context,
               text: 'Name was successfully edited.',
               snackBarIcon: SnackBarIcon.done,
+            ),
+          );
+          break;
+        case AuthStatus.networkError:
+          ScaffoldMessenger.of(context).showSnackBar(
+            mySnackBar(
+              context,
+              text: 'Network error, check your internet connection.',
+              snackBarIcon: SnackBarIcon.error,
             ),
           );
           break;
@@ -109,7 +108,7 @@ class _EditNameModalState extends ConsumerState<EditNameModal> {
             ),
           ),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 16),
         Row(
           children: [
             const Spacer(),
@@ -126,7 +125,6 @@ class _EditNameModalState extends ConsumerState<EditNameModal> {
                   ? null
                   : () {
                       if (_inputController.text.trim() == _currentName) {
-                        Navigator.pop(context);
                         Navigator.pop(context);
                         return;
                       }

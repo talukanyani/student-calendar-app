@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:sc_app/utils/helpers.dart';
 
+import '../../widgets/tile_button.dart';
 import 'screens/ask_help.dart';
 import 'screens/bug_report.dart';
 import 'screens/suggestion.dart';
@@ -31,43 +32,45 @@ class HelpAndFeedbackScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Help & Feedback')),
       body: ListView(
         primary: false,
+        padding: (availWidth < 480)
+            ? EdgeInsets.zero
+            : EdgeInsets.symmetric(horizontal: ((availWidth - 480) / 2)),
         children: [
-          ListTile(
+          TileButton(
             onTap: _redirectToRateApp,
             title: const Text('Rate'),
             subtitle: Text(
               'Rate and review this app on '
               '${Platform.isAndroid ? 'Play Store' : 'App Store'}',
             ),
-            leading: const Column(
-              children: [Spacer(), Icon(Icons.star), Spacer()],
-            ),
-            visualDensity: const VisualDensity(vertical: -3),
+            leading: const Icon(Icons.star_outline),
           ),
-          ListTile(
+          TileButton(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const AskHelpScreen()),
             ),
             title: const Text('Ask for help'),
-            leading: const Icon(Icons.help),
+            leading: const Icon(Icons.help_outline),
           ),
-          ListTile(
+          TileButton(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const BugReportScreen()),
             ),
             title: const Text('Report a bug'),
-            leading: const Icon(Icons.bug_report),
+            leading: const Icon(Icons.bug_report_outlined),
           ),
-          ListTile(
+          TileButton(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const SuggestionScreen()),
             ),
             title: const Text('Send a suggestion'),
-            leading: const Icon(Icons.feedback),
+            leading: const Icon(Icons.feedback_outlined),
           ),
         ],
       ),

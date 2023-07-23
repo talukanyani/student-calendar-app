@@ -4,7 +4,7 @@ import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:sc_app/views/widgets/activities_list.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
 import 'package:sc_app/views/widgets/main_drawer.dart';
-import 'package:sc_app/views/widgets/profile_icon_button.dart';
+import 'package:sc_app/views/widgets/settings_icon_button.dart';
 import 'package:sc_app/views/widgets/side_nav_bar.dart';
 import 'widgets/box.dart';
 import 'widgets/week_activities.dart';
@@ -22,7 +22,9 @@ class HomeScreen extends StatelessWidget {
         automaticallyImplyLeading: isDrawer,
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('SC'),
-        actions: const [ProfileIconButton()],
+        actions: [
+          !isDrawer ? const SettingsIconButton() : const SizedBox(),
+        ],
       ),
       body: SideNavBar(
         screenIndex: 0,

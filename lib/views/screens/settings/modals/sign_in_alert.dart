@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sc_app/views/screens/profile/profile.dart';
 import 'package:sc_app/views/widgets/buttons.dart';
 import 'package:sc_app/views/widgets/modal.dart';
+
+import '../screens/account/sign_in.dart';
 
 class SignInAlert extends StatelessWidget {
   const SignInAlert({super.key, this.message});
@@ -19,15 +20,14 @@ class SignInAlert extends StatelessWidget {
         SizedBox(height: (message == null) ? 0 : 24),
         ForegroundFilledBtn(
           onPressed: () {
-            Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pop(context);
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ProfileScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const SignInScreen()),
             );
           },
           child: const Text('Sign In'),
         ),
+        const SizedBox(height: 8),
         TextButton(
           onPressed: () => Navigator.pop(context),
           style: TextButton.styleFrom(

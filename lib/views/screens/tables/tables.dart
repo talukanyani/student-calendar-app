@@ -5,7 +5,7 @@ import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
 import 'package:sc_app/views/widgets/main_drawer.dart';
-import 'package:sc_app/views/widgets/profile_icon_button.dart';
+import 'package:sc_app/views/widgets/settings_icon_button.dart';
 import 'package:sc_app/views/widgets/side_nav_bar.dart';
 
 import 'widgets/subject_add_button.dart';
@@ -23,7 +23,9 @@ class TablesScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: isDrawer,
         title: const Text('Tables'),
-        actions: const [ProfileIconButton()],
+        actions: [
+          !isDrawer ? const SettingsIconButton() : const SizedBox(),
+        ],
       ),
       body: SideNavBar(
         screenIndex: 1,

@@ -33,7 +33,8 @@ class _DeleteProfileScreenState extends ConsumerState<DeleteProfileScreen> {
           });
           break;
         case AuthStatus.done:
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pop(context);
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             mySnackBar(
               context,
@@ -87,11 +88,15 @@ class _DeleteProfileScreenState extends ConsumerState<DeleteProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Delete Profile')),
       body: ListView(
         primary: false,
-        padding: const EdgeInsets.all(16),
+        padding: (availWidth < 480)
+            ? const EdgeInsets.symmetric(horizontal: 16)
+            : EdgeInsets.symmetric(horizontal: ((availWidth - 480) / 2) + 16),
         children: [
           Text(
             'Note that if you delete your profile:',

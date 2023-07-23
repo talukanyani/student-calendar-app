@@ -4,40 +4,27 @@ import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/themes/color_scheme.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../widgets/tile_button.dart';
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const appVersion = '1.0.0';
+  static const appVersion = '1.1.0';
 
   @override
   Widget build(BuildContext context) {
-    Widget button({
-      required void Function() onPressed,
-      required Text text,
-      required Icon icon,
-    }) {
-      return Row(
-        children: [
-          TextButton(
-            onPressed: onPressed,
-            style: TextButton.styleFrom(foregroundColor: context.grey4),
-            child: Row(
-              children: [
-                icon,
-                const SizedBox(width: 8),
-                text,
-              ],
-            ),
-          ),
-        ],
-      );
-    }
+    final availWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(title: const Text('About')),
       body: ListView(
         primary: false,
-        padding: const EdgeInsets.all(16),
+        padding: (availWidth < 480)
+            ? const EdgeInsets.all(16)
+            : EdgeInsets.symmetric(
+                horizontal: ((availWidth - 480) / 2) + 16,
+                vertical: 16,
+              ),
         children: [
           Text(
             'Student Calendar',
@@ -51,28 +38,26 @@ class AboutScreen extends StatelessWidget {
                   color: context.grey4,
                 ),
           ),
-          const SizedBox(height: 32),
-          button(
-            onPressed: () {
-              Share.share(
-                'Checkout this mobile app called Student Calendar. '
-                'It helps with managing your assessments/activities. '
-                'Download it at https://muts.dev/student_calendar/download',
-                subject: 'Student Calendar App',
-              );
-            },
-            text: const Text('Share this app'),
-            icon: const Icon(Iconsax.share),
+          const SizedBox(height: 24),
+          TileButton(
+            title: const Text('Share this app'),
+            leading: const Icon(Iconsax.share),
+            onTap: () => Share.share(
+              'Checkout this mobile app called Student Calendar. '
+              'It helps with managing your assessments/activities. '
+              'Download it at https://muts.dev/student_calendar/download',
+              subject: 'Student Calendar App',
+            ),
           ),
-          button(
-            onPressed: () => Helpers.launchLink('https://muts.dev/terms'),
-            text: const Text('Terms of Use'),
-            icon: const Icon(Iconsax.document),
+          TileButton(
+            title: const Text('Terms of Use'),
+            leading: const Icon(Iconsax.document),
+            onTap: () => Helpers.launchLink('https://muts.dev/terms'),
           ),
-          button(
-            onPressed: () => Helpers.launchLink('https://muts.dev/privacy'),
-            text: const Text('Privacy Policy'),
-            icon: const Icon(Iconsax.document),
+          TileButton(
+            title: const Text('Privacy Policy'),
+            leading: const Icon(Iconsax.document),
+            onTap: () => Helpers.launchLink('https://muts.dev/privacy'),
           ),
           const SizedBox(height: 32),
           Text(

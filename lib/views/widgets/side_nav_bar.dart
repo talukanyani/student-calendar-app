@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sc_app/views/screens/calendar/calendar.dart';
 import 'package:sc_app/views/screens/settings/settings.dart';
 import 'package:sc_app/views/screens/tables/tables.dart';
+import 'package:sc_app/views/themes/color_scheme.dart';
 
 class SideNavBar extends StatelessWidget {
   const SideNavBar({
@@ -37,7 +38,7 @@ class SideNavBar extends StatelessWidget {
                     child: Container(
                       width: 64,
                       height: constraints.maxHeight,
-                      constraints: const BoxConstraints(minHeight: 270),
+                      constraints: const BoxConstraints(minHeight: 300),
                       color: backgroundColor ??
                           Theme.of(context).colorScheme.background,
                       child: Column(
@@ -46,6 +47,7 @@ class SideNavBar extends StatelessWidget {
                           Material(
                             type: MaterialType.transparency,
                             child: ListTile(
+                              iconColor: context.grey4,
                               leading: (screenIndex == 0)
                                   ? const Icon(FluentIcons.home_24_filled)
                                   : const Icon(FluentIcons.home_24_regular),
@@ -58,6 +60,7 @@ class SideNavBar extends StatelessWidget {
                           Material(
                             type: MaterialType.transparency,
                             child: ListTile(
+                              iconColor: context.grey4,
                               leading: (screenIndex == 1)
                                   ? const Icon(FluentIcons.table_24_filled)
                                   : const Icon(FluentIcons.table_24_regular),
@@ -70,6 +73,7 @@ class SideNavBar extends StatelessWidget {
                           Material(
                             type: MaterialType.transparency,
                             child: ListTile(
+                              iconColor: context.grey4,
                               leading: (screenIndex == 2)
                                   ? const Icon(
                                       FluentIcons.calendar_ltr_24_filled)
@@ -86,6 +90,7 @@ class SideNavBar extends StatelessWidget {
                           Material(
                             type: MaterialType.transparency,
                             child: ListTile(
+                              iconColor: context.grey4,
                               leading:
                                   const Icon(FluentIcons.settings_24_regular),
                               onTap: () => Navigator.of(context).push(

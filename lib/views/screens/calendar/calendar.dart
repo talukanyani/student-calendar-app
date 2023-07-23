@@ -5,7 +5,7 @@ import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/screens/add_activities/add_activities.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
 import 'package:sc_app/views/widgets/main_drawer.dart';
-import 'package:sc_app/views/widgets/profile_icon_button.dart';
+import 'package:sc_app/views/widgets/settings_icon_button.dart';
 import 'package:sc_app/views/widgets/side_nav_bar.dart';
 import 'state/displayed_month_date.dart';
 import 'widgets/calendar.dart';
@@ -32,7 +32,9 @@ class CalendarScreen extends ConsumerWidget {
       appBar: AppBar(
         automaticallyImplyLeading: isDrawer,
         title: Text(_monthTitle(displayedMonthDate)),
-        actions: const [ProfileIconButton()],
+        actions: [
+          !isDrawer ? const SettingsIconButton() : const SizedBox(),
+        ],
       ),
       body: SideNavBar(
         screenIndex: 2,

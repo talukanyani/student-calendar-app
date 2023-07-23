@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Modal extends StatelessWidget {
-  const Modal({
-    super.key,
-    this.padding = const EdgeInsets.all(16),
-    this.insetPadding = 16,
-    required this.children,
-  });
+  const Modal({super.key, this.insetPadding = 16, required this.children});
 
-  final EdgeInsets padding;
   final double insetPadding;
   final List<Widget> children;
 
@@ -27,7 +21,7 @@ class Modal extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        padding: padding,
+        padding: const EdgeInsets.all(20),
         children: children,
       ),
     );
