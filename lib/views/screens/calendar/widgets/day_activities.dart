@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sc_app/utils/helpers.dart';
 import 'package:sc_app/views/screens/add_activities/add_activities.dart';
 import 'package:sc_app/views/widgets/activities_list.dart';
+
 import '../state/selected_day.dart';
 
 class DayActivities extends ConsumerWidget {
@@ -35,10 +36,23 @@ class DayActivities extends ConsumerWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
-        Expanded(child: ActivitiesList(date: date)),
+        Expanded(
+          child: ActivitiesList(date: date),
+        ),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
           alignment: Alignment.center,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Theme.of(context).colorScheme.background,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 2,
+                offset: const Offset(0.2, 0.4),
+                color: Theme.of(context).colorScheme.shadow,
+              ),
+            ],
+          ),
           child: IconButton(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
@@ -46,6 +60,7 @@ class DayActivities extends ConsumerWidget {
               ),
             ),
             icon: const Icon(Iconsax.add_square),
+            tooltip: 'Add an activity',
           ),
         ),
       ],
