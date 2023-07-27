@@ -34,10 +34,15 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add Activities')),
       body: ListView.builder(
         primary: false,
+        padding: (availWidth < 480)
+            ? EdgeInsets.zero
+            : EdgeInsets.symmetric(horizontal: (availWidth - 480) / 2),
         controller: _scrollController,
         itemCount: (activityFormCount + 1),
         itemBuilder: (context, index) {

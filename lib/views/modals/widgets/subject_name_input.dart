@@ -29,6 +29,7 @@ class _SubjectNameInputState extends State<SubjectNameInput> {
     return TextField(
       controller: _textEditingController,
       onChanged: (value) => widget.onChanged(value.trim()),
+      autofocus: true,
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.words,
       maxLength: 30,

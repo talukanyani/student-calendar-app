@@ -4,7 +4,9 @@ import 'package:sc_app/controllers/setting.dart' show TablesSort;
 import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/providers/settings.dart';
 import 'package:sc_app/views/widgets/bottom_nav_bar.dart';
-import 'package:sc_app/views/widgets/profile_icon_button.dart';
+import 'package:sc_app/views/widgets/main_drawer.dart';
+import 'package:sc_app/views/widgets/settings_icon_button.dart';
+import 'package:sc_app/views/widgets/side_nav_bar.dart';
 
 import 'widgets/subject_add_button.dart';
 import 'widgets/table.dart';
@@ -14,14 +16,24 @@ class TablesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+    final isDrawer = (availWidth >= 600);
+
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: isDrawer,
         title: const Text('Tables'),
-        actions: const [ProfileIconButton()],
+        actions: [
+          !isDrawer ? const SettingsIconButton() : const SizedBox(),
+        ],
       ),
-      body: const Tables(),
-      bottomNavigationBar: const BottomNavBar(screenIndex: 1),
+      body: SideNavBar(
+        screenIndex: 1,
+        isVisible: isDrawer,
+        child: const Tables(),
+      ),
+      bottomNavigationBar: isDrawer ? null : const BottomNavBar(screenIndex: 1),
+      drawer: isDrawer ? const MainDrawer(screenIndex: 1) : null,
     );
   }
 }
@@ -33,6 +45,8 @@ class Tables extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     final subjects = ref.watch(subjectsAndActivitiesProvider);
     var subjectsCount = subjects.length;
 
@@ -41,7 +55,7 @@ class Tables extends ConsumerWidget {
         case TablesSort.name:
           subjects.sort((a, b) => a.name.compareTo(b.name));
           break;
-        default: // case TablesSort.dateAdded:
+        case TablesSort.dateAdded:
           subjects.sort((a, b) => a.id.compareTo(b.id));
       }
 
@@ -51,6 +65,9 @@ class Tables extends ConsumerWidget {
     return ListView.builder(
       controller: _scrollController,
       physics: const BouncingScrollPhysics(),
+      padding: (availWidth < 560)
+          ? EdgeInsets.zero
+          : EdgeInsets.symmetric(horizontal: (availWidth - 560) / 2),
       itemCount: subjectsCount + 1,
       itemBuilder: (context, index) {
         if (index == subjectsCount) {

@@ -52,7 +52,7 @@ class ActivitiesSync extends ConsumerWidget {
           title: const Text('Activities Sync'),
           subtitle:
               const Text('Automatically sync and back up your activities.'),
-          leading: const Icon(FluentIcons.cloud_32_filled),
+          leading: const Icon(FluentIcons.cloud_24_filled),
           trailing: Switch(
             value: (ref.watch(dataSyncProvider) && isLoggedIn),
             onChanged: (value) {

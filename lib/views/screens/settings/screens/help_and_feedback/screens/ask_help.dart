@@ -26,21 +26,23 @@ class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
 
     CloudDb()
         .sendHelp(_inputController.text.trim(), user: ref.watch(userProvider))
-        .then((_) {
-      setState(() => _isLoading = false);
+        .then(
+      (_) {
+        setState(() => _isLoading = false);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) {
-          return const SendResponseScreen(
-            sendName: 'help',
-            message: Text(
-              'We will respond to your help by '
-              'emailing you using your profile\'s email address.',
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const SendResponseScreen(
+              sendName: 'help',
+              message: Text(
+                'We will respond to your help by '
+                'emailing you using your profile\'s email address.',
+              ),
             ),
-          );
-        }),
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -51,13 +53,20 @@ class _AskHelpScreenState extends ConsumerState<AskHelpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
       appBar: AppBar(title: const Text('Help')),
       body: ListView(
         primary: false,
-        padding: const EdgeInsets.all(16),
+        padding: (availWidth < 480)
+            ? const EdgeInsets.all(16)
+            : EdgeInsets.symmetric(
+                horizontal: ((availWidth - 480) / 2) + 16,
+                vertical: 16,
+              ),
         children: [
           Text(
             'You don\'t know how something works? We know how, ask us.',

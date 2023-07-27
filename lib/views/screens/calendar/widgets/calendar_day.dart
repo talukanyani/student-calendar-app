@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sc_app/providers/data.dart';
 import 'package:sc_app/utils/helpers.dart';
+
 import '../state/displayed_month_date.dart';
+import '../state/is_day_box.dart';
 import '../state/selected_day.dart';
 import 'day_activities.dart';
 
@@ -43,20 +45,24 @@ class _CalendarDayState extends ConsumerState<CalendarDay> {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         ref.read(selectedDayProvider.notifier).change(widget.date);
 
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: (240 + (MediaQuery.of(context).size.height * 0.2)),
-              child: const DayActivities(),
-            );
-          },
-        );
+        if (!isDayBox(availWidth)) {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                height: (240 + (MediaQuery.of(context).size.height * 0.2)),
+                child: const DayActivities(),
+              );
+            },
+          );
+        }
       },
       child: Opacity(
         opacity: _isInDisplayedMonth ? 1 : 0.25,

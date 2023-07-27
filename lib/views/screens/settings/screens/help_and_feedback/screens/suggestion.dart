@@ -54,13 +54,20 @@ class _SuggestionScreenState extends ConsumerState<SuggestionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     if (_isLoading) return const Loading(text: 'Sending...');
 
     return Scaffold(
       appBar: AppBar(title: const Text('Send Suggestion')),
       body: ListView(
         primary: false,
-        padding: const EdgeInsets.all(16),
+        padding: (availWidth < 480)
+            ? const EdgeInsets.all(16)
+            : EdgeInsets.symmetric(
+                horizontal: ((availWidth - 480) / 2) + 16,
+                vertical: 16,
+              ),
         children: [
           Text(
             'Something not functioning the way you want? Send us a suggestion.',

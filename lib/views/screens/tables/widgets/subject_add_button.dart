@@ -11,7 +11,7 @@ class SubjectAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.all(16),
       child: OutlinedButton(
         onPressed: () {
           controller.jumpTo(0);

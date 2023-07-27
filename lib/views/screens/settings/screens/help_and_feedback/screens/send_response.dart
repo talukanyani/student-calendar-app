@@ -15,11 +15,18 @@ class SendResponseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
       body: ListView(
         primary: false,
-        padding: const EdgeInsets.all(16),
+        padding: (availWidth < 480)
+            ? const EdgeInsets.all(16)
+            : EdgeInsets.symmetric(
+                horizontal: ((availWidth - 480) / 2) + 16,
+                vertical: 16,
+              ),
         children: [
           Column(
             children: [
@@ -30,7 +37,7 @@ class SendResponseScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Your $sendName will be sent when ready.',
+                'Your $sendName was successfully sent.',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
